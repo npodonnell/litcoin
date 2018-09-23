@@ -5,7 +5,7 @@ from setuptools import setup
 setup(
     name='litcoin',
     version='0.0.0',
-    description='A logically-designed library for interacting with Bitcoin and Litecoin',
+    description='A library for interacting with Bitcoin and Litecoin',
     license='MIT',
     packages=['litcoin'],
     author='Noel ODonnell',
