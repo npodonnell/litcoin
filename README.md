@@ -4,7 +4,7 @@ A logically-designed library for interacting with Bitcoin and Litecoin (and poss
 
 ## Tenets
 
-* Abstract all the commanalities of these cryptocurrencies and parameterize functions with the name of the network in question.
+* Abstract all the commonalities of these cryptocurrencies and parameterize functions with the name of the network in question.
 * Use simple data structures such as `bytes`, `str`, `list` and `dict` instead of `class`.
 * Be easy to translate into other languages.
 * Have as few dependencies as possible. In security-critical applications convenience is not a priority. The philosophy here is **Be a central point of failure, But don't fail**.
