@@ -1,7 +1,0 @@
-README.md
-setup.py
-litcoin/__init__.py
-litcoin.egg-info/PKG-INFO
-litcoin.egg-info/SOURCES.txt
-litcoin.egg-info/dependency_links.txt
-litcoin.egg-info/top_level.txt
