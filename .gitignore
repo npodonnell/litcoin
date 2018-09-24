@@ -2,3 +2,5 @@ build
 dist
 .vscode
 litcoin.egg-info
+.eggs
+*__pycache__
