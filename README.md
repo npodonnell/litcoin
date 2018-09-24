@@ -1,6 +1,6 @@
 # **Lit**coin
 
-A logically-designed library for interacting with Bitcoin and Litecoin (and possibly more similar cryptocurrencies in the future)
+A library for interacting with Bitcoin and Litecoin (and possibly more similar cryptocurrencies in the future)
 
 ## Tenets
 
@@ -14,13 +14,22 @@ A logically-designed library for interacting with Bitcoin and Litecoin (and poss
 ## License
 MIT
 
-## Requirements
+## Prerequisites
 * Python 3
 * pip3
-* setuptools
 
 ## Installation
 
+Ensure you have OpenSSL libraries:
+
+Debian-based:
+```
+sudo apt-get install libssl-dev
+```
+Fedora-based:
+```
+sudo dnf install openssl-devel
+```
 Ensure you have setuptools installed:
 ```
 sudo pip3 install setuptools
