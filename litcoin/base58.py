@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
 
-import binascii
-
 BASE58_ALPHABET = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz'
 
 def base58_encode(data):
