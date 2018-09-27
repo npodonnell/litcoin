@@ -20,7 +20,6 @@ def test_base58_encode():
         expected = test_case['b58']
         assert actual == expected
 
-
 def test_base58_decode():
     for test_case in TEST_CASES:
         actual = base58_decode(test_case['b58'])

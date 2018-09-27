@@ -44,4 +44,3 @@ def base58_decode(data):
         break
 
     return dec
-

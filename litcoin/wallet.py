@@ -3,6 +3,7 @@
 from litcoin.keys import make_keypair
 from litcoin.address import make_address
 
+
 def make_wallet(**kwargs):
     """
     Make a wallet
