@@ -18,8 +18,8 @@ def base58_encode(data):
     for b in data:
         if b == 0x00:
             enc = '1' + enc
-        else:
-            break
+            continue
+        break
 
     return enc
 
@@ -40,8 +40,8 @@ def base58_decode(data):
     for c in data:
         if c == '1':
             dec = bytes([0x00]) + dec
-        else:
-            break
+            continue
+        break
 
     return dec
 
