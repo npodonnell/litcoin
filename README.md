@@ -16,20 +16,24 @@ A library for interacting with Bitcoin and Litecoin (and possibly more similar c
 ## License
 MIT
 
-## Prerequisites
-* Python 3
-* pip3
-
 ## Installation
 
-Ensure you have setuptools installed:
+Install these first:
 ```
 sudo pip3 install setuptools
+sudo pip3 install pytest
+sudo pip3 install pytest-runner
+sudo pip3 install cryptography
 ```
 
 Build:
 ```
 ./setup.py build
+```
+
+Run Tests:
+```
+./setup.py test
 ```
 
 Install:
