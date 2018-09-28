@@ -20,16 +20,6 @@ MIT
 
 ## Installation
 
-Ensure you have OpenSSL libraries:
-
-Debian-based:
-```
-sudo apt-get install libssl-dev
-```
-Fedora-based:
-```
-sudo dnf install openssl-devel
-```
 Ensure you have setuptools installed:
 ```
 sudo pip3 install setuptools
