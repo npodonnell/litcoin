@@ -33,8 +33,10 @@ def derive_pubkey(privkey):
 
 
 def sign_message(message, privkey):
+    #TODO
     pass
 
 
 def verify_signature(signature, message, pubkey):
+    #TODO
     pass
