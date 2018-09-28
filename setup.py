@@ -10,8 +10,5 @@ setup(
     packages=['litcoin'],
     author='Noel ODonnell',
     keywords=['bitcoin', 'litecoin', 'litcoin'],
-    url='https://github.com/odonnellnoel/litcoin',
-
-    setup_requires=['pytest-runner'],
-    tests_require=['pytest']
+    url='https://github.com/odonnellnoel/litcoin'
 )
