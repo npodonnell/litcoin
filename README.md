@@ -43,21 +43,21 @@ sudo ./setup.py install
 
 ## Usage
 
-Creating wallets
+Creating keys and addresses
 ```
-from litcoin.wallet import make_wallet
-
-# Make a bitcoin wallet
-bitcoin_wallet = make_wallet(network='bitcoin')
-
-# Make a litecoin wallet
-litecoin_wallet = make_wallet(network='litecoin')
-
-# Make a bitcoin brainwallet
-bitcoin_brainwallet = make_wallet(network='bitcoin', passphrase='abc123')
-
-# Make a litecoin segwit wallet
-litecoin_wallet = make_wallet(network='litecoin', segwit=True)
+Python 3.6.5 (default, Apr  4 2018, 15:09:05) 
+[GCC 7.3.1 20180130 (Red Hat 7.3.1-2)] on linux
+Type "help", "copyright", "credits" or "license" for more information.
+>>> from litcoin.address import make_p2pkh_address
+>>> from litcoin.ec import make_privkey, derive_pubkey
+>>> privkey = make_privkey()
+>>> privkey
+b'\xc5\xaeYw\xf5\x9e\xa9-\x9a\x11\x88Vd5\xccg/<\xae\xa6e\xbf\x85\xa2\xfb\x92=\xe8:\xe0$\x0e'
+>>> pubkey = derive_pubkey(privkey)
+>>> laddr = make_p2pkh_address(pubkey, network='litecoin')
+>>> baddr = make_p2pkh_address(pubkey, network='bitcoin')
+>>> laddr
+'LL8SyH86F6SeKZPDBWDYpFcQg4v775yG9v'
+>>> baddr
+'1uVi4pGASCb4kh41NEFYEYeTrYpyhfULL'
 ```
-
-## Recipes
