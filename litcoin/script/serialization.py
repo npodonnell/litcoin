@@ -4,11 +4,11 @@
 from litcoin.script.opcodes import *
 
 def serialize_opcode(opcode):
-    return opcode.to_bytes(1, byteorder='little', signed=False)
+    return int.to_bytes(opcode, 1, byteorder='little', signed=False)
 
 
 def serialize_uint(n, len):
-    return n.to_bytes(len, byteorder='little', signed=False)
+    return int.to_bytes(n, len, byteorder='little', signed=False)
 
 
 def get_le_uint(bytearr, i, size):
@@ -23,7 +23,7 @@ def serialize_script(script):
         return bin_script
     
     i = 0
-    while True:
+    while i < len(script):
         opcode = script[i]
         bin_script += serialize_opcode(opcode)
         i += 1
@@ -60,6 +60,10 @@ def serialize_script(script):
             assert len(script[i]) == size
             
             bin_script += script[i]
+        
+        i += 1
+    
+    return bin_script
 
 def deserialize_script(bin_script):
     pass
