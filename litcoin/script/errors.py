@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 
+"""
+Error codes defined in bitcoind
+"""
+
 SCRIPT_ERR_OK = 0,
 SCRIPT_ERR_UNKNOWN_ERROR = 1
 SCRIPT_ERR_EVAL_FALSE = 2
@@ -61,3 +65,9 @@ SCRIPT_ERR_OP_CODESEPARATOR = 41
 SCRIPT_ERR_SIG_FINDANDDELETE = 42
 
 SCRIPT_ERR_ERROR_COUNT = 43
+
+
+class ScriptError(Exception):
+    def __init__(self, errorCode=SCRIPT_ERR_UNKNOWN_ERROR, msg=None):
+        super(ScriptError, self).__init__(msg)
+        self.errorCode = errorCode
