@@ -41,7 +41,7 @@ class TestUInt32(unittest.TestCase):
         assert deserialize_uint32(b('cc01000000'), 1) == 1
         assert deserialize_uint32(b('ccffffffff'), 1) == 0xffffffff
         assert deserialize_uint32(b('ccfeffffff'), 1) == 0xfffffffe
-
+        
         assert deserialize_uint32(b('cc00000000cc'), 1) == 0
         assert deserialize_uint32(b('cc01000000cc'), 1) == 1
         assert deserialize_uint32(b('ccffffffffcc'), 1) == 0xffffffff
@@ -52,7 +52,7 @@ class TestUInt32(unittest.TestCase):
         with self.assertRaises(AssertionError, msg='should be raised because `data` argument is of the wrong type'):
             deserialize_uint32('wrong type')
         with self.assertRaises(AssertionError, msg='should be raised because `i` argument is negative'):
-            deserialize_uint32(b('0000000000000000000000000000000000000000000000000000000000000000'), -1)
+            deserialize_uint32(b('00000000'), -1)
         with self.assertRaises(AssertionError, msg='should be raised because `data` argument is 3 bytes long'):
             deserialize_uint32(b('000000'))
         with self.assertRaises(AssertionError, msg='should be raised because `i` argument is 0 when it should be 1 thus a different value is deserialized'):
