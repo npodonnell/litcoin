@@ -14,7 +14,7 @@ def b(hex_str):
 
 def x(bytes_obj):
     """
-    Convenience function to convert bytes object to hex string (excluding 0x)
+    Convenience function to convert bytes object to even-length hex string (excluding 0x)
     """
     assert type(bytes_obj) == bytes
     return bytes_obj.hex()
