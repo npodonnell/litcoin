@@ -14,12 +14,12 @@ class TestUInt256(unittest.TestCase):
     
         with self.assertRaises(TypeError, msg='should be raised because all arguments are missing'):
             serialize_uint256()
+        with self.assertRaises(AssertionError, msg='should be raised because `n` argument is of the wrong type'):
+            serialize_uint256('wrong type')
         with self.assertRaises(AssertionError, msg='should be raised because `n` argument is negative'):
             serialize_uint256(-1)
         with self.assertRaises(AssertionError, msg='should be raised because `n` argument overflows to more than 256 bits'):
             serialize_uint256(0x10000000000000000000000000000000000000000000000000000000000000000)
-        with self.assertRaises(AssertionError, msg='should be raised because `n` argument is of the wrong type'):
-            serialize_uint256('wrong type')
     
     def test_deserialize_uint256(self):
         assert deserialize_uint256(b('0000000000000000000000000000000000000000000000000000000000000000')) == 0
