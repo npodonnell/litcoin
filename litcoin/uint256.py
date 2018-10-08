@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 
+def is_uint256(n):
+    return (type(n) == int) and (0 <= n) and (n <= 0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff)
+
 
 def serialize_uint256(n):
-    assert type(n) == int
-    assert 0 <= n
-    assert n <= 0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+    assert is_uint256(n)
     return int.to_bytes(n, 32, byteorder='little', signed=False)
 
 

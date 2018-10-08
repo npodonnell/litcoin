@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 
+def is_uint32(n):
+    return (type(n) == int) and (0 <= n) and (n <= 0xffffffff)
+
 
 def serialize_uint32(n):
-    assert type(n) == int
-    assert 0 <= n
-    assert n <= 0xffffffff
+    assert is_uint32(n)
     return int.to_bytes(n, 4, byteorder='little', signed=False)
 
 
