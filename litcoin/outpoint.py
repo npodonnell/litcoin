@@ -16,8 +16,7 @@ def make_outpoint(txid, output_index):
 
 def validate_outpoint(outpoint):
     assert type(outpoint) == dict, 'type of outpoint should be dict'
-    assert 'txid' in outpoint, 'outpoint should have `txid` attribute'
-    assert 'output_index' in outpoint, 'outpoint should have `output_index` attribute'
+    assert set(outpoint.keys()) == {'txid', 'output_index'}, 'outpoint should have only `txid` and `output_index` keys'
     validate_uint256(outpoint['txid'])
     validate_uint32(outpoint['output_index'])
 

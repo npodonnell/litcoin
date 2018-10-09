@@ -13,6 +13,21 @@ class TestOutpoint(unittest.TestCase):
     def test_validate_outpoint(self):
         validate_outpoint({'txid': txid, 'output_index': output_index})
 
+        with self.assertRaises(AssertionError, msg='should be raised because `outpoint` has an extra unnecessary attribute'):
+            validate_outpoint({'txid': txid, 'output_index': output_index, 'unnecessary_attribute': 42})
+        with self.assertRaises(AssertionError, msg='should be raised because `outpoint.txid` is invalid'):
+            validate_outpoint({'txid': -1, 'output_index': output_index})
+        with self.assertRaises(AssertionError, msg='should be raised because `outpoint.output_index` is invalid'):
+            validate_outpoint({'txid': txid, 'output_index': -1})
+        with self.assertRaises(AssertionError, msg='should be raised because `outpoint` argument is missing `output_index` attribute'):
+            validate_outpoint({'txid': txid})
+        with self.assertRaises(AssertionError, msg='should be raised because `outpoint` argument is missing `txid` attribute'):
+            validate_outpoint({'output_index': output_index})
+        with self.assertRaises(AssertionError, msg='should be raised because `outpoint` argument is empty dict'):
+            validate_outpoint({})
+        with self.assertRaises(TypeError, msg='should be raised because all arguments are missing'):
+            validate_outpoint()
+
     def test_make_outpoint(self):
         actual = make_outpoint(txid, output_index)
         expected = {'txid': txid, 'output_index': output_index}
