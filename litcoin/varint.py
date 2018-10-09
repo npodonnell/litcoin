@@ -1,10 +1,13 @@
 #!/usr/bin/env python3
 
+def validate_varint(n):
+    assert type(n) == int, 'type of `n` should be int'
+    assert 0 <= n, '`n` may not be negative'
+    assert n <= 0xffffffffffffffff, '`n` must fit within 64 bits'
+
 
 def serialize_varint(n):
-    assert type(n) == int
-    assert 0 <= n
-    assert n <= 0xffffffffffffffff
+    validate_varint(n)
 
     if n <= 0xfc:
         return int.to_bytes(n, 1, byteorder='little', signed=False)

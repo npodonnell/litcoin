@@ -2,10 +2,25 @@
 
 import unittest
 from litcoin.binhex import b, x
-from litcoin.varint import serialize_varint, deserialize_varint
+from litcoin.varint import validate_varint, serialize_varint, deserialize_varint
 
 
 class TestVarInt(unittest.TestCase):
+    def test_validate_varint(self):
+        validate_varint(0)
+        validate_varint(0xffffffffffffffff)
+
+        with self.assertRaises(AssertionError, msg='should be raised because `n` argument is negative'):
+            validate_varint(-1)
+        with self.assertRaises(AssertionError, msg='should be raised because `n` argument is too big for 256 bits'):
+            validate_varint(0x10000000000000000)
+        with self.assertRaises(AssertionError, msg='should be raised because `n` argument is float'):
+            validate_varint(0.0)
+        with self.assertRaises(AssertionError, msg='should be raised because `n` argument is the wrong type'):
+            validate_varint('0')
+        with self.assertRaises(TypeError, msg='should be raised because all arguments are missing'):
+            validate_varint()
+    
     def test_serialize_varint(self):
         assert serialize_varint(0) == b'\x00'
         assert serialize_varint(1) == b'\x01'

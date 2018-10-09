@@ -2,21 +2,25 @@
 
 import unittest
 from litcoin.binhex import b, x
-from litcoin.uint32 import is_uint32, serialize_uint32, deserialize_uint32
+from litcoin.uint32 import validate_uint32, serialize_uint32, deserialize_uint32
 
 
 class TestUInt32(unittest.TestCase):
-    def test_is_uint32(self):
-        assert is_uint32(0)
-        assert is_uint32(0xffffffff)
-        assert not is_uint32(0.0)
-        assert not is_uint32(-1)
-        assert not is_uint32(0x100000000)
-        assert not is_uint32('1')
-
+    def test_validate_uint32(self):
+        validate_uint32(0)
+        validate_uint32(0xffffffff)
+        
+        with self.assertRaises(AssertionError, msg='should be raised because `n` argument is negative'):
+            validate_uint32(-1)
+        with self.assertRaises(AssertionError, msg='should be raised because `n` argument is too big for 32 bits'):
+            validate_uint32(0x100000000)
+        with self.assertRaises(AssertionError, msg='should be raised because `n` argument is float'):
+            validate_uint32(0.0)
+        with self.assertRaises(AssertionError, msg='should be raised because `n` argument is the wrong type'):
+            validate_uint32('0')
         with self.assertRaises(TypeError, msg='should be raised because all arguments are missing'):
-            is_uint32()
-    
+            validate_uint32()
+
     def test_serialize_uint32(self):
         assert serialize_uint32(0) == b('00000000')
         assert serialize_uint32(1) == b('01000000')

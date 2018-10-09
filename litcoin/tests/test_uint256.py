@@ -2,21 +2,25 @@
 
 import unittest
 from litcoin.binhex import b, x
-from litcoin.uint256 import is_uint256, serialize_uint256, deserialize_uint256
+from litcoin.uint256 import validate_uint256, serialize_uint256, deserialize_uint256
 
 
 class TestUInt256(unittest.TestCase):
-    def test_is_uint256(self):
-        assert is_uint256(0)
-        assert is_uint256(0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff)
-        assert not is_uint256(0.0)
-        assert not is_uint256(-1)
-        assert not is_uint256(0x10000000000000000000000000000000000000000000000000000000000000000)
-        assert not is_uint256('1')
+    def test_validate_uint256(self):
+        validate_uint256(0)
+        validate_uint256(0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff)
 
+        with self.assertRaises(AssertionError, msg='should be raised because `n` argument is negative'):
+            validate_uint256(-1)
+        with self.assertRaises(AssertionError, msg='should be raised because `n` argument is too big for 256 bits'):
+            validate_uint256(0x10000000000000000000000000000000000000000000000000000000000000000)
+        with self.assertRaises(AssertionError, msg='should be raised because `n` argument is float'):
+            validate_uint256(0.0)
+        with self.assertRaises(AssertionError, msg='should be raised because `n` argument is the wrong type'):
+            validate_uint256('0')
         with self.assertRaises(TypeError, msg='should be raised because all arguments are missing'):
-            is_uint256()
-
+            validate_uint256()
+    
     def test_serialize_uint256(self):
         assert serialize_uint256(0) == b('0000000000000000000000000000000000000000000000000000000000000000')
         assert serialize_uint256(1) == b('0100000000000000000000000000000000000000000000000000000000000000')
