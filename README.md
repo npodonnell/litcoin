@@ -2,6 +2,9 @@
 
 A library for interacting with Bitcoin and Litecoin (and possibly more similar cryptocurrencies in the future)
 
+
+** WARNING: THIS LIBRARY IS UNDER CONSTRUCTION. DO NOT USE IT FOR COMMERCIAL PURPOSES. YOU MAY LOSE MONEY **
+
 ## Tenets
 
 * Abstract all the commonalities of these cryptocurrencies and parameterize functions with the name of the network in question.
