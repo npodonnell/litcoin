@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
 
 from litcoin.hashing import double_sha
-from litcoin.base58 import base58_encode, base58_decode
 
 BASE58_ALPHABET = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz'
 
 def base58check_encode(data):
     data = data + double_sha(data)[0:4]
-    n = int(data.hex(), 16)
+    n = int.from_bytes(data, byteorder='big', signed=False)
     enc = ''
 
     while n != 0:
