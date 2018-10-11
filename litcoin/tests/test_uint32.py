@@ -27,14 +27,14 @@ class TestUInt32(unittest.TestCase):
         assert serialize_uint32(0xffffffff) == b('ffffffff')
         assert serialize_uint32(0xfffffffe) == b('feffffff')
 
-        with self.assertRaises(TypeError, msg='should be raised because all arguments are missing'):
-            serialize_uint32()
         with self.assertRaises(AssertionError, msg='should be raised because `n` argument is negative'):
             serialize_uint32(-1)
         with self.assertRaises(AssertionError, msg='should be raised because `n` argument overflows to more than 32 bits'):
             serialize_uint32(0x100000000)
         with self.assertRaises(AssertionError, msg='should be raised because `n` argument is of the wrong type'):
             serialize_uint32('wrong type')
+        with self.assertRaises(TypeError, msg='should be raised because all arguments are missing'):
+            serialize_uint32()
 
     def test_deserialize_uint32(self):
         assert deserialize_uint32(b('00000000')) == 0
@@ -62,10 +62,6 @@ class TestUInt32(unittest.TestCase):
         assert deserialize_uint32(b('ccffffffffcc'), 1) == 0xffffffff
         assert deserialize_uint32(b('ccfeffffffcc'), 1) == 0xfffffffe
 
-        with self.assertRaises(TypeError, msg='should be raised because all arguments are missing'):
-            deserialize_uint32()
-        with self.assertRaises(AssertionError, msg='should be raised because `data` argument is of the wrong type'):
-            deserialize_uint32('wrong type')
         with self.assertRaises(AssertionError, msg='should be raised because `i` argument is negative'):
             deserialize_uint32(b('00000000'), -1)
         with self.assertRaises(AssertionError, msg='should be raised because `data` argument is 3 bytes long'):
@@ -74,3 +70,7 @@ class TestUInt32(unittest.TestCase):
             assert deserialize_uint32(b('cc00000000'), 0) == 0
         with self.assertRaises(AssertionError, msg='should be raised because `i` argument is 2 when it should be 1 thus there\'s an overflow'):
             deserialize_uint32(b('cc00000000'), 2)
+        with self.assertRaises(AssertionError, msg='should be raised because `data` argument is of the wrong type'):
+            deserialize_uint32('wrong type')
+        with self.assertRaises(TypeError, msg='should be raised because all arguments are missing'):
+            deserialize_uint32()

@@ -36,14 +36,14 @@ class TestVarInt(unittest.TestCase):
         assert serialize_varint(4294967296) == b'\xff\x00\x00\x00\x00\x01\x00\x00\x00'
         assert serialize_varint(0xffffffffffffffff) == b'\xff\xff\xff\xff\xff\xff\xff\xff\xff'
 
-        with self.assertRaises(TypeError, msg='should be raised because all arguments are missing'):
-            serialize_varint()
-        with self.assertRaises(AssertionError, msg='should be raised because `n` argument is of the wrong type'):
-            serialize_varint('wrong type')
         with self.assertRaises(AssertionError, msg='should be raised because `n` argument is negative'):
             serialize_varint(-1)
         with self.assertRaises(AssertionError, msg='should be raised because `n` argument overflows to more than 64 bits'):
             serialize_varint(0x10000000000000000)
+        with self.assertRaises(AssertionError, msg='should be raised because `n` argument is of the wrong type'):
+            serialize_varint('wrong type')
+        with self.assertRaises(TypeError, msg='should be raised because all arguments are missing'):
+            serialize_varint()
 
     def test_deserialize_varint(self):
         assert deserialize_varint(b('00')) == (0, 1)
@@ -116,10 +116,6 @@ class TestVarInt(unittest.TestCase):
         assert deserialize_varint(b('ccff0000000001000000cc'), 1) == (4294967296, 8)
         assert deserialize_varint(b('ccffffffffffffffffffcc'), 1) == (0xffffffffffffffff, 8)
 
-        with self.assertRaises(TypeError, msg='should be raised because all arguments are missing'):
-            deserialize_varint()
-        with self.assertRaises(AssertionError, msg='should be raised because `data` argument is of the wrong type'):
-            deserialize_varint('wrong type')
         with self.assertRaises(AssertionError, msg='should be raised because `i` argument is negative'):
             deserialize_varint(b('00'), -1)
         with self.assertRaises(AssertionError, msg='should be raised because `data` argument is 0 bytes long'):
@@ -134,3 +130,7 @@ class TestVarInt(unittest.TestCase):
             assert deserialize_varint(b('cc00'), 0) == (0, 1)
         with self.assertRaises(AssertionError, msg='should be raised because `i` argument is 2 when it should be 1 thus is out of bounds'):
             assert deserialize_varint(b('cc00'), 2) == (0, 1)
+        with self.assertRaises(AssertionError, msg='should be raised because `data` argument is of the wrong type'):
+            deserialize_varint('wrong type')
+        with self.assertRaises(TypeError, msg='should be raised because all arguments are missing'):
+            deserialize_varint()

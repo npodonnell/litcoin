@@ -27,15 +27,15 @@ class TestUInt256(unittest.TestCase):
         assert serialize_uint256(0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff) == b('ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff')
         assert serialize_uint256(0xfffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe) == b('feffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff')
     
-        with self.assertRaises(TypeError, msg='should be raised because all arguments are missing'):
-            serialize_uint256()
-        with self.assertRaises(AssertionError, msg='should be raised because `n` argument is of the wrong type'):
-            serialize_uint256('wrong type')
         with self.assertRaises(AssertionError, msg='should be raised because `n` argument is negative'):
             serialize_uint256(-1)
         with self.assertRaises(AssertionError, msg='should be raised because `n` argument overflows to more than 256 bits'):
             serialize_uint256(0x10000000000000000000000000000000000000000000000000000000000000000)
-    
+        with self.assertRaises(AssertionError, msg='should be raised because `n` argument is of the wrong type'):
+            serialize_uint256('wrong type')
+        with self.assertRaises(TypeError, msg='should be raised because all arguments are missing'):
+            serialize_uint256()
+            
     def test_deserialize_uint256(self):
         assert deserialize_uint256(b('0000000000000000000000000000000000000000000000000000000000000000')) == 0
         assert deserialize_uint256(b('0100000000000000000000000000000000000000000000000000000000000000')) == 1
@@ -61,11 +61,7 @@ class TestUInt256(unittest.TestCase):
         assert deserialize_uint256(b('cc0100000000000000000000000000000000000000000000000000000000000000cc'), 1) == 1
         assert deserialize_uint256(b('ccffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffcc'), 1) == 0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
         assert deserialize_uint256(b('ccfeffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffcc'), 1) == 0xfffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe
-        
-        with self.assertRaises(TypeError, msg='should be raised because all arguments are missing'):
-            deserialize_uint256()
-        with self.assertRaises(AssertionError, msg='should be raised because `data` argument is of the wrong type'):
-            deserialize_uint256('wrong type')
+
         with self.assertRaises(AssertionError, msg='should be raised because `i` argument is negative'):
             deserialize_uint256(b('0000000000000000000000000000000000000000000000000000000000000000'), -1)
         with self.assertRaises(AssertionError, msg='should be raised because `data` argument is 31 bytes long'):
@@ -74,3 +70,7 @@ class TestUInt256(unittest.TestCase):
             assert deserialize_uint256(b('cc0000000000000000000000000000000000000000000000000000000000000000'), 0) == 0
         with self.assertRaises(AssertionError, msg='should be raised because `i` argument is 2 when it should be 1 thus there\'s an overflow'):
             deserialize_uint256(b('cc0000000000000000000000000000000000000000000000000000000000000000'), 2)
+        with self.assertRaises(AssertionError, msg='should be raised because `data` argument is of the wrong type'):
+            deserialize_uint256('wrong type')
+        with self.assertRaises(TypeError, msg='should be raised because all arguments are missing'):
+            deserialize_uint256()

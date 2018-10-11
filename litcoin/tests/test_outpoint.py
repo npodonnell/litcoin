@@ -33,15 +33,15 @@ class TestOutpoint(unittest.TestCase):
         expected = {'txid': txid, 'output_index': output_index}
         self.assertDictEqual(actual, expected)
 
-        with self.assertRaises(TypeError, msg='should be raised because all arguments are missing'):
-            make_outpoint()
-        with self.assertRaises(TypeError, msg='should be raised because `output_index` argument is missing'):
-            make_outpoint(txid)
         with self.assertRaises(AssertionError, msg='should be raised because `txid` argument is the wrong type'):
             make_outpoint(b('1000000000000000000000000000000000000000000000000000000000000001'), output_index)
         with self.assertRaises(AssertionError, msg='should be raised because `output_index` argument is the wrong type'):
             make_outpoint(output_index, 42.0)
-        
+        with self.assertRaises(TypeError, msg='should be raised because `output_index` argument is missing'):
+            make_outpoint(txid)
+        with self.assertRaises(TypeError, msg='should be raised because all arguments are missing'):
+            make_outpoint()
+
     def test_serialize_outpoint(self):
         actual = serialize_outpoint({'txid': txid, 'output_index': output_index})
         expected = serialize_uint256(txid) + serialize_uint32(output_index)
