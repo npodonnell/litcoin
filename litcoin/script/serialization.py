@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+from litcoin.script.validation import validate_script
 from litcoin.script.opcodes import OP_0, OP_PUSHDATA1, OP_PUSHDATA2, OP_PUSHDATA4
 from litcoin.script.constants import MAX_SCRIPT_SIZE
 
@@ -13,12 +14,9 @@ def serialize_uint(n, len):
 
 
 def serialize_script(script):
-    assert type(script) == list
+    validate_script(script)
     bin_script = b''
 
-    if len(script) == 0:
-        return bin_script
-    
     i = 0
     while i < len(script):
         assert type(script[i]) == int
