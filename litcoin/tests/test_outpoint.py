@@ -2,14 +2,17 @@
 
 import unittest
 from litcoin.binhex import b
-from litcoin.uint32 import serialize_uint32
-from litcoin.uint256 import serialize_uint256
-from litcoin.outpoint import validate_outpoint, make_outpoint, serialize_outpoint, deserialize_outpoint
+from litcoin.uint256 import UINT256_SIZE_IN_BYTES, serialize_uint256
+from litcoin.uint32 import UINT32_SIZE_IN_BYTES, serialize_uint32
+from litcoin.outpoint import OUTPOINT_SIZE_IN_BYTES, validate_outpoint, make_outpoint, serialize_outpoint, deserialize_outpoint
 
 txid = 0x1000000000000000000000000000000000000000000000000000000000000001
 output_index = 42
 
 class TestOutpoint(unittest.TestCase):
+    def test_OUTPOINT_SIZE_IN_BYTES(self):
+        assert OUTPOINT_SIZE_IN_BYTES == UINT256_SIZE_IN_BYTES + UINT32_SIZE_IN_BYTES
+    
     def test_validate_outpoint(self):
         validate_outpoint({'txid': txid, 'output_index': output_index})
 

@@ -2,10 +2,13 @@
 
 import unittest
 from litcoin.binhex import b, x
-from litcoin.uint64 import validate_uint64, serialize_uint64, deserialize_uint64
+from litcoin.uint64 import UINT64_SIZE_IN_BYTES, validate_uint64, serialize_uint64, deserialize_uint64
 
 
 class TestUInt64(unittest.TestCase):
+    def test_UINT64_SIZE_IN_BYTES(self):
+        assert UINT64_SIZE_IN_BYTES == 8
+
     def test_validate_uint64(self):
         validate_uint64(0)
         validate_uint64(0xffffffffffffffff)

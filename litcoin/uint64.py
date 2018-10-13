@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
 
+from litcoin.serialization import validate_data
+
+UINT64_SIZE_IN_BYTES = 8
+
+
 def validate_uint64(n):
     assert type(n) == int, 'type of `n` should be int'
     assert 0 <= n, '`n` may not be negative'
@@ -8,12 +13,9 @@ def validate_uint64(n):
 
 def serialize_uint64(n):
     validate_uint64(n)
-    return int.to_bytes(n, 8, byteorder='little', signed=False)
+    return int.to_bytes(n, UINT64_SIZE_IN_BYTES, byteorder='little', signed=False)
 
 
 def deserialize_uint64(data, i=0):
-    assert type(data) == bytes
-    assert type(i) == int
-    assert 0 <= i
-    assert i + 8 <= len(data)
-    return int.from_bytes(data[i:i+8], byteorder='little', signed=False)
+    validate_data(data, i, UINT64_SIZE_IN_BYTES)
+    return int.from_bytes(data[i : i + UINT64_SIZE_IN_BYTES], byteorder='little', signed=False)

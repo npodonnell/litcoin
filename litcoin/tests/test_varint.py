@@ -2,10 +2,13 @@
 
 import unittest
 from litcoin.binhex import b, x
-from litcoin.varint import validate_varint, serialize_varint, deserialize_varint
+from litcoin.varint import VARINT_SIZE_RANGE_IN_BYTES, validate_varint, serialize_varint, deserialize_varint
 
 
 class TestVarInt(unittest.TestCase):
+    def test_VARINT_SIZE_RANGE_IN_BYTES(self):
+        assert VARINT_SIZE_RANGE_IN_BYTES == (1, 9)
+    
     def test_validate_varint(self):
         validate_varint(0)
         validate_varint(0xffffffffffffffff)

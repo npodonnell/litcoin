@@ -1,7 +1,10 @@
 #!/usr/bin/env python3
 
-from litcoin.uint32 import validate_uint32, serialize_uint32, deserialize_uint32
-from litcoin.uint256 import validate_uint256, serialize_uint256, deserialize_uint256
+from litcoin.uint256 import UINT256_SIZE_IN_BYTES, validate_uint256, serialize_uint256, deserialize_uint256
+from litcoin.uint32 import UINT32_SIZE_IN_BYTES, validate_uint32, serialize_uint32, deserialize_uint32
+from litcoin.serialization import validate_data
+
+OUTPOINT_SIZE_IN_BYTES = UINT256_SIZE_IN_BYTES + UINT32_SIZE_IN_BYTES
 
 
 def make_outpoint(txid, output_index):
@@ -27,8 +30,5 @@ def serialize_outpoint(outpoint):
 
 
 def deserialize_outpoint(data, i=0):
-    assert type(data) == bytes
-    assert type(i) == int
-    assert 0 <= i
-    assert i + 36 <= len(data)
-    return make_outpoint(deserialize_uint256(data, i), deserialize_uint32(data, i + 32))
+    validate_data(data, i, OUTPOINT_SIZE_IN_BYTES)
+    return make_outpoint(deserialize_uint256(data, i), deserialize_uint32(data, i + UINT256_SIZE_IN_BYTES))

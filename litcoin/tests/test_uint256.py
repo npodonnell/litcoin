@@ -2,10 +2,13 @@
 
 import unittest
 from litcoin.binhex import b, x
-from litcoin.uint256 import validate_uint256, serialize_uint256, deserialize_uint256
+from litcoin.uint256 import UINT256_SIZE_IN_BYTES, validate_uint256, serialize_uint256, deserialize_uint256
 
 
 class TestUInt256(unittest.TestCase):
+    def test_UINT256_SIZE_IN_BYTES(self):
+        assert UINT256_SIZE_IN_BYTES == 32
+    
     def test_validate_uint256(self):
         validate_uint256(0)
         validate_uint256(0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff)

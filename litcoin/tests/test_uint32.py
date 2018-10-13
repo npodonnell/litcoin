@@ -2,10 +2,13 @@
 
 import unittest
 from litcoin.binhex import b, x
-from litcoin.uint32 import validate_uint32, serialize_uint32, deserialize_uint32
+from litcoin.uint32 import UINT32_SIZE_IN_BYTES, validate_uint32, serialize_uint32, deserialize_uint32
 
 
 class TestUInt32(unittest.TestCase):
+    def test_UINT32_SIZE_IN_BYTES(self):
+        assert UINT32_SIZE_IN_BYTES == 4
+
     def test_validate_uint32(self):
         validate_uint32(0)
         validate_uint32(0xffffffff)
