@@ -46,16 +46,18 @@ def serialize_txinput(txinput):
 def deserialize_txinput(data, i=0):
     validate_data(data, i, TXINPUT_SIZE_RANGE_IN_BYTES[0])
 
+    # deserialize outpoint
     outpoint = deserialize_outpoint(data, i)
     i += OUTPOINT_SIZE_IN_BYTES
 
+    # deserialize unlocking script
     (unlocking_script_length, unlocking_script_length_length) = deserialize_varint(data, i)
     i += unlocking_script_length_length
     assert i + unlocking_script_length + UINT32_SIZE_IN_BYTES <= len(data)
-
     unlocking_script = data[i : i + unlocking_script_length]
     i += unlocking_script_length
 
+    # deserialize sequence number
     sequence_no = deserialize_uint32(data, i)
 
     return make_txinput(outpoint, sequence_no, unlocking_script)
