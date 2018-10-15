@@ -4,6 +4,7 @@ from litcoin.hashing import double_sha
 
 BASE58_ALPHABET = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz'
 
+
 def base58check_encode(data):
     assert type(data) == bytes
 

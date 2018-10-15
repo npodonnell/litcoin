@@ -1,13 +1,19 @@
 #!/usr/bin/env python3
 
-
+"""
+These are used whenever bitcoin is undergoing an upgrade. Newer nodes will 
+bump up MAX_TX_VERSION first and accept transactions with both the current
+version and the new version. Eventually when all (or most) nodes have
+upgraded, CURRENT_TX_VERSION will be bumped up to match MAX_TX_VERSION and
+older transactions will no longer be accepted.
+"""
 CURRENT_TX_VERSION = 2
 MAX_TX_VERSION = 2
 
 
 def make_tx():
     """
-    Makes a "blank" transaction
+    Returns a 'blank' transaction.
     """
     return {
         'version': CURRENT_TX_VERSION,

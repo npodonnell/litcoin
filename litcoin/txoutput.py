@@ -6,7 +6,6 @@ from litcoin.script.validation import validate_script
 from litcoin.script.serialization import serialize_script
 from litcoin.serialization import validate_data
 
-
 TXOUTPUT_SIZE_RANGE_IN_BYTES = ( \
     UINT64_SIZE_IN_BYTES + VARINT_SIZE_RANGE_IN_BYTES[0] \
 )

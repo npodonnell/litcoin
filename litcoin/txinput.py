@@ -1,19 +1,18 @@
 #!/usr/bin/env python3
 
-from litcoin.outpoint import OUTPOINT_SIZE_IN_BYTES, validate_outpoint, serialize_outpoint
-from litcoin.uint32 import UINT32_SIZE_IN_BYTES, validate_uint32, serialize_uint32
-from litcoin.varint import VARINT_SIZE_RANGE_IN_BYTES, serialize_varint
+from litcoin.outpoint import OUTPOINT_SIZE_IN_BYTES, validate_outpoint, serialize_outpoint, deserialize_outpoint
+from litcoin.uint32 import UINT32_SIZE_IN_BYTES, validate_uint32, serialize_uint32, deserialize_uint32
+from litcoin.varint import VARINT_SIZE_RANGE_IN_BYTES, serialize_varint, deserialize_varint
 from litcoin.script.validation import validate_script
 from litcoin.script.serialization import serialize_script
 from litcoin.serialization import validate_data
 
-
 TXINPUT_SIZE_RANGE_IN_BYTES = ( \
-    OUTPOINT_SIZE_IN_BYTES + VARINT_SIZE_RANGE_IN_BYTES[0] + UINT32_SIZE_IN_BYTES \
+    OUTPOINT_SIZE_IN_BYTES + VARINT_SIZE_RANGE_IN_BYTES[0] + UINT32_SIZE_IN_BYTES, \
 )
 
 
-def make_txinput(outpoint, sequence_no, unlockling_script):
+def make_txinput(outpoint, unlocking_script, sequence_no):
     validate_outpoint(outpoint)
     validate_script(unlocking_script)
     validate_uint32(sequence_no)
@@ -31,8 +30,8 @@ def validate_txinput(txinput):
         'txinput should have only `outpoint`, `sequence_no` and `unlocking_script` keys'
     
     validate_outpoint(txinput['outpoint'])
-    validate_uint32(txinput['sequence_no'])
     validate_script(txinput['unlocking_script'])
+    validate_uint32(txinput['sequence_no'])
 
 
 def serialize_txinput(txinput):
@@ -60,4 +59,4 @@ def deserialize_txinput(data, i=0):
     # deserialize sequence number
     sequence_no = deserialize_uint32(data, i)
 
-    return make_txinput(outpoint, sequence_no, unlocking_script)
+    return make_txinput(outpoint, unlocking_script, sequence_no)
