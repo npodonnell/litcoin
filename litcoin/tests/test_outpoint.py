@@ -20,9 +20,9 @@ class TestOutpoint(unittest.TestCase):
         assert actual == expected
 
         with self.assertRaises(AssertionError, msg='should be raised because `txid` argument is the wrong type'):
-            make_outpoint(b('8000000000000000000000000000000000000000000000000000000000000001'), OUTPUT_INDEX)
+            make_outpoint('wrong type', OUTPUT_INDEX)
         with self.assertRaises(AssertionError, msg='should be raised because `output_index` argument is the wrong type'):
-            make_outpoint(OUTPUT_INDEX, 42.0)
+            make_outpoint(TXID, 'wrong type')
         with self.assertRaises(TypeError, msg='should be raised because `output_index` argument is missing'):
             make_outpoint(TXID)
         with self.assertRaises(TypeError, msg='should be raised because all arguments are missing'):

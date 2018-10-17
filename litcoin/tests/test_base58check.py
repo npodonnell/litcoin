@@ -25,7 +25,7 @@ class TestBase58Check(unittest.TestCase):
             assert actual == expected
 
         with self.assertRaises(AssertionError, msg='should be raised because `data` argument is of the wrong type'):
-            base58check_encode('abc')
+            base58check_encode('wrong type')
         with self.assertRaises(TypeError, msg='should be raised because all arguments are missing'):
             base58check_encode()
     
@@ -36,6 +36,6 @@ class TestBase58Check(unittest.TestCase):
             assert actual == expected
 
         with self.assertRaises(AssertionError, msg='should be raised because `b58str` argument is of the wrong type'):
-            base58check_decode(b'\42')
+            base58check_decode(b'wrong type')
         with self.assertRaises(TypeError, msg='should be raised because all arguments are missing'):
             base58check_decode()

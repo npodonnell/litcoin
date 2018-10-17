@@ -26,9 +26,9 @@ class TestTxinput(unittest.TestCase):
         assert actual == expected
 
         with self.assertRaises(AssertionError, msg='should be raised because `outpoint` argument is the wrong type'):
-            make_txinput(b('8000000000000000000000000000000000000000000000000000000000000001'), UNLOCKING_SCRIPT, SEQUENCE_NO)
+            make_txinput('wrong type', UNLOCKING_SCRIPT, SEQUENCE_NO)
         with self.assertRaises(AssertionError, msg='should be raised because `unlocking_script` argument is the wrong type'):
-            make_txinput(OUTPOINT, b'', SEQUENCE_NO)
+            make_txinput(OUTPOINT, 'wrong type', SEQUENCE_NO)
         with self.assertRaises(AssertionError, msg='should be raised because `sequence_no` argument is the wrong type'):
             make_txinput(OUTPOINT, UNLOCKING_SCRIPT, 42.0)
         with self.assertRaises(TypeError, msg='should be raised because `sequence_no` argument is missing'):

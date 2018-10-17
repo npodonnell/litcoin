@@ -20,7 +20,7 @@ class TestVarInt(unittest.TestCase):
         with self.assertRaises(AssertionError, msg='should be raised because `n` argument is float'):
             validate_varint(0.0)
         with self.assertRaises(AssertionError, msg='should be raised because `n` argument is the wrong type'):
-            validate_varint('0')
+            validate_varint('wrong type')
         with self.assertRaises(TypeError, msg='should be raised because all arguments are missing'):
             validate_varint()
     

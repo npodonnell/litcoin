@@ -20,7 +20,7 @@ class TestUInt16(unittest.TestCase):
         with self.assertRaises(AssertionError, msg='should be raised because `n` argument is float'):
             validate_uint16(0.0)
         with self.assertRaises(AssertionError, msg='should be raised because `n` argument is the wrong type'):
-            validate_uint16('0')
+            validate_uint16('wrong type')
         with self.assertRaises(TypeError, msg='should be raised because all arguments are missing'):
             validate_uint16()
 
