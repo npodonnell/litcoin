@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 
-import unittest
 from litcoin.binhex import b, x
 from litcoin.varint import VARINT_SIZE_RANGE_IN_BYTES, validate_varint, serialize_varint, deserialize_varint
+import unittest
 
 
 class TestVarInt(unittest.TestCase):

@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 
-import unittest
 from litcoin.binhex import b
 from litcoin.uint256 import UINT256_SIZE_IN_BYTES, serialize_uint256
 from litcoin.uint32 import UINT32_SIZE_IN_BYTES, serialize_uint32
 from litcoin.outpoint import OUTPOINT_SIZE_IN_BYTES, validate_outpoint, make_outpoint, serialize_outpoint, deserialize_outpoint
+import unittest
 
 TXID = 0x8000000000000000000000000000000000000000000000000000000000000001
 OUTPUT_INDEX = 42

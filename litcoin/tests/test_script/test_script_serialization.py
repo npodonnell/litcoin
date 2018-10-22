@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 
-import unittest
 from litcoin.script.serialization import serialize_opcode, serialize_uint, serialize_script
 from litcoin.script.opcodes import OP_0, OP_PUSHDATA1, OP_PUSHDATA2
+import unittest
+
 
 class TestScriptSerialization(unittest.TestCase):
     def test_serialize_opcode(self):
@@ -50,7 +51,3 @@ class TestScriptSerialization(unittest.TestCase):
         assert serialize_script([OP_PUSHDATA2, 256, ba(256)]) == b'\x4d\x00\x01' + ba(256)
 
         # Invalid scripts
-        
-
-if __name__ == '__main__':
-    unittest.main()

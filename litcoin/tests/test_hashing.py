@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 from litcoin.hashing import single_sha, double_sha, hash160
+import unittest
 
 
 TEST_CASES = [
@@ -37,22 +38,23 @@ TEST_CASES = [
 ]
 
 
-def test_single_sha():
-    for test_case in TEST_CASES:
-        actual = bytes.fromhex(test_case['single_sha'])
-        expected = single_sha(bytes.fromhex(test_case['hex']))
-        assert actual == expected
+class TestHashing(unittest.TestCase):
+    def test_single_sha(self):
+        for test_case in TEST_CASES:
+            actual = bytes.fromhex(test_case['single_sha'])
+            expected = single_sha(bytes.fromhex(test_case['hex']))
+            assert actual == expected
 
 
-def test_double_sha():
-    for test_case in TEST_CASES:
-        actual = bytes.fromhex(test_case['double_sha'])
-        expected = double_sha(bytes.fromhex(test_case['hex']))
-        assert actual == expected
-    
+    def test_double_sha(self):
+        for test_case in TEST_CASES:
+            actual = bytes.fromhex(test_case['double_sha'])
+            expected = double_sha(bytes.fromhex(test_case['hex']))
+            assert actual == expected
+        
 
-def test_hash160():
-    for test_case in TEST_CASES:
-        actual = bytes.fromhex(test_case['hash160'])
-        expected = hash160(bytes.fromhex(test_case['hex']))
-        assert actual == expected
+    def test_hash160(self):
+        for test_case in TEST_CASES:
+            actual = bytes.fromhex(test_case['hash160'])
+            expected = hash160(bytes.fromhex(test_case['hex']))
+            assert actual == expected

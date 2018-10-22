@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
-import unittest
 from litcoin.binhex import b, x
+import unittest
 
 
 class TestBinHex(unittest.TestCase):

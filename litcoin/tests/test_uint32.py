@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 
-import unittest
 from litcoin.binhex import b, x
 from litcoin.uint32 import UINT32_SIZE_IN_BYTES, validate_uint32, serialize_uint32, deserialize_uint32
+import unittest
 
 
 class TestUInt32(unittest.TestCase):

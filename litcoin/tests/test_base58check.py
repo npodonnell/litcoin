@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 
-import unittest
 from litcoin.binhex import b
 from litcoin.base58check import base58check_encode, base58check_decode
+import unittest
 
 
 TEST_CASES = [
@@ -16,6 +16,7 @@ TEST_CASES = [
     {'hex': 'ffff', 'base58check': '3CUsNEUP5'},
     {'hex': '0102030405060708090a0b0c0d0e0f', 'base58check': 'Bhh3pU9gLXZiNDL6PEZxnvuRw'}
 ]
+
 
 class TestBase58Check(unittest.TestCase):
     def test_base58check_encode(self):
