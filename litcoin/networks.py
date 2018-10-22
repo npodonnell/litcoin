@@ -16,17 +16,17 @@ NETWORKS = {
 }
 
 
-def get_name(key):
+def network_name(key):
     return NETWORKS[key]['name']
 
 
-def get_inventor(key):
+def network_inventor(key):
     return NETWORKS[key]['inventor']
 
 
-def get_p2pkh_prefix(key):
+def network_p2pkh_prefix(key):
     return NETWORKS[key]['p2pkh_prefix']
 
 
-def get_p2sh_prefix(key):
+def network_p2sh_prefix(key):
     return NETWORKS[key]['p2sh_prefix']
