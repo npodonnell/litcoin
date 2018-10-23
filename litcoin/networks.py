@@ -15,6 +15,8 @@ NETWORKS = {
     }
 }
 
+NETWORK_KEYS = list(NETWORKS.keys())
+
 
 def network_name(key):
     return NETWORKS[key]['name']
