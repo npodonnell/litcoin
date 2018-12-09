@@ -5,13 +5,15 @@ NETWORKS = {
         'name': 'Bitcoin',
         'inventor': 'Satoshi Nakamoto',
         'p2pkh_prefix': b'\x00',
-        'p2sh_prefix': b'\x05'
+        'p2sh_prefix': b'\x05',
+        'wif_prefix': b'\x80'
     },
     'litecoin': {
         'name': 'Litecoin',
         'inventor': 'Charles Lee',
         'p2pkh_prefix': b'\x30',
-        'p2sh_prefix': b'\x05'
+        'p2sh_prefix': b'\x05',
+        'wif_prefix': b'\xb0'
     }
 }
 
@@ -32,3 +34,7 @@ def network_p2pkh_prefix(key):
 
 def network_p2sh_prefix(key):
     return NETWORKS[key]['p2sh_prefix']
+
+
+def network_wif_prefix(key):
+    return NETWORKS[key]['wif_prefix']

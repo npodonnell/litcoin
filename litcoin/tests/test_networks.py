@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
-from litcoin.networks import NETWORKS, NETWORK_KEYS, network_name, network_inventor, network_p2pkh_prefix, network_p2sh_prefix
+from litcoin.networks import NETWORKS, NETWORK_KEYS, network_name, network_inventor, \
+	network_p2pkh_prefix, network_p2sh_prefix, network_wif_prefix
 import unittest
 
 
@@ -27,3 +28,8 @@ class TestBinHex(unittest.TestCase):
 	def test_network_p2sh_prefix(self):
 	    for key in NETWORK_KEYS:
 	        assert network_p2sh_prefix(key) == NETWORKS[key]['p2sh_prefix']
+
+
+	def test_network_wif_prefix(self):
+	    for key in NETWORK_KEYS:
+	        assert network_wif_prefix(key) == NETWORKS[key]['wif_prefix']
