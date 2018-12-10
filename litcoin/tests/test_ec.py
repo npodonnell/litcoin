@@ -25,25 +25,26 @@ class TestEc(unittest.TestCase):
         with self.assertRaises(TypeError, msg='should be raised because `privkey` is not present'):
             validate_privkey()
 
+
     def test_compress_ec_point(self):
         actual = compress_ec_point(0, 0)
-        expected = bytes.fromhex('020000000000000000000000000000000000000000000000000000000000000000')
+        expected = b('020000000000000000000000000000000000000000000000000000000000000000')
         assert actual == expected
 
         actual = compress_ec_point(0, 1)
-        expected = bytes.fromhex('030000000000000000000000000000000000000000000000000000000000000000')
+        expected = b('030000000000000000000000000000000000000000000000000000000000000000')
         assert actual == expected
 
         actual = compress_ec_point(1, 0)
-        expected = bytes.fromhex('020000000000000000000000000000000000000000000000000000000000000001')
+        expected = b('020000000000000000000000000000000000000000000000000000000000000001')
         assert actual == expected
 
         actual = compress_ec_point(1, 1)
-        expected = bytes.fromhex('030000000000000000000000000000000000000000000000000000000000000001')
+        expected = b('030000000000000000000000000000000000000000000000000000000000000001')
         assert actual == expected
 
         actual = compress_ec_point(1, 1)
-        expected = bytes.fromhex('030000000000000000000000000000000000000000000000000000000000000001')
+        expected = b('030000000000000000000000000000000000000000000000000000000000000001')
         assert actual == expected
 
 
@@ -58,29 +59,29 @@ class TestEc(unittest.TestCase):
             assert privkey1 != privkey2
 
         actual = make_privkey(passphrase='')
-        expected = bytes.fromhex('e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855')
+        expected = b('e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855')
         assert actual == expected
 
         actual = make_privkey(passphrase='bitcoin')
-        expected = bytes.fromhex('6b88c087247aa2f07ee1c5956b8e1a9f4c7f892a70e324f1bb3d161e05ca107b')
+        expected = b('6b88c087247aa2f07ee1c5956b8e1a9f4c7f892a70e324f1bb3d161e05ca107b')
         assert actual == expected
 
         actual = make_privkey(passphrase='litecoin')
-        expected = bytes.fromhex('6ce9fe4549f0f60d6fcc7697681ec2e6ed2eade066c3f6829628a59ce5cfc64b')
+        expected = b('6ce9fe4549f0f60d6fcc7697681ec2e6ed2eade066c3f6829628a59ce5cfc64b')
         assert actual == expected
 
         actual = make_privkey(passphrase='litcoin')
-        expected = bytes.fromhex('83154786b09476e9221d30bb1f98cb678c02bc8ddc97deeb654f6dcd93f95474')
+        expected = b('83154786b09476e9221d30bb1f98cb678c02bc8ddc97deeb654f6dcd93f95474')
         assert actual == expected
 
 
     def test_derive_pubkey(self):
-        actual = derive_pubkey(bytes.fromhex('7cf3547ccfbf3b17d3eae42256396c0544714b0df4f8c8c4268a3e2d705eaf73'))
-        expected = bytes.fromhex('02172204d37ae71933f2595bc74eb90e984254759c560245d8bf523e0d60c1477b')
+        actual = derive_pubkey(b('7cf3547ccfbf3b17d3eae42256396c0544714b0df4f8c8c4268a3e2d705eaf73'))
+        expected = b('02172204d37ae71933f2595bc74eb90e984254759c560245d8bf523e0d60c1477b')
         assert actual == expected
 
-        actual = derive_pubkey(bytes.fromhex('0ec786c41a15ced8b1d018539cdcbdc50c40e733a9ba6775ce5733d75bb78a42'))
-        expected = bytes.fromhex('032be7848317b80628112869f4da0edfbc1f4ca9539a8c94355bad5961a36d33d6')
+        actual = derive_pubkey(b('0ec786c41a15ced8b1d018539cdcbdc50c40e733a9ba6775ce5733d75bb78a42'))
+        expected = b('032be7848317b80628112869f4da0edfbc1f4ca9539a8c94355bad5961a36d33d6')
         assert actual == expected
 
 
