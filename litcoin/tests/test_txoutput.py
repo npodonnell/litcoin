@@ -12,9 +12,7 @@ LOCKING_SCRIPT = []
 
 class TestTxoutput(unittest.TestCase):
     def test_TXOUTPUT_SIZE_RANGE_IN_BYTES(self):
-        assert TXOUTPUT_SIZE_RANGE_IN_BYTES == ( \
-            UINT64_SIZE_IN_BYTES + VARINT_SIZE_RANGE_IN_BYTES[0] \
-        )
+        assert TXOUTPUT_SIZE_RANGE_IN_BYTES == (UINT64_SIZE_IN_BYTES + VARINT_SIZE_RANGE_IN_BYTES[0])
 
     def test_make_txoutput(self):
         actual = make_txoutput(VALUE, LOCKING_SCRIPT)
@@ -38,7 +36,7 @@ class TestTxoutput(unittest.TestCase):
         with self.assertRaises(AssertionError, msg='should be raised because `txoutput.value` is invalid'):
             validate_txoutput({'value': 42.0, 'locking_script': LOCKING_SCRIPT})
         with self.assertRaises(AssertionError, msg='should be raised because `txoutput.locking_script` is invalid'):
-            validate_txoutput({'value': VALUE, 'locking_script': ['invlalid', 'locking', 'script']})
+            validate_txoutput({'value': VALUE, 'locking_script': 'invlalid-locking-script'})
         with self.assertRaises(AssertionError, msg='should be raised because `txoutput.value` is missing'):
             validate_txoutput({'locking_script': LOCKING_SCRIPT})
         with self.assertRaises(AssertionError, msg='should be raised because `txoutput.locking_script` is missing'):

@@ -16,9 +16,7 @@ SEQUENCE_NO = 42
 
 class TestTxinput(unittest.TestCase):
     def test_TXINPUT_SIZE_RANGE_IN_BYTES(self):
-        assert TXINPUT_SIZE_RANGE_IN_BYTES == ( \
-            OUTPOINT_SIZE_IN_BYTES + VARINT_SIZE_RANGE_IN_BYTES[0] + UINT32_SIZE_IN_BYTES, \
-        )
+        assert TXINPUT_SIZE_RANGE_IN_BYTES == (OUTPOINT_SIZE_IN_BYTES + VARINT_SIZE_RANGE_IN_BYTES[0] + UINT32_SIZE_IN_BYTES)
 
     def test_make_txinput(self):
         actual = make_txinput(OUTPOINT, UNLOCKING_SCRIPT, SEQUENCE_NO)
@@ -46,7 +44,7 @@ class TestTxinput(unittest.TestCase):
         with self.assertRaises(AssertionError, msg='should be raised because `txinput.outpoint` is invalid'):
             validate_txinput({'outpoint': {'invalid': 'outpoint'}, 'unlocking_script': UNLOCKING_SCRIPT, 'sequence_no': SEQUENCE_NO})
         with self.assertRaises(AssertionError, msg='should be raised because `txinput.unlocking_script` is invalid'):
-            validate_txinput({'outpoint': OUTPOINT, 'unlocking_script': ['invalid', 'script'], 'sequence_no': SEQUENCE_NO})
+            validate_txinput({'outpoint': OUTPOINT, 'unlocking_script': 'invalid-script', 'sequence_no': SEQUENCE_NO})
         with self.assertRaises(AssertionError, msg='should be raised because `txinput.sequence_no` is invalid'):
             validate_txinput({'outpoint': OUTPOINT, 'unlocking_script': UNLOCKING_SCRIPT, 'sequence_no': -1})
         with self.assertRaises(AssertionError, msg='should be raised because `txinput.outpoint` is missing'):
