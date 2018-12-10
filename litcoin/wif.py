@@ -4,7 +4,7 @@ from litcoin.networks import network_wif_prefix
 from litcoin.base58check import base58check_encode, base58check_decode
 
 
-def privkey_to_wif(privkey, network, is_compressed_pubkey):
+def privkey_to_wif(privkey, is_compressed_pubkey, network):
     wif_data = network_wif_prefix(network) + privkey + (b'\x01' if is_compressed_pubkey else b'')
     return base58check_encode(wif_data)
 
