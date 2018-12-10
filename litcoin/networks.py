@@ -2,14 +2,12 @@
 
 NETWORKS = {
     'bitcoin': {
-        'name': 'Bitcoin',
         'inventor': 'Satoshi Nakamoto',
         'p2pkh_prefix': b'\x00',
         'p2sh_prefix': b'\x05',
         'wif_prefix': b'\x80'
     },
     'litecoin': {
-        'name': 'Litecoin',
         'inventor': 'Charles Lee',
         'p2pkh_prefix': b'\x30',
         'p2sh_prefix': b'\x05',
@@ -17,11 +15,15 @@ NETWORKS = {
     }
 }
 
-NETWORK_KEYS = list(NETWORKS.keys())
+
+NETWORK_NAMES = list(NETWORKS.keys())
 
 
-def network_name(key):
-    return NETWORKS[key]['name']
+def get_network(network_name):
+    try:
+        return NETWORKS[network_name]
+    except:
+        raise ValueError('Unknown network: {0}'.format(network_name))
 
 
 def network_inventor(key):
