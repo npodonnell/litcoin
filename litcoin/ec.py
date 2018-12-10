@@ -12,6 +12,11 @@ from litcoin.hashing import single_sha
 KEY_SIZE_BYTES = 32
 
 
+def validate_privkey(privkey):
+    assert type(privkey) == bytes, 'privkey should be of type bytes'
+    assert len(privkey) == KEY_SIZE_BYTES, 'privkey should be of length {0}'.format(KEY_SIZE_BYTES)
+
+
 def compress_ec_point(x, y):
     x_bytes = x.to_bytes(KEY_SIZE_BYTES, byteorder='big')
     prefix = b'\02' if y % 2 == 0 else b'\03'

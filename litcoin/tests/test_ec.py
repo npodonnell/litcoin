@@ -1,10 +1,30 @@
 #!/usr/bin/env python3
 
-from litcoin.ec import compress_ec_point, make_privkey, derive_pubkey, sign_message, verify_signature
+from litcoin.ec import validate_privkey, compress_ec_point, make_privkey, derive_pubkey, sign_message, \
+    verify_signature
+from litcoin.binhex import b
 import unittest
 
+VALID_PRIVKEY = '7fb4f6e09d5344c46b4551fe08af8033d5d5864d9bbe551f282a574c928e945b'
+NONHEX_PRIVKEY = '7gb4f6e09d5344c46b4551fe08af8033d5d5864d9bbe551f282a574c928e945b'
+TOO_SHORT_PRIVKEY = '8be5d14cf68e613515a2ee1a6f09f34f9f567d6ed68e72eb5768b6dfd19a61'
+TOO_LONG_PRIVKEY = 'd5ebe46d38e62125e31739cd3de9efbd90e6d9be1cca7d4d66e5bc666cb995fe41'
 
 class TestEc(unittest.TestCase):
+    def test_validate_privkey(self):
+        validate_privkey(b(VALID_PRIVKEY))
+
+        with self.assertRaises(AssertionError, msg='should be raised because `privkey` contains non-hex character'):
+            validate_privkey(b(NONHEX_PRIVKEY))
+        with self.assertRaises(AssertionError, msg='should be raised because `privkey` is too short'):
+            validate_privkey(b(TOO_SHORT_PRIVKEY))
+        with self.assertRaises(AssertionError, msg='should be raised because `privkey` is too long'):
+            validate_privkey(b(TOO_LONG_PRIVKEY))
+        with self.assertRaises(AssertionError, msg='should be raised because `privkey` is wrong type'):
+            validate_privkey(VALID_PRIVKEY)
+        with self.assertRaises(TypeError, msg='should be raised because `privkey` is not present'):
+            validate_privkey()
+
     def test_compress_ec_point(self):
         actual = compress_ec_point(0, 0)
         expected = bytes.fromhex('020000000000000000000000000000000000000000000000000000000000000000')
