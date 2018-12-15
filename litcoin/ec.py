@@ -13,28 +13,37 @@ KEY_SIZE_BYTES = 32
 
 
 def validate_privkey(privkey):
-    assert type(privkey) == bytes, 'privkey should be of type bytes'
-    assert len(privkey) == KEY_SIZE_BYTES, 'privkey should be of length {0}'.format(KEY_SIZE_BYTES)
+    assert type(privkey) == bytes, 'Privkey should be of type bytes'
+    assert len(privkey) == KEY_SIZE_BYTES, 'Privkey should be of length {0}'.format(KEY_SIZE_BYTES)
 
 
-def compress_ec_point(x, y):
-    x_bytes = x.to_bytes(KEY_SIZE_BYTES, byteorder='big')
-    prefix = b'\02' if y % 2 == 0 else b'\03'
-    return prefix + x_bytes
+def make_privkey(passphrase=None):
+    assert passphrase is None or type(passphrase) == str, 'Passphrase should be None or a string'
 
-
-def make_privkey(**kwargs):
-    if 'passphrase' in kwargs:
-        return single_sha(kwargs['passphrase'].encode('utf-8'))
+    if passphrase is not None:
+        return single_sha(passphrase.encode('utf-8'))
     return os.urandom(KEY_SIZE_BYTES)
 
 
-def derive_pubkey(privkey):
+def derive_pubkey(privkey, compress=True):
+    validate_privkey(privkey)
+    assert type(compress) == bool, 'Compress should be of type bool'
+
     privkey_int = int.from_bytes(privkey, signed=False, byteorder='big')
     key = derive_private_key(privkey_int, SECP256K1(), default_backend())
     public_key = key.public_key()
     point = public_key.public_numbers()
-    return compress_ec_point(point.x, point.y)
+
+    x_bytes = point.x.to_bytes(KEY_SIZE_BYTES, byteorder='big')
+
+    if compress:
+        # return a compressed pubkey
+        prefix = b'\02' if point.y % 2 == 0 else b'\03'
+        return prefix + x_bytes
+    else:
+        # return an uncompressed pubkey
+        y_bytes = point.y.to_bytes(KEY_SIZE_BYTES, byteorder='big')
+        return b'\04' + x_bytes + y_bytes
 
 
 def sign_message(message, privkey):
