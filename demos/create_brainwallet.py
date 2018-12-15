@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 
-from .networks import NETWORK_NAMES
+import sys
+sys.path.append('../..')
+
+from litcoin.networks import NETWORK_NAMES
 from litcoin.ec import make_privkey, derive_pubkey
 from litcoin.address import make_p2pkh_address
 from litcoin.wif import privkey_to_wif
