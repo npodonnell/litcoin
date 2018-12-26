@@ -2,7 +2,6 @@
 
 from litcoin.binhex import b
 from litcoin.outpoint import OUTPOINT_SIZE_IN_BYTES, make_outpoint, serialize_outpoint
-from litcoin.script.validation import validate_script
 from litcoin.script.serialization import serialize_script
 from litcoin.uint32 import UINT32_SIZE_IN_BYTES, serialize_uint32
 from litcoin.varint import VARINT_SIZE_RANGE_IN_BYTES, serialize_varint

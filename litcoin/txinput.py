@@ -3,7 +3,7 @@
 from litcoin.outpoint import OUTPOINT_SIZE_IN_BYTES, validate_outpoint, serialize_outpoint, deserialize_outpoint
 from litcoin.uint32 import UINT32_SIZE_IN_BYTES, validate_uint32, serialize_uint32, deserialize_uint32
 from litcoin.varint import VARINT_SIZE_RANGE_IN_BYTES, serialize_varint, deserialize_varint
-from litcoin.script.validation import validate_script
+from litcoin.script.validator import validate_script
 from litcoin.script.serialization import serialize_script
 from litcoin.serialization import validate_data
 

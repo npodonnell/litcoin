@@ -2,7 +2,7 @@
 
 from litcoin.uint64 import UINT64_SIZE_IN_BYTES, validate_uint64, serialize_uint64, deserialize_uint64
 from litcoin.varint import VARINT_SIZE_RANGE_IN_BYTES, serialize_varint
-from litcoin.script.validation import validate_script
+from litcoin.script.validator import validate_script
 from litcoin.script.serialization import serialize_script
 from litcoin.serialization import validate_data
 
