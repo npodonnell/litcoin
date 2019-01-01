@@ -10,6 +10,8 @@ class ScriptOp(object):
     def __str__(self):
         return 'OP_' + self.name
 
+    def __repr__(self):
+        return 'OP_' + self.name
 
 # push value
 OP_0 = ScriptOp(b('00'), '0')
