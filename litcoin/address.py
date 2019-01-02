@@ -2,12 +2,12 @@
 
 from litcoin.hashing import hash160, double_sha
 from litcoin.base58check import base58check_encode
-from litcoin.networks import network_p2pkh_prefix
+from litcoin.networks import NETWORK_NAMES, network_p2pkh_prefix
 
 
-def make_p2pkh_address(pubkey, **kwargs):
+def make_p2pkh_address(pubkey, network=NETWORK_NAMES[0]):
     pubkey_hash = hash160(pubkey)
-    prefixed_pubkey_hash = network_p2pkh_prefix(kwargs['network']) + pubkey_hash
+    prefixed_pubkey_hash = network_p2pkh_prefix(network) + pubkey_hash
     address = base58check_encode(prefixed_pubkey_hash)
     return address
 
