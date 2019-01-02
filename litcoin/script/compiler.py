@@ -19,7 +19,10 @@ def compile_script(script):
                 compiled += OP_0.opcode
             elif len(item) == 1:
                 item_uint8 = deserialize_uint8(item)
-                if item_uint8 < 0x11:
+                if item_uint8 == 0x00:
+                    # another way of representing zero
+                    compiled += OP_0.opcode
+                elif item_uint8 < 0x11:
                     # 80 is the difference between OP_1's opcode (0x51) and 1
                     compiled += serialize_uint8(item_uint8 + 80)
                 else:
