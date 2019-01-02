@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+from .binhex import b
+
 NETWORKS = {
     'bitcoin': {
         'inventor': 'Satoshi Nakamoto',
@@ -17,6 +19,12 @@ NETWORKS = {
 
 
 NETWORK_NAMES = list(NETWORKS.keys())
+
+
+NETWORK_BY_P2PKH_PREFIX = {
+    b('00'): 'bitcoin',
+    b('30'): 'litecoin'
+}
 
 
 def get_network(network_name):
