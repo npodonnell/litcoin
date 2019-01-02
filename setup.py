@@ -7,7 +7,7 @@ setup(
     version='0.0.0',
     description='A library for interacting with Bitcoin and Litecoin',
     license='MIT',
-    packages=['litcoin'],
+    packages=['litcoin', 'litcoin.script'],
     author='Noel ODonnell',
     keywords=['bitcoin', 'litecoin', 'litcoin'],
     url='https://github.com/odonnellnoel/litcoin'
