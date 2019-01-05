@@ -1,6 +1,5 @@
 
-# **Lit**coin
-
+# 🔥**Lit**coin
 A library for interacting with Bitcoin and Litecoin (and possibly more similar cryptocurrencies in the future)
 
 
