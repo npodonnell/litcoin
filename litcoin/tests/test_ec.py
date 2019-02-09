@@ -1,33 +1,51 @@
 #!/usr/bin/env python3
 
-from litcoin.ec import validate_privkey, make_privkey, \
+from litcoin.ec import validate_privkey, validate_pubkey, make_privkey, \
     derive_pubkey, sign_message, verify_signature
 from litcoin.binhex import b
 import unittest
 
-VALID_PRIVKEY = '7fb4f6e09d5344c46b4551fe08af8033d5d5864d9bbe551f282a574c928e945b'
-NONHEX_PRIVKEY = '7gb4f6e09d5344c46b4551fe08af8033d5d5864d9bbe551f282a574c928e945b'
-TOO_SHORT_PRIVKEY = '7fb4f6e09d5344c46b4551fe08af8033d5d5864d9bbe551f282a574c928e94'
-TOO_LONG_PRIVKEY = '7fb4f6e09d5344c46b4551fe08af8033d5d5864d9bbe551f282a574c928e945bff'
+VALID_PRIVKEY = b('7fb4f6e09d5344c46b4551fe08af8033d5d5864d9bbe551f282a574c928e945b')
 
-COMPRESSED_PUBKEY = '021d5219a13f0f23ebbd8e88abe9ab9eac77f9daaa859cfff0580279a15d9aa12b'
-UNCOMPRESSED_PUBKEY = '041d5219a13f0f23ebbd8e88abe9ab9eac77f9daaa859cfff0580279a15d9aa12bc93b5e89d20236bb095d00f580821b2c4034cf3b35b5b2e6bc89a5f09ec8a19a'
+TOO_SHORT_PRIVKEY = b('7fb4f6e09d5344c46b4551fe08af8033d5d5864d9bbe551f282a574c928e94')
+TOO_LONG_PRIVKEY = b('7fb4f6e09d5344c46b4551fe08af8033d5d5864d9bbe551f282a574c928e945bff')
+
+VALID_UNCOMPRESSED_PUBKEY = b('041d5219a13f0f23ebbd8e88abe9ab9eac77f9daaa859cfff0580279a15d9aa12bc93b5e89d20236bb095d00f580821b2c4034cf3b35b5b2e6bc89a5f09ec8a19a')
+VALID_COMPRESSED_PUBKEY = b('021d5219a13f0f23ebbd8e88abe9ab9eac77f9daaa859cfff0580279a15d9aa12b')
+
+TOO_SHORT_UNCOMPRESSED_PUBKEY = b('041d5219a13f0f23ebbd8e88abe9ab9eac77f9daaa859cfff0580279a15d9aa12bc93b5e89d20236bb095d00f580821b2c4034cf3b35b5b2e6bc89a5f09ec8a1')
+TOO_LONG_UNCOMPRESSED_PUBKEY = b('041d5219a13f0f23ebbd8e88abe9ab9eac77f9daaa859cfff0580279a15d9aa12bc93b5e89d20236bb095d00f580821b2c4034cf3b35b5b2e6bc89a5f09ec8a19a34')
+
+TOO_SHORT_COMPRESSED_PUBKEY = b('021d5219a13f0f23ebbd8e88abe9ab9eac77f9daaa859cfff0580279a15d9aa1')
+TOO_LONG_COMPRESSED_PUBKEY = b('021d5219a13f0f23ebbd8e88abe9ab9eac77f9daaa859cfff0580279a15d9aa12b42')
+
 
 class TestEc(unittest.TestCase):
     def test_validate_privkey(self):
-        validate_privkey(b(VALID_PRIVKEY))
+        validate_privkey(VALID_PRIVKEY)
 
-        with self.assertRaises(AssertionError, msg='Should be raised because `privkey` contains non-hex character'):
-            validate_privkey(b(NONHEX_PRIVKEY))
         with self.assertRaises(AssertionError, msg='Should be raised because `privkey` is too short'):
-            validate_privkey(b(TOO_SHORT_PRIVKEY))
+            validate_privkey(TOO_SHORT_PRIVKEY)
         with self.assertRaises(AssertionError, msg='Should be raised because `privkey` is too long'):
-            validate_privkey(b(TOO_LONG_PRIVKEY))
+            validate_privkey(TOO_LONG_PRIVKEY)
         with self.assertRaises(AssertionError, msg='Should be raised because `privkey` is wrong type'):
-            validate_privkey(VALID_PRIVKEY)
-        with self.assertRaises(TypeError, msg='Should be raised because `privkey` is not present'):
-            validate_privkey()
-    
+            validate_privkey('wrong type')
+
+
+    def test_validate_pubkey(self):
+        validate_pubkey(VALID_UNCOMPRESSED_PUBKEY)
+        validate_pubkey(VALID_COMPRESSED_PUBKEY)
+
+        with self.assertRaises(AssertionError, msg='Should be raised because `pubkey` (uncompressed) is too short'):
+            validate_pubkey(TOO_SHORT_UNCOMPRESSED_PUBKEY)
+        with self.assertRaises(AssertionError, msg='Should be raised because `pubkey` (uncompressed) is too long'):
+            validate_pubkey(TOO_LONG_UNCOMPRESSED_PUBKEY)
+        with self.assertRaises(AssertionError, msg='Should be raised because `pubkey` (compressed) is too short'):
+            validate_pubkey(TOO_SHORT_COMPRESSED_PUBKEY)
+        with self.assertRaises(AssertionError, msg='Should be raised because `pubkey` (compressed) is too long'):
+            validate_pubkey(TOO_LONG_COMPRESSED_PUBKEY)
+        with self.assertRaises(AssertionError, msg='Should be raised because `pubkey` is wrong type'):
+            validate_pubkey('wrong type')
 
     def test_make_privkey(self):
         for _ in range(1000):
@@ -60,12 +78,12 @@ class TestEc(unittest.TestCase):
 
 
     def test_derive_pubkey(self):
-        actual = derive_pubkey(b(VALID_PRIVKEY), True)
-        expected = b(COMPRESSED_PUBKEY)
+        actual = derive_pubkey(VALID_PRIVKEY, True)
+        expected = VALID_COMPRESSED_PUBKEY
         assert actual == expected, 'Failed to derive compressed pubkey'
 
-        actual = derive_pubkey(b(VALID_PRIVKEY), False)
-        expected = b(UNCOMPRESSED_PUBKEY)
+        actual = derive_pubkey(VALID_PRIVKEY, False)
+        expected = VALID_UNCOMPRESSED_PUBKEY
         assert actual == expected, 'Failed to derive uncompressed pubkey'
 
 
