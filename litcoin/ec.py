@@ -8,21 +8,38 @@ from cryptography.hazmat.primitives.asymmetric.ec import SECP256K1
 from cryptography.hazmat.primitives.asymmetric.ec import derive_private_key
 from cryptography.hazmat.primitives.asymmetric.ec import EllipticCurvePrivateKey
 from litcoin.hashing import single_sha
+from litcoin.binhex import b, x
 
-KEY_SIZE_BYTES = 32
-
+PRIVKEY_SIZE_BYTES = 32
+UNCOMPRESSED_PUBKEY_SIZE_BYTES = 65
+COMPRESSED_PUBKEY_SIZE_BYTES = 33
 
 def validate_privkey(privkey):
-    assert type(privkey) == bytes, 'Privkey should be of type bytes'
-    assert len(privkey) == KEY_SIZE_BYTES, 'Privkey should be of length {0}'.format(KEY_SIZE_BYTES)
+    assert type(privkey) == bytes, '`privkey` should be of type `bytes`'
+    assert len(privkey) == PRIVKEY_SIZE_BYTES, '`privkey` should be of length {0}'.format(PRIVKEY_SIZE_BYTES)
 
+
+def validate_pubkey(pubkey):
+    assert type(pubkey) == bytes, '`pubkey` should be of type bytes'
+    assert len(pubkey) == UNCOMPRESSED_PUBKEY_SIZE_BYTES or len(pubkey) == COMPRESSED_PUBKEY_SIZE_BYTES, \
+        '`pubkey` should be either {0} bytes or {1} bytes' \
+        .format(UNCOMPRESSED_PUBKEY_SIZE_BYTES, COMPRESSED_PUBKEY_SIZE_BYTES)
+
+    if pubkey[0] == 0x04:
+        assert len(pubkey) == UNCOMPRESSED_PUBKEY_SIZE_BYTES, \
+            'Uncompressed `pubkey` should be of length {0}'.format(UNCOMPRESSED_PUBKEY_SIZE_BYTES)
+    elif pubkey[0] == 0x02 or pubkey[0] == 0x03:
+        assert len(pubkey) == COMPRESSED_PUBKEY_SIZE_BYTES, \
+            'Compressed `pubkey` should be of length {0}'.format(COMPRESSED_PUBKEY_SIZE_BYTES)
+    else:
+        assert False, '`pubkey` should begin with 0x02, 0x03 or 0x04'
 
 def make_privkey(passphrase=None):
     assert passphrase is None or type(passphrase) == str, 'Passphrase should be None or a string'
 
     if passphrase is not None:
         return single_sha(passphrase.encode('utf-8'))
-    return os.urandom(KEY_SIZE_BYTES)
+    return os.urandom(PRIVKEY_SIZE_BYTES)
 
 
 def derive_pubkey(privkey, compress=True):
@@ -34,7 +51,7 @@ def derive_pubkey(privkey, compress=True):
     public_key = key.public_key()
     point = public_key.public_numbers()
 
-    x_bytes = point.x.to_bytes(KEY_SIZE_BYTES, byteorder='big')
+    x_bytes = point.x.to_bytes(PRIVKEY_SIZE_BYTES, byteorder='big')
 
     if compress:
         # return a compressed pubkey
@@ -42,7 +59,7 @@ def derive_pubkey(privkey, compress=True):
         return prefix + x_bytes
     else:
         # return an uncompressed pubkey
-        y_bytes = point.y.to_bytes(KEY_SIZE_BYTES, byteorder='big')
+        y_bytes = point.y.to_bytes(PRIVKEY_SIZE_BYTES, byteorder='big')
         return b'\04' + x_bytes + y_bytes
 
 

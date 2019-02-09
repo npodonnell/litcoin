@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 
-from litcoin.ec import validate_privkey, validate_pubkey, make_privkey, \
-    derive_pubkey, sign_message, verify_signature
+from litcoin.ec import PRIVKEY_SIZE_BYTES, UNCOMPRESSED_PUBKEY_SIZE_BYTES, \
+    COMPRESSED_PUBKEY_SIZE_BYTES, validate_privkey, validate_pubkey, \
+    make_privkey, derive_pubkey, sign_message, verify_signature
 from litcoin.binhex import b
 import unittest
 
@@ -15,9 +16,10 @@ VALID_COMPRESSED_PUBKEY = b('021d5219a13f0f23ebbd8e88abe9ab9eac77f9daaa859cfff05
 
 TOO_SHORT_UNCOMPRESSED_PUBKEY = b('041d5219a13f0f23ebbd8e88abe9ab9eac77f9daaa859cfff0580279a15d9aa12bc93b5e89d20236bb095d00f580821b2c4034cf3b35b5b2e6bc89a5f09ec8a1')
 TOO_LONG_UNCOMPRESSED_PUBKEY = b('041d5219a13f0f23ebbd8e88abe9ab9eac77f9daaa859cfff0580279a15d9aa12bc93b5e89d20236bb095d00f580821b2c4034cf3b35b5b2e6bc89a5f09ec8a19a34')
-
+WRONG_LEADING_BYTE_UNCOMPRESSED_PUBKEY = b('031d5219a13f0f23ebbd8e88abe9ab9eac77f9daaa859cfff0580279a15d9aa12bc93b5e89d20236bb095d00f580821b2c4034cf3b35b5b2e6bc89a5f09ec8a19a')
 TOO_SHORT_COMPRESSED_PUBKEY = b('021d5219a13f0f23ebbd8e88abe9ab9eac77f9daaa859cfff0580279a15d9aa1')
 TOO_LONG_COMPRESSED_PUBKEY = b('021d5219a13f0f23ebbd8e88abe9ab9eac77f9daaa859cfff0580279a15d9aa12b42')
+WRONG_LEADING_BYTE_COMPRESSED_PUBKEY = b('041d5219a13f0f23ebbd8e88abe9ab9eac77f9daaa859cfff0580279a15d9aa12b')
 
 
 class TestEc(unittest.TestCase):
@@ -40,22 +42,26 @@ class TestEc(unittest.TestCase):
             validate_pubkey(TOO_SHORT_UNCOMPRESSED_PUBKEY)
         with self.assertRaises(AssertionError, msg='Should be raised because `pubkey` (uncompressed) is too long'):
             validate_pubkey(TOO_LONG_UNCOMPRESSED_PUBKEY)
+        with self.assertRaises(AssertionError, msg='Should be raised because `pubkey` (uncompressed) has wrong leading byte'):
+            validate_pubkey(WRONG_LEADING_BYTE_UNCOMPRESSED_PUBKEY)
         with self.assertRaises(AssertionError, msg='Should be raised because `pubkey` (compressed) is too short'):
             validate_pubkey(TOO_SHORT_COMPRESSED_PUBKEY)
         with self.assertRaises(AssertionError, msg='Should be raised because `pubkey` (compressed) is too long'):
             validate_pubkey(TOO_LONG_COMPRESSED_PUBKEY)
+        with self.assertRaises(AssertionError, msg='Should be raised because `pubkey` (compressed) has wrong leading byte'):
+            validate_pubkey(WRONG_LEADING_BYTE_COMPRESSED_PUBKEY)
         with self.assertRaises(AssertionError, msg='Should be raised because `pubkey` is wrong type'):
             validate_pubkey('wrong type')
 
+
     def test_make_privkey(self):
-        for _ in range(1000):
-            privkey1 = make_privkey()
-            privkey2 = make_privkey()
-            assert type(privkey1) == bytes
-            assert type(privkey2) == bytes
-            assert len(privkey1) == 32
-            assert len(privkey2) == 32
-            assert privkey1 != privkey2
+        privkey1 = make_privkey()
+        privkey2 = make_privkey()
+        assert type(privkey1) == bytes
+        assert type(privkey2) == bytes
+        assert len(privkey1) == PRIVKEY_SIZE_BYTES
+        assert len(privkey2) == PRIVKEY_SIZE_BYTES
+        assert privkey1 != privkey2
 
         actual = make_privkey(passphrase='')
         expected = b('e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855')
