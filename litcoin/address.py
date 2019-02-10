@@ -12,8 +12,11 @@ def make_p2pkh_address(pubkey, network_name):
     return address
 
 
-def make_p2sh_address(script):
-    pass
+def make_p2sh_address(script, network_name):
+    script_hash = hash160(script)
+    prefixed_script_hash = NETWORKS[network_name]['p2sh_prefix'] + script_hash
+    address = base58check_encode(prefixed_script_hash)
+    return address
 
 
 def address_to_network(addr):
