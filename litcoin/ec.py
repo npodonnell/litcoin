@@ -22,7 +22,7 @@ def validate_privkey(privkey):
 def validate_pubkey(pubkey):
     assert type(pubkey) == bytes, '`pubkey` should be of type bytes'
     assert len(pubkey) == UNCOMPRESSED_PUBKEY_SIZE_BYTES or len(pubkey) == COMPRESSED_PUBKEY_SIZE_BYTES, \
-        '`pubkey` should be either {0} bytes or {1} bytes' \
+        '`pubkey` should be of length {0} or {1} bytes' \
         .format(UNCOMPRESSED_PUBKEY_SIZE_BYTES, COMPRESSED_PUBKEY_SIZE_BYTES)
 
     if pubkey[0] == 0x04:
