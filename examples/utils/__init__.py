@@ -27,7 +27,7 @@ def get_network_name():
     Prompt user to choose a network
     """
     while True:
-        network_name = input('network ({0}) ? '.format(','.join(NETWORK_NAMES)))
+        network_name = input('network ({0})?'.format(','.join(NETWORK_NAMES)))
         if network_name in NETWORK_NAMES:
             return network_name
 
