@@ -3,8 +3,9 @@
 import sys
 sys.path.append('../..')
 
-
 from litcoin.networks import NETWORK_NAMES
+from litcoin.ec import validate_pubkey
+from litcoin.binhex import b
 
 
 def get_ans(question):
@@ -29,3 +30,16 @@ def get_network_name():
         network_name = input('network ({0}) ? '.format(','.join(NETWORK_NAMES)))
         if network_name in NETWORK_NAMES:
             return network_name
+
+
+def get_public_key():
+    """
+    Prompt user to input a public key
+    """
+    while True:
+        try:
+            pubkey = b(input('Public key?'))
+            validate_pubkey(pubkey)
+            return pubkey
+        except AssertionError as ex:
+            print(ex)
