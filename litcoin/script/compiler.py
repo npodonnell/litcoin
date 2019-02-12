@@ -8,7 +8,7 @@ from .operations import ScriptOp, OP_0, OP_PUSHDATA1, OP_PUSHDATA2, OP_PUSHDATA4
 
 def compile_script(script):
     assert type(script) == list, '`script` argument should be of type `list`'
-    
+
     compiled = b('')
 
     for item in script:
@@ -16,29 +16,26 @@ def compile_script(script):
             compiled += item.opcode
         elif type(item) == bytes:
             if len(item) == 0:
+                # Empty array of bytes - compiles to '00'
                 compiled += OP_0.opcode
-            elif len(item) == 1:
-                item_uint8 = deserialize_uint8(item)
-                if item_uint8 == 0x00:
-                    # another way of representing zero
-                    compiled += OP_0.opcode
-                elif item_uint8 < 0x11:
-                    # 80 is the difference between OP_1's opcode (0x51) and 1
-                    compiled += serialize_uint8(item_uint8 + 80)
-                else:
-                    # For 17 or larger we must include a PUSHDATA(1)
-                    compiled += b('01')
-                    compiled += item
             else:
                 if len(item) < 0x4c:
+                    # Array of length [1, 75] bytes
+                    # Compiles to <number of bytes> followed by the bytes themselves
                     compiled += serialize_uint8(len(item))
                 elif len(item) < 0x100:
+                    # Array of length [76, 255] bytes
+                    # Compiles to <0x4c> followed by <number of bytes (1 byte)> followed by the bytes themselves
                     compiled += OP_PUSHDATA1.opcode
                     compiled += serialize_uint8(len(item))
                 elif len(item) < 0x10000:
+                    # Array of length [256, 65535] bytes
+                    # Compiles to <0x4d> followed by <number of bytes (2 bytes)> followed by the bytes themselves
                     compiled += OP_PUSHDATA2.opcode
                     compiled += serialize_uint16(len(item))
                 elif len(item) < 0x100000000:
+                    # Array of length [65536, 4294967295] bytes
+                    # Compiles to <0x4e> followed by <number of bytes (4 bytes)> followed by the bytes themselves
                     compiled += OP_PUSHDATA4.opcode
                     compiled += serialize_uint32(len(item))
                 compiled += item
