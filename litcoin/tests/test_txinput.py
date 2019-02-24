@@ -15,7 +15,7 @@ SEQUENCE_NO = 42
 
 class TestTxinput(unittest.TestCase):
     def test_TXINPUT_SIZE_RANGE_IN_BYTES(self):
-        assert TXINPUT_SIZE_RANGE_IN_BYTES == (OUTPOINT_SIZE_IN_BYTES + VARINT_SIZE_RANGE_IN_BYTES[0] + UINT32_SIZE_IN_BYTES)
+        assert TXINPUT_SIZE_RANGE_IN_BYTES == (OUTPOINT_SIZE_IN_BYTES + VARINT_SIZE_RANGE_IN_BYTES[0] + UINT32_SIZE_IN_BYTES,)
 
     def test_make_txinput(self):
         actual = make_txinput(OUTPOINT, UNLOCKING_SCRIPT, SEQUENCE_NO)

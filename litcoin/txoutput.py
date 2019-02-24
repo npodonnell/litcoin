@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 
 from litcoin.uint64 import UINT64_SIZE_IN_BYTES, validate_uint64, serialize_uint64, deserialize_uint64
-from litcoin.varint import VARINT_SIZE_RANGE_IN_BYTES, serialize_varint
+from litcoin.varint import VARINT_SIZE_RANGE_IN_BYTES, serialize_varint, deserialize_varint
 from litcoin.script.validator import validate_script
 from litcoin.script.serialization import serialize_script
 from litcoin.serialization import validate_data
 
 TXOUTPUT_SIZE_RANGE_IN_BYTES = ( \
-    UINT64_SIZE_IN_BYTES + VARINT_SIZE_RANGE_IN_BYTES[0] \
+    UINT64_SIZE_IN_BYTES + VARINT_SIZE_RANGE_IN_BYTES[0], \
 )
 
 

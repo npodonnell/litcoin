@@ -8,7 +8,7 @@ from litcoin.script.serialization import serialize_script
 from litcoin.serialization import validate_data
 
 TXINPUT_SIZE_RANGE_IN_BYTES = ( \
-    OUTPOINT_SIZE_IN_BYTES + VARINT_SIZE_RANGE_IN_BYTES[0] + UINT32_SIZE_IN_BYTES \
+    OUTPOINT_SIZE_IN_BYTES + VARINT_SIZE_RANGE_IN_BYTES[0] + UINT32_SIZE_IN_BYTES, \
 )
 
 

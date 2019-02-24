@@ -12,7 +12,7 @@ LOCKING_SCRIPT = []
 
 class TestTxoutput(unittest.TestCase):
     def test_TXOUTPUT_SIZE_RANGE_IN_BYTES(self):
-        assert TXOUTPUT_SIZE_RANGE_IN_BYTES == (UINT64_SIZE_IN_BYTES + VARINT_SIZE_RANGE_IN_BYTES[0])
+        assert TXOUTPUT_SIZE_RANGE_IN_BYTES == (UINT64_SIZE_IN_BYTES + VARINT_SIZE_RANGE_IN_BYTES[0],)
 
     def test_make_txoutput(self):
         actual = make_txoutput(VALUE, LOCKING_SCRIPT)
