@@ -23,7 +23,6 @@ def bytes_needed(i):
             return bn
         i >>= 1
         bn += 1
-    return bn
 
 
 def compile_bytes(item):
@@ -94,6 +93,10 @@ def compile_int(item):
         return OP_16.opcode
     elif item >= 16:
         return compile_bytes((item).to_bytes(bytes_needed(item), byteorder='little'))
+    elif item <= -2:
+        # TODO
+        raise NotImplementedError("Not implemented!")
+
 
 def compile_script(script):
     assert type(script) == list, '`script` argument should be of type `list`'
