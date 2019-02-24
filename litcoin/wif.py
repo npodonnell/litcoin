@@ -20,7 +20,7 @@ def wif_to_privkey(wif, network_name):
     wif_prefix = decoded[0:1]
 
     if network_name != None:
-        assert wif_prefix == NETWORKS['wif_prefix'][network_name], \
+        assert wif_prefix == NETWORKS[network_name]['wif_prefix'], \
             'unknown WIF prefix for network {0}: {1}'.format(network_name, wif_prefix)
         
     if decoded_len == 34:
