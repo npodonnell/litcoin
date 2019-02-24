@@ -9,11 +9,11 @@ from blockchain import blockexplorer
 from litcoin.script.constants import LOCKTIME_THRESHOLD
 from litcoin.script.compiler import compile_script
 from litcoin.networks import NETWORKS
-from litcoin.uint32 import serialize_uint32
 from litcoin.binhex import x
 from litcoin.address import make_p2sh_address
 from litcoin.script.operations import OP_CHECKLOCKTIMEVERIFY, OP_DROP, OP_CHECKSIG
 from examples.utils import get_ans, get_network_name, get_public_key
+
 
 def get_locktime():
     print('How do you wish to specify the lock time ?')
@@ -47,7 +47,7 @@ def main():
     pubkey = get_public_key()
     locktime = get_locktime()
 
-    redeem_script = compile_script([serialize_uint32(locktime), OP_CHECKLOCKTIMEVERIFY, OP_DROP, pubkey, OP_CHECKSIG])
+    redeem_script = compile_script([locktime, OP_CHECKLOCKTIMEVERIFY, OP_DROP, pubkey, OP_CHECKSIG])
     p2sh_address = make_p2sh_address(redeem_script, network_name)
 
     print('Redeem script: {0}'.format(x(redeem_script)))
