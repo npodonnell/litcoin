@@ -8,6 +8,24 @@ from .operations import ScriptOp, OP_0, OP_PUSHDATA1, OP_PUSHDATA2, OP_PUSHDATA4
     OP_1NEGATE, OP_1, OP_2, OP_3, OP_4, OP_5, OP_6, OP_7, OP_8, \
     OP_9, OP_10, OP_11, OP_12, OP_13, OP_14, OP_15, OP_16
 
+
+def bytes_needed(i):
+    """
+    Compute the number of bytes needed to hold arbitrary-length integer i
+    """
+    bn = 1
+    while True:
+        i >>= 7
+        if i == 1:
+            # negative sign bit
+            return bn + 1
+        elif i == 0:
+            return bn
+        i >>= 1
+        bn += 1
+    return bn
+
+
 def compile_bytes(item):
     compiled = b''
     if len(item) == 0:
@@ -37,6 +55,46 @@ def compile_bytes(item):
     return compiled
 
 
+def compile_int(item):
+    if item == -1:
+        return OP_1NEGATE.opcode
+    elif item == 0:
+        return OP_0.opcode
+    elif item == 1:
+        return OP_1.opcode
+    elif item == 2:
+        return OP_2.opcode
+    elif item == 3:
+        return OP_3.opcode
+    elif item == 4:
+        return OP_4.opcode
+    elif item == 5:
+        return OP_5.opcode
+    elif item == 6:
+        return OP_6.opcode
+    elif item == 7:
+        return OP_7.opcode
+    elif item == 8:
+        return OP_8.opcode
+    elif item == 9:
+        return OP_9.opcode
+    elif item == 10:
+        return OP_10.opcode
+    elif item == 11:
+        return OP_11.opcode
+    elif item == 12:
+        return OP_12.opcode
+    elif item == 13:
+        return OP_13.opcode
+    elif item == 14:
+        return OP_14.opcode
+    elif item == 15:
+        return OP_15.opcode
+    elif item == 16:
+        return OP_16.opcode
+    elif item >= 16:
+        return compile_bytes((item).to_bytes(bytes_needed(item), byteorder='little'))
+
 def compile_script(script):
     assert type(script) == list, '`script` argument should be of type `list`'
     compiled = b''
@@ -49,42 +107,7 @@ def compile_script(script):
             # encode as UTF-8
             compiled += compile_bytes(item.encode('utf-8'))
         elif type(item) == int:
-            if item == -1:
-                compiled += OP_1NEGATE.opcode
-            if item == 0:
-                compiled += OP_0.opcode
-            if item == 1:
-                compiled += OP_1.opcode
-            if item == 2:
-                compiled += OP_2.opcode
-            if item == 3:
-                compiled += OP_3.opcode
-            if item == 4:
-                compiled += OP_4.opcode
-            if item == 5:
-                compiled += OP_5.opcode
-            if item == 6:
-                compiled += OP_6.opcode
-            if item == 7:
-                compiled += OP_7.opcode
-            if item == 8:
-                compiled += OP_8.opcode
-            if item == 9:
-                compiled += OP_9.opcode
-            if item == 10:
-                compiled += OP_10.opcode
-            if item == 11:
-                compiled += OP_11.opcode
-            if item == 12:
-                compiled += OP_12.opcode
-            if item == 13:
-                compiled += OP_13.opcode
-            if item == 14:
-                compiled += OP_14.opcode
-            if item == 15:
-                compiled += OP_15.opcode
-            if item == 16:
-                compiled += OP_16.opcode
+            compiled += compile_int(item)
         else:
-            raise AssertionError('`script` may only contain items of type `ScriptOp`, `bytes`, `str`')
+            raise AssertionError('`script` may only contain items of type `ScriptOp`, `bytes`, `str` or `int`')
     return compiled
