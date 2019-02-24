@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 
 import sys
+from getpass import getpass
 sys.path.append('../..')
 
 from litcoin.networks import NETWORK_NAMES
+from litcoin.wif import wif_to_privkey
 from litcoin.ec import validate_pubkey
 from litcoin.binhex import b
 
@@ -43,3 +45,14 @@ def get_public_key():
             return pubkey
         except AssertionError as ex:
             print(ex)
+
+
+def get_private_key(network_name):
+    """
+    Prompt user to input a private key
+    """
+    try:
+        data = getpass("Private key?")
+        return wif_to_privkey(data, network_name)
+    except:
+        raise ValueError("Invalid WIF key for the {0} network".format(network_name))
