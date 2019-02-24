@@ -8,7 +8,7 @@ from litcoin.varint import VARINT_SIZE_RANGE_IN_BYTES, serialize_varint
 from litcoin.txinput import TXINPUT_SIZE_RANGE_IN_BYTES, make_txinput, validate_txinput, serialize_txinput, deserialize_txinput
 import unittest
 
-OUTPOINT = make_outpoint(0x8000000000000000000000000000000000000000000000000000000000000001, 42)
+OUTPOINT = make_outpoint(b('8000000000000000000000000000000000000000000000000000000000000001'), 42)
 UNLOCKING_SCRIPT = []
 SEQUENCE_NO = 42
 
