@@ -7,10 +7,10 @@ from litcoin.binhex import b, x
 from litcoin.address import make_p2sh_address
 from litcoin.outpoint import make_outpoint
 from litcoin.txid import make_txid
-from examples.utils import get_ans, get_network_name
+from examples.utils import input_ans, input_network_name
 from blockchain import blockexplorer
 from blockchain.exceptions import APIException
-from examples.utils import get_private_key
+from examples.utils import input_private_key
 
 def rev_txid_str(txid_str):
     """
@@ -46,7 +46,7 @@ def get_total_value(utxos):
 
 
 def main():
-    network_name = get_network_name()
+    network_name = input_network_name()
     redeem_script = b(input("Redeem script ?"))
     p2sh_address = make_p2sh_address(redeem_script, network_name)
 
@@ -66,7 +66,7 @@ def main():
         print("Exiting")
         sys.exit(0)
 
-    privkey = get_private_key(network_name)
+    privkey = input_private_key(network_name)
     deposit_address = input("Deposit address ?")
     
 

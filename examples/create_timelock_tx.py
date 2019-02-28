@@ -12,7 +12,7 @@ from litcoin.networks import NETWORKS
 from litcoin.binhex import x
 from litcoin.address import make_p2sh_address
 from litcoin.script.operations import OP_CHECKLOCKTIMEVERIFY, OP_DROP, OP_CHECKSIG
-from examples.utils import get_ans, get_network_name, get_public_key
+from examples.utils import input_ans, input_network_name, get_public_key
 
 
 def get_locktime():
@@ -43,7 +43,7 @@ def get_locktime():
 
 
 def main():
-    network_name = get_network_name()
+    network_name = input_network_name()
     pubkey = get_public_key()
     locktime = get_locktime()
 

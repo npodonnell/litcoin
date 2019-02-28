@@ -10,7 +10,7 @@ from litcoin.ec import validate_pubkey
 from litcoin.binhex import b
 
 
-def get_ans(question):
+def input_ans(question):
     """
     Prompt user to answer Y/N question from console
     """
@@ -24,7 +24,7 @@ def get_ans(question):
             return True
 
 
-def get_network_name():
+def input_network_name():
     """
     Prompt user to choose a network
     """
@@ -47,7 +47,7 @@ def get_public_key():
             print(ex)
 
 
-def get_private_key(network_name):
+def input_private_key(network_name):
     """
     Prompt user to input a private key
     """

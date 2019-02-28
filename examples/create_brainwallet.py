@@ -7,13 +7,13 @@ from litcoin.ec import make_privkey, derive_pubkey
 from litcoin.address import make_p2pkh_address
 from litcoin.wif import privkey_to_wif
 from litcoin.binhex import x
-from examples.utils import get_ans, get_network_name
+from examples.utils import input_ans, input_network_name
 
 
 def main():
-    network_name = get_network_name()
+    network_name = input_network_name()
     passphrase = input('Brainwallet passphrase? ')
-    compress = get_ans('Compress pubkey')
+    compress = input_ans('Compress pubkey')
 
     privkey = make_privkey(passphrase=passphrase)
     pubkey = derive_pubkey(privkey, compress)
