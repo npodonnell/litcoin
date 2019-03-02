@@ -4,10 +4,11 @@ from litcoin.uint64 import UINT64_SIZE_IN_BYTES, serialize_uint64
 from litcoin.varint import VARINT_SIZE_RANGE_IN_BYTES, serialize_varint
 from litcoin.script.serialization import serialize_script
 from litcoin.txoutput import TXOUTPUT_SIZE_RANGE_IN_BYTES, make_txoutput, validate_txoutput, serialize_txoutput, deserialize_txoutput
+from litcoin.binhex import b
 import unittest
 
 VALUE = 42
-LOCKING_SCRIPT = []
+LOCKING_SCRIPT = b('')
 
 
 class TestTxoutput(unittest.TestCase):
