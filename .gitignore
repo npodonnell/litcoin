@@ -5,4 +5,4 @@ litcoin.egg-info
 .eggs
 *__pycache__
 scratch.py
-
+/*.txt
