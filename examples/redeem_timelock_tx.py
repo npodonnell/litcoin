@@ -24,18 +24,22 @@ def rev_txid_str(txid_str):
     return rev
 
 
-def get_utxos(address):
+def get_utxos(network_name, address):
     """
     Get all the UTXOs for an address. 
     TODO: Remove dependency on blockexplorer and use litcoin instead
     """
     utxos = []
-    for out in blockexplorer.get_unspent_outputs(address):
-        utxos.append({
-            "outpoint": make_outpoint(make_txid(rev_txid_str(out.tx_hash)), out.tx_output_n),
-            "value": out.value
-        })
-    return utxos
+
+    if network_name == 'bitcoin':
+        for out in blockexplorer.get_unspent_outputs(address):
+            utxos.append({
+                "outpoint": make_outpoint(make_txid(rev_txid_str(out.tx_hash)), out.tx_output_n),
+                "value": out.value
+            })
+        return utxos
+    else:
+        raise NotImplementedError('Not implemented')
 
 
 def get_total_value(utxos):
@@ -45,8 +49,9 @@ def get_total_value(utxos):
     return total_value
 
 
-def build_redeem_tx(utxos, redeem_script, privkey, deposit_address, total_value):
+def make_redeem_tx(utxos, redeem_script, privkey, deposit_address, total_value):
     pass
+
 
 def main():
     network_name = input_network_name()
@@ -54,7 +59,13 @@ def main():
     p2sh_address = make_p2sh_address(redeem_script, network_name)
 
     print("Searching for UTXOs for address {0}...".format(p2sh_address)),
-    utxos = get_utxos(p2sh_address)
+    #utxos = get_utxos(network_name, p2sh_address)
+    utxos = [
+        {
+            "outpoint": make_outpoint(make_txid("8dcb357f393eca25514c0cf70d8129eeafa40782f661f40922b6fb1a7b4c5581"), 0),
+            "value": 1000000
+        }
+    ]
     total_value = get_total_value(utxos)
 
     print("Found {0}s in {1} UTXOs:".format(total_value, len(utxos)))
@@ -72,7 +83,7 @@ def main():
     privkey = input_private_key(network_name)
     deposit_address = input("Deposit address ?")
 
-    build_redeem_tx(utxos, redeem_script, privkey, deposit_address, total_value)
+    make_redeem_tx(utxos, redeem_script, privkey, deposit_address, total_value)
     
 
 if __name__ == "__main__":
