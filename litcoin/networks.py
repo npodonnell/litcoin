@@ -21,7 +21,7 @@ NETWORKS = {
         'name': 'litecoin',
         'inventor': 'Charles Lee',
         'p2pkh_prefix': b('30'),
-        'p2sh_prefix': b('05'),
+        'p2sh_prefix': b('32'),
         'wif_prefix': b('b0'),
         'seconds_per_block': int(2.5 * 60),
         'seconds_between_retargets': int(3.5 * 24 * 60 * 60),
@@ -41,7 +41,6 @@ NETWORK_BY_P2PKH_PREFIX = {
     NETWORKS[k]['p2pkh_prefix']: NETWORKS[k] for k in NETWORKS
 }
 
-"""
-Note that there should be **no** NETWORK_BY_P2SH_PREFIX since
-bitcoin and litecoin have the same prefix (0x05)
-"""
+NETWORK_BY_P2SH_PREFIX = {
+    NETWORKS[k]['p2sh_prefix']: NETWORKS[k] for k in NETWORKS
+}

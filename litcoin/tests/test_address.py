@@ -34,7 +34,5 @@ class TestAddress(unittest.TestCase):
             b('0460ae0a00b1752103da79c329cf1a92a6cb172118027fb49ed93352ad40990331442350d809d7fbd1ac'), 
             'litecoin'
         )
-        expected = '34mPLwgbsDFaUqKyuLwJdZz3uJJUKJ1DYE'
+        expected = 'MAyXeq6ZpL71HLbt1DveTDETDztvLUdZvT'
         assert actual == expected
-
-    
