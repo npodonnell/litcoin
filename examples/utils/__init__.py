@@ -34,7 +34,7 @@ def input_network_name():
             return network_name
 
 
-def get_public_key():
+def input_public_key():
     """
     Prompt user to input a public key
     """

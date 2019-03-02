@@ -45,6 +45,9 @@ def get_total_value(utxos):
     return total_value
 
 
+def build_redeem_tx(utxos, redeem_script, privkey, deposit_address, total_value):
+    pass
+
 def main():
     network_name = input_network_name()
     redeem_script = b(input("Redeem script ?"))
@@ -68,6 +71,8 @@ def main():
 
     privkey = input_private_key(network_name)
     deposit_address = input("Deposit address ?")
+
+    build_redeem_tx(utxos, redeem_script, privkey, deposit_address, total_value)
     
 
 if __name__ == "__main__":
