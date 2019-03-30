@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
-from .txid import TXID_SIZE_IN_BYTES, validate_txid, serialize_txid, deserialize_txid
+from .txid import TXID_SIZE_IN_BYTES, validate_txid, serialize_txid, deserialize_txid, \
+    txid_to_human_readable
 from .uint32 import UINT32_SIZE_IN_BYTES, validate_uint32, serialize_uint32, deserialize_uint32
 from .serialization import validate_data
 
@@ -32,3 +33,10 @@ def serialize_outpoint(outpoint):
 def deserialize_outpoint(data, i=0):
     validate_data(data, i, OUTPOINT_SIZE_IN_BYTES)
     return make_outpoint(deserialize_txid(data, i), deserialize_uint32(data, i + TXID_SIZE_IN_BYTES))
+
+
+def outpoint_to_human_readable(outpoint):
+    return {
+        'txid': txid_to_human_readable(outpoint['txid']),
+        'output_index': outpoint['output_index']
+    }

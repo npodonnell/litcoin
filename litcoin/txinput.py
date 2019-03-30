@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
 
-from litcoin.outpoint import OUTPOINT_SIZE_IN_BYTES, validate_outpoint, serialize_outpoint, deserialize_outpoint
+from litcoin.outpoint import OUTPOINT_SIZE_IN_BYTES, validate_outpoint, serialize_outpoint, \
+    deserialize_outpoint, outpoint_to_human_readable
 from litcoin.uint32 import UINT32_SIZE_IN_BYTES, validate_uint32, serialize_uint32, deserialize_uint32
 from litcoin.varint import VARINT_SIZE_RANGE_IN_BYTES, serialize_varint, deserialize_varint
 from litcoin.script.validator import validate_script
 from litcoin.script.serialization import serialize_script
+from litcoin.script.humanreadable import script_to_human_readable
 from litcoin.serialization import validate_data
 
 TXINPUT_SIZE_RANGE_IN_BYTES = ( \
@@ -60,3 +62,11 @@ def deserialize_txinput(data, i=0):
     sequence_no = deserialize_uint32(data, i)
 
     return make_txinput(outpoint, unlocking_script, sequence_no)
+
+
+def txinput_to_human_readable(txinput):
+    return {
+        'outpoint': outpoint_to_human_readable(txinput['outpoint']),
+        'unlocking_script': script_to_human_readable(txinput['unlocking_script']),
+        'sequence_no': txinput['sequence_no']
+    }

@@ -5,11 +5,11 @@ from .txinput import validate_txinput
 from .txoutput import validate_txoutput
 from .uint32 import serialize_uint32
 from .varint import serialize_varint
-from .txinput import serialize_txinput
-from .txoutput import serialize_txoutput
+from .txinput import serialize_txinput, txinput_to_human_readable
+from .txoutput import serialize_txoutput, txoutput_to_human_readable
 
 """
-These are used whenever bitcoin is undergoing an upgrade. Newer nodes will 
+These are used whenever *coin is undergoing an upgrade. Newer nodes will 
 bump up MAX_TX_VERSION first and accept transactions with both the current
 version and the new version. Eventually when all (or most) nodes have
 upgraded, CURRENT_TX_VERSION will be bumped up to match MAX_TX_VERSION and
@@ -63,6 +63,14 @@ def serialize_tx(tx):
     return serialized
 
 
-
 def deserialize_tx(tx_bytes):
     pass
+
+
+def tx_to_human_readable(tx):
+    return {
+        'version': tx['version'],
+        'lock_time': tx['lock_time'],
+        'inputs': [txinput_to_human_readable(txinput) for txinput in tx['inputs']],
+        'outputs': [txoutput_to_human_readable(txoutput) for txoutput in tx['outputs']]
+    }

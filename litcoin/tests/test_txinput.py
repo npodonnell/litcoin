@@ -4,8 +4,11 @@ from litcoin.outpoint import OUTPOINT_SIZE_IN_BYTES, make_outpoint, serialize_ou
 from litcoin.script.serialization import serialize_script
 from litcoin.uint32 import UINT32_SIZE_IN_BYTES, serialize_uint32
 from litcoin.varint import VARINT_SIZE_RANGE_IN_BYTES, serialize_varint
-from litcoin.txinput import TXINPUT_SIZE_RANGE_IN_BYTES, make_txinput, validate_txinput, serialize_txinput, deserialize_txinput
-from litcoin.binhex import b
+from litcoin.txinput import TXINPUT_SIZE_RANGE_IN_BYTES, make_txinput, validate_txinput, serialize_txinput, \
+    deserialize_txinput, txinput_to_human_readable
+from litcoin.outpoint import outpoint_to_human_readable
+from litcoin.script.humanreadable import script_to_human_readable
+from litcoin.binhex import b, x
 import unittest
 
 OUTPOINT = make_outpoint(b('8000000000000000000000000000000000000000000000000000000000000001'), 42)
@@ -69,3 +72,16 @@ class TestTxinput(unittest.TestCase):
     def test_deserialize_txinput(self):
         #TODO - requires script deserialization
         pass
+
+    def test_txinput_to_human_readable(self):
+        actual = txinput_to_human_readable(make_txinput(OUTPOINT, UNLOCKING_SCRIPT, SEQUENCE_NO))
+        expected = {
+            'outpoint': outpoint_to_human_readable(OUTPOINT),
+            'unlocking_script': script_to_human_readable(UNLOCKING_SCRIPT),
+            'sequence_no': SEQUENCE_NO
+        }
+        print('ACTUAL')
+        print(actual)
+
+        assert actual == expected
+

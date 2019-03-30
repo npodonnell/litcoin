@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 
-from litcoin.binhex import b
+from litcoin.binhex import b, x
 from litcoin.txid import TXID_SIZE_IN_BYTES, serialize_txid
 from litcoin.uint32 import UINT32_SIZE_IN_BYTES, serialize_uint32
-from litcoin.outpoint import OUTPOINT_SIZE_IN_BYTES, validate_outpoint, make_outpoint, serialize_outpoint, deserialize_outpoint
+from litcoin.outpoint import OUTPOINT_SIZE_IN_BYTES, validate_outpoint, make_outpoint, serialize_outpoint, \
+    deserialize_outpoint, outpoint_to_human_readable
 import unittest
 
 TXID = b('8000000000000000000000000000000000000000000000000000000000000001')
@@ -64,3 +65,8 @@ class TestOutpoint(unittest.TestCase):
         with self.assertRaises(AssertionError, msg='should be raised because data is invalid'):
             data = b'\x00' * ((TXID_SIZE_IN_BYTES + UINT32_SIZE_IN_BYTES) - 1)
             deserialize_outpoint(data)
+
+    def test_outpoint_to_human_readable(self):
+        actual = outpoint_to_human_readable({'txid': TXID, 'output_index': OUTPUT_INDEX})
+        expected = {'txid': x(TXID), 'output_index': OUTPUT_INDEX}
+        assert actual == expected

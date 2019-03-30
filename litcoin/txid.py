@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 
-from .binhex import b
+from .binhex import b, x
 from .serialization import validate_data
 
 TXID_SIZE_IN_BYTES = 32
@@ -46,3 +46,7 @@ def serialize_txid(txid):
 def deserialize_txid(data, i=0):
     validate_data(data, i, TXID_SIZE_IN_BYTES)
     return data[i : i + TXID_SIZE_IN_BYTES]
+
+
+def txid_to_human_readable(txid):
+    return x(txid)

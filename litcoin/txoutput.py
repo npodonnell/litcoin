@@ -3,6 +3,7 @@
 from litcoin.uint64 import UINT64_SIZE_IN_BYTES, validate_uint64, serialize_uint64, deserialize_uint64
 from litcoin.varint import VARINT_SIZE_RANGE_IN_BYTES, serialize_varint, deserialize_varint
 from litcoin.script.validator import validate_script
+from litcoin.script.humanreadable import script_to_human_readable
 from litcoin.script.serialization import serialize_script
 from litcoin.serialization import validate_data
 
@@ -51,3 +52,10 @@ def deserialize_txoutput(data, i=0):
     locking_script = data[i : i + locking_script_length]
 
     return make_txoutput(value, locking_script)
+
+
+def txoutput_to_human_readable(txoutput):
+    return {
+        'value': txoutput['value'],
+        'locking_script': script_to_human_readable(txoutput['locking_script'])
+    }
