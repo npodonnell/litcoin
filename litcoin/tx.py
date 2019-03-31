@@ -5,8 +5,8 @@ from .txinput import validate_txinput
 from .txoutput import validate_txoutput
 from .uint32 import serialize_uint32
 from .varint import serialize_varint
-from .txinput import serialize_txinput, txinput_to_human_readable
-from .txoutput import serialize_txoutput, txoutput_to_human_readable
+from .txinput import serialize_txinput, txinput_to_human_readable, txinput_copy
+from .txoutput import serialize_txoutput, txoutput_to_human_readable, txoutput_copy
 
 """
 These are used whenever *coin is undergoing an upgrade. Newer nodes will 
@@ -73,4 +73,16 @@ def tx_to_human_readable(tx):
         'lock_time': tx['lock_time'],
         'inputs': [txinput_to_human_readable(txinput) for txinput in tx['inputs']],
         'outputs': [txoutput_to_human_readable(txoutput) for txoutput in tx['outputs']]
+    }
+
+
+def tx_copy(tx):
+    """
+    Performs a deep-copy of a transaction
+    """
+    return {
+        'version': tx["version"],
+        'lock_time': tx["lock_time"],
+        'inputs': [txinput_copy(i) for i in tx["inputs"]],
+        'outputs': [txoutput_copy(i) for i in tx["outputs"]]
     }

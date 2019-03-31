@@ -2,7 +2,7 @@
 
 from litcoin.binhex import b
 from litcoin.txid import TXID_SIZE_IN_BYTES, make_txid, validate_txid, serialize_txid, deserialize_txid, \
-    txid_to_human_readable
+    txid_to_human_readable, txid_copy
 import unittest
 
 
@@ -84,4 +84,10 @@ class TestTxid(unittest.TestCase):
     def test_txid_to_human_readable(self):
         actual = txid_to_human_readable(b("3d9550d1e14fd855f801d0ce78fe118a6981f7b954151754535bd411df41562f"))
         expected = "3d9550d1e14fd855f801d0ce78fe118a6981f7b954151754535bd411df41562f"
+        assert actual == expected
+
+    def test_txid_copy(self):
+        txid = b("3d9550d1e14fd855f801d0ce78fe118a6981f7b954151754535bd411df41562f")
+        actual = txid_copy(txid)
+        expected = txid
         assert actual == expected

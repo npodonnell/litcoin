@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 from .txid import TXID_SIZE_IN_BYTES, validate_txid, serialize_txid, deserialize_txid, \
-    txid_to_human_readable
+    txid_to_human_readable, txid_copy
 from .uint32 import UINT32_SIZE_IN_BYTES, validate_uint32, serialize_uint32, deserialize_uint32
 from .serialization import validate_data
 
@@ -39,4 +39,14 @@ def outpoint_to_human_readable(outpoint):
     return {
         'txid': txid_to_human_readable(outpoint['txid']),
         'output_index': outpoint['output_index']
+    }
+
+
+def outpoint_copy(outpoint):
+    """
+    Performs a deep-copy of an outpoint
+    """
+    return {
+        "txid": txid_copy(outpoint["txid"]),
+        "output_index": outpoint["output_index"]
     }

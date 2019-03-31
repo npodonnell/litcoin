@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
 
 from litcoin.outpoint import OUTPOINT_SIZE_IN_BYTES, validate_outpoint, serialize_outpoint, \
-    deserialize_outpoint, outpoint_to_human_readable
+    deserialize_outpoint, outpoint_to_human_readable, outpoint_copy
 from litcoin.uint32 import UINT32_SIZE_IN_BYTES, validate_uint32, serialize_uint32, deserialize_uint32
 from litcoin.varint import VARINT_SIZE_RANGE_IN_BYTES, serialize_varint, deserialize_varint
 from litcoin.script.validator import validate_script
 from litcoin.script.serialization import serialize_script
 from litcoin.script.humanreadable import script_to_human_readable
+from litcoin.script.copy import script_copy
 from litcoin.serialization import validate_data
 
 TXINPUT_SIZE_RANGE_IN_BYTES = ( \
@@ -69,4 +70,15 @@ def txinput_to_human_readable(txinput):
         'outpoint': outpoint_to_human_readable(txinput['outpoint']),
         'unlocking_script': script_to_human_readable(txinput['unlocking_script']),
         'sequence_no': txinput['sequence_no']
+    }
+
+
+def txinput_copy(txinput):
+    """
+    Performs a deep-copy of a txinput
+    """
+    return {
+        "outpoint": outpoint_copy(txinput["outpoint"]),
+        "unlocking_script": script_copy(txinput["unlocking_script"]),
+        "sequence_no": txinput["sequence_no"]
     }

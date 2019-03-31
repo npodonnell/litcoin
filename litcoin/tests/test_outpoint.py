@@ -4,7 +4,7 @@ from litcoin.binhex import b, x
 from litcoin.txid import TXID_SIZE_IN_BYTES, serialize_txid
 from litcoin.uint32 import UINT32_SIZE_IN_BYTES, serialize_uint32
 from litcoin.outpoint import OUTPOINT_SIZE_IN_BYTES, validate_outpoint, make_outpoint, serialize_outpoint, \
-    deserialize_outpoint, outpoint_to_human_readable
+    deserialize_outpoint, outpoint_to_human_readable, outpoint_copy
 import unittest
 
 TXID = b('8000000000000000000000000000000000000000000000000000000000000001')
@@ -67,6 +67,18 @@ class TestOutpoint(unittest.TestCase):
             deserialize_outpoint(data)
 
     def test_outpoint_to_human_readable(self):
-        actual = outpoint_to_human_readable({'txid': TXID, 'output_index': OUTPUT_INDEX})
+        actual = outpoint_to_human_readable(make_outpoint(TXID, OUTPUT_INDEX))
         expected = {'txid': x(TXID), 'output_index': OUTPUT_INDEX}
         assert actual == expected
+
+
+    def test_outpoint_copy(self):
+        original = make_outpoint(TXID, OUTPUT_INDEX)
+        copy = outpoint_copy(original)
+
+        assert type(copy) is type(original)
+        assert sorted(copy.keys()) == sorted(original.keys())
+        assert id(copy) != id(original)
+
+        assert copy["txid"] == original["txid"]
+        assert copy["output_index"] == original["output_index"]

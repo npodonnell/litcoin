@@ -5,6 +5,7 @@ from litcoin.varint import VARINT_SIZE_RANGE_IN_BYTES, serialize_varint, deseria
 from litcoin.script.validator import validate_script
 from litcoin.script.humanreadable import script_to_human_readable
 from litcoin.script.serialization import serialize_script
+from litcoin.script.copy import script_copy
 from litcoin.serialization import validate_data
 
 TXOUTPUT_SIZE_RANGE_IN_BYTES = ( \
@@ -58,4 +59,11 @@ def txoutput_to_human_readable(txoutput):
     return {
         'value': txoutput['value'],
         'locking_script': script_to_human_readable(txoutput['locking_script'])
+    }
+
+
+def txoutput_copy(txoutput):
+    return {
+        "value": txoutput["value"],
+        "locking_script": script_copy(txoutput["locking_script"])
     }

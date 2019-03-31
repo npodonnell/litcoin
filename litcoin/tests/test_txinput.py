@@ -5,7 +5,7 @@ from litcoin.script.serialization import serialize_script
 from litcoin.uint32 import UINT32_SIZE_IN_BYTES, serialize_uint32
 from litcoin.varint import VARINT_SIZE_RANGE_IN_BYTES, serialize_varint
 from litcoin.txinput import TXINPUT_SIZE_RANGE_IN_BYTES, make_txinput, validate_txinput, serialize_txinput, \
-    deserialize_txinput, txinput_to_human_readable
+    deserialize_txinput, txinput_to_human_readable, txinput_copy
 from litcoin.outpoint import outpoint_to_human_readable
 from litcoin.script.humanreadable import script_to_human_readable
 from litcoin.binhex import b, x
@@ -80,8 +80,24 @@ class TestTxinput(unittest.TestCase):
             'unlocking_script': script_to_human_readable(UNLOCKING_SCRIPT),
             'sequence_no': SEQUENCE_NO
         }
-        print('ACTUAL')
-        print(actual)
 
         assert actual == expected
 
+
+    def test_txinput_copy(self):
+        original = make_txinput(OUTPOINT, UNLOCKING_SCRIPT, SEQUENCE_NO)
+        copy = txinput_copy(original)
+
+        assert type(copy) is type(original)
+        assert sorted(copy.keys()) == sorted(original.keys())
+        assert id(copy) != id(original)
+
+        assert copy["unlocking_script"] == original["unlocking_script"]
+        assert copy["sequence_no"] == original["sequence_no"]
+
+        assert type(copy["outpoint"]) is type(original["outpoint"])
+        assert sorted(copy["outpoint"].keys()) == sorted(original["outpoint"].keys())
+        assert id(copy["outpoint"]) != id(original["outpoint"])
+
+        assert copy["outpoint"]["txid"] == original["outpoint"]["txid"]
+        assert copy["outpoint"]["output_index"] == original["outpoint"]["output_index"]

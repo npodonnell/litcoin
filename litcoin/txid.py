@@ -50,3 +50,15 @@ def deserialize_txid(data, i=0):
 
 def txid_to_human_readable(txid):
     return x(txid)
+
+
+def txid_copy(txid):
+    """
+    Performs a deep-copy of a txid
+    """
+    validate_txid(txid)
+
+    # bytes objects are immutable so just return `txid`
+    # this is python-specific and may not work in other
+    # languages!
+    return txid
