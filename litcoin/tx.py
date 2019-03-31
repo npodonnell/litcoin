@@ -15,6 +15,9 @@ version and the new version. Eventually when all (or most) nodes have
 upgraded, CURRENT_TX_VERSION will be bumped up to match MAX_TX_VERSION and
 older transactions will no longer be accepted.
 TODO: This is bitcoin-specific, move these to networks.py
+
+Code Pointer: src/primitives/transaction.h
+
 """
 CURRENT_TX_VERSION = 2
 MAX_TX_VERSION = 2
