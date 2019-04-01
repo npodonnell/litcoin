@@ -40,7 +40,11 @@ def make_tx_sighash(script, tx, type, input_index, amount, sig_version, sighash_
         txinput["unlocking_script"] = compile_script([])
     
 
-    txtemp["inputs"][input_index]["unlocking_script"] = find_and_delete(script, compile_script([OP_CODESEPERATOR]))
+    txtemp["inputs"][input_index]["unlocking_script"] = find_and_delete(script, compile_script([OP_CODESEPARATOR]))
 
     if (sighash_type & 0x1f) == SIGHASH_NONE:
         txtemp["outputs"] = []
+
+        for i in range(len(txtemp["inputs"])):
+            if i != input_index:
+                txtemp["inputs"][i]["sequence_no"] = 0
