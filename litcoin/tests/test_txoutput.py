@@ -51,8 +51,7 @@ class TestTxoutput(unittest.TestCase):
         
     def test_serialize_txoutput(self):
         actual = serialize_txoutput({'value': VALUE, 'locking_script': LOCKING_SCRIPT})
-        expected = serialize_uint64(VALUE) + serialize_varint(len(LOCKING_SCRIPT)) + \
-            serialize_script(LOCKING_SCRIPT)
+        expected = serialize_uint64(VALUE) + serialize_script(LOCKING_SCRIPT)
         assert actual == expected
 
         with self.assertRaises(AssertionError, msg='should be raised because txoutput is invalid'):

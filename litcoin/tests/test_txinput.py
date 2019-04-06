@@ -62,8 +62,7 @@ class TestTxinput(unittest.TestCase):
     
     def test_serialize_txinput(self):
         actual = serialize_txinput({'outpoint': OUTPOINT, 'unlocking_script': UNLOCKING_SCRIPT, 'sequence_no': SEQUENCE_NO})
-        expected = serialize_outpoint(OUTPOINT) + serialize_varint(len(UNLOCKING_SCRIPT)) + \
-            serialize_script(UNLOCKING_SCRIPT) + serialize_uint32(SEQUENCE_NO)
+        expected = serialize_outpoint(OUTPOINT) + serialize_script(UNLOCKING_SCRIPT) + serialize_uint32(SEQUENCE_NO)
         assert actual == expected
 
         with self.assertRaises(AssertionError, msg='should be raised because txinput is invalid'):

@@ -3,9 +3,9 @@
 from litcoin.outpoint import OUTPOINT_SIZE_IN_BYTES, validate_outpoint, serialize_outpoint, \
     deserialize_outpoint, outpoint_to_human_readable, outpoint_copy
 from litcoin.uint32 import UINT32_SIZE_IN_BYTES, validate_uint32, serialize_uint32, deserialize_uint32
-from litcoin.varint import VARINT_SIZE_RANGE_IN_BYTES, serialize_varint, deserialize_varint
+from litcoin.varint import VARINT_SIZE_RANGE_IN_BYTES
 from litcoin.script.validator import validate_script
-from litcoin.script.serialization import serialize_script
+from litcoin.script.serialization import serialize_script, deserialize_script
 from litcoin.script.humanreadable import script_to_human_readable
 from litcoin.script.copy import script_copy
 from litcoin.serialization import validate_data
@@ -40,7 +40,6 @@ def validate_txinput(txinput):
 def serialize_txinput(txinput):
     validate_txinput(txinput)
     return serialize_outpoint(txinput['outpoint']) + \
-        serialize_varint(len(txinput['unlocking_script'])) + \
         serialize_script(txinput['unlocking_script']) + \
         serialize_uint32(txinput['sequence_no'])
 
@@ -53,10 +52,7 @@ def deserialize_txinput(data, i=0):
     i += OUTPOINT_SIZE_IN_BYTES
 
     # deserialize unlocking script
-    (unlocking_script_length, unlocking_script_length_length) = deserialize_varint(data, i)
-    i += unlocking_script_length_length
-    assert i + unlocking_script_length + UINT32_SIZE_IN_BYTES <= len(data)
-    unlocking_script = data[i : i + unlocking_script_length]
+    (unlocking_script, unlocking_script_length) = deserialize_script(data, i)
     i += unlocking_script_length
 
     # deserialize sequence number

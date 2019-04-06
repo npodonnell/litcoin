@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 
 from litcoin.uint64 import UINT64_SIZE_IN_BYTES, validate_uint64, serialize_uint64, deserialize_uint64
-from litcoin.varint import VARINT_SIZE_RANGE_IN_BYTES, serialize_varint, deserialize_varint
+from litcoin.varint import VARINT_SIZE_RANGE_IN_BYTES
 from litcoin.script.validator import validate_script
 from litcoin.script.humanreadable import script_to_human_readable
-from litcoin.script.serialization import serialize_script
+from litcoin.script.serialization import serialize_script, deserialize_script
 from litcoin.script.copy import script_copy
 from litcoin.serialization import validate_data
 
@@ -34,9 +34,7 @@ def validate_txoutput(txoutput):
 
 def serialize_txoutput(txoutput):
     validate_txoutput(txoutput)
-    return serialize_uint64(txoutput['value']) + \
-        serialize_varint(len(txoutput['locking_script'])) + \
-        serialize_script(txoutput['locking_script'])
+    return serialize_uint64(txoutput['value']) + serialize_script(txoutput['locking_script'])
 
 
 def deserialize_txoutput(data, i=0):
@@ -47,10 +45,7 @@ def deserialize_txoutput(data, i=0):
     i += UINT64_SIZE_IN_BYTES
 
     # deserialize locking script
-    (locking_script_length, locking_script_length_length) = deserialize_varint(data, i)
-    i += locking_script_length_length
-    assert i + locking_script_length <= len(data)
-    locking_script = data[i : i + locking_script_length]
+    (locking_script, _) = deserialize_script(data, i)
 
     return make_txoutput(value, locking_script)
 
