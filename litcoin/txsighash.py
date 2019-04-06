@@ -8,6 +8,7 @@ from .hashing import double_sha
 from .outpoint import serialize_outpoint
 from .txoutput import serialize_txoutput
 from .uint32 import serialize_uint32
+from .uint64 import serialize_uint64
 
 # Sighash types
 # See script/interpreter.h
@@ -72,11 +73,13 @@ def make_tx_sighash(script, tx, input_index, sighash_type, amount, sigversion):
             serialize_uint32(tx["version"]) +
             hash_prevouts +
             hash_sequence +
-            serialize_outpoint(tx["inputs"][input_index]["outpoint"] +
+            serialize_outpoint(tx["inputs"][input_index]["outpoint"]) +
             script +
             serialize_uint64(amount) +
             serialize_uint32(tx["inputs"][input_index]["sequence_no"]) +
             hash_outputs +
-            tx["lock_time"] +
+            serialize_uint32(tx["lock_time"]) +
             serialize_uint32(sighash_type)
         )
+
+
