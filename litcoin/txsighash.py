@@ -6,7 +6,7 @@ from .script.operations import OP_CODESEPARATOR
 from .binhex import b, x
 from .hashing import double_sha
 from .outpoint import serialize_outpoint
-from .txoutput import serialize_txoutput
+from .txoutput import serialize_txoutput, make_txoutput
 from .script.serialization import serialize_script
 from .uint32 import serialize_uint32
 from .int64 import serialize_int64
@@ -25,7 +25,7 @@ SIGVERSION_BASE = 0
 SIGVERSION_WITNESS_V0 = 1
 
 HASH_ONE = b("0100000000000000000000000000000000000000000000000000000000000000")
-SERIALIZED_NULL_TXOUTPUT = b("ffffffffffffffff")
+SERIALIZED_NULL_TXOUTPUT = serialize_txoutput(make_txoutput(-1, b("")))
 
 def sigversion_base_serialize(tx, script, input_index, sighash_type, anyone_can_pay, 
     hash_single, hash_none):
