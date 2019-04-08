@@ -125,8 +125,10 @@ def make_tx_sighash(script, tx, input_index, sighash_type, amount, sigversion):
         )
     
     if hash_single:
-        if len(tx["inputs"]) < input_index:
+        if len(tx["inputs"]) <= input_index:
             return HASH_ONE
 
-    return double_sha(sigversion_base_serialize(tx, script, input_index, sighash_type, 
-        anyone_can_pay, hash_single, hash_none))
+    return double_sha(
+        sigversion_base_serialize(tx, script, input_index, sighash_type, anyone_can_pay, hash_single, hash_none) +
+        serialize_uint32(sighash_type)
+    )
