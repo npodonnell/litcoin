@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from litcoin.uint64 import UINT64_SIZE_IN_BYTES, serialize_uint64
+from litcoin.int64 import INT64_SIZE_IN_BYTES, serialize_int64
 from litcoin.varint import VARINT_SIZE_RANGE_IN_BYTES, serialize_varint
 from litcoin.script.serialization import serialize_script
 from litcoin.txoutput import TXOUTPUT_SIZE_RANGE_IN_BYTES, make_txoutput, validate_txoutput, \
@@ -15,7 +15,7 @@ LOCKING_SCRIPT = b('')
 
 class TestTxoutput(unittest.TestCase):
     def test_TXOUTPUT_SIZE_RANGE_IN_BYTES(self):
-        assert TXOUTPUT_SIZE_RANGE_IN_BYTES == (UINT64_SIZE_IN_BYTES + VARINT_SIZE_RANGE_IN_BYTES[0],)
+        assert TXOUTPUT_SIZE_RANGE_IN_BYTES == (INT64_SIZE_IN_BYTES + VARINT_SIZE_RANGE_IN_BYTES[0],)
 
     def test_make_txoutput(self):
         actual = make_txoutput(VALUE, LOCKING_SCRIPT)
@@ -51,7 +51,7 @@ class TestTxoutput(unittest.TestCase):
         
     def test_serialize_txoutput(self):
         actual = serialize_txoutput({'value': VALUE, 'locking_script': LOCKING_SCRIPT})
-        expected = serialize_uint64(VALUE) + serialize_script(LOCKING_SCRIPT)
+        expected = serialize_int64(VALUE) + serialize_script(LOCKING_SCRIPT)
         assert actual == expected
 
         with self.assertRaises(AssertionError, msg='should be raised because txoutput is invalid'):
