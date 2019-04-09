@@ -21,6 +21,7 @@ UNCOMPRESSED_PUBKEY_DER_PREFIX = b('3056301006072a8648ce3d020106052b8104000a0342
 COMPRESSED_PUBKEY_DER_PREFIX = b('3036301006072a8648ce3d020106052b8104000a032200')
 SIGNATURE_ALGORITHM = ECDSA(Prehashed(SHA256()))
 
+
 def _internal_key_from_bytes(privkey):
     """
     Gets an internal-form private key object for performing EC
@@ -28,6 +29,7 @@ def _internal_key_from_bytes(privkey):
     """
     privkey_int = int.from_bytes(privkey, signed=False, byteorder='big')
     return derive_private_key(privkey_int, SECP256K1(), default_backend())
+
 
 def validate_privkey(privkey):
     assert type(privkey) == bytes, '`privkey` should be of type `bytes`'
@@ -48,6 +50,7 @@ def validate_pubkey(pubkey):
             'Compressed `pubkey` should be of length {0}'.format(COMPRESSED_PUBKEY_SIZE_BYTES)
     else:
         assert False, '`pubkey` should begin with 0x02, 0x03 or 0x04'
+
 
 def make_privkey(passphrase=None):
     assert passphrase is None or type(passphrase) == str, 'Passphrase should be None or a string'
