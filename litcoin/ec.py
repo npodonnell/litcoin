@@ -2,17 +2,32 @@
 
 import os
 from cryptography.hazmat.backends import default_backend
+from cryptography.hazmat.primitives.hashes import SHA256
+from cryptography.hazmat.primitives.asymmetric.utils import Prehashed
 from cryptography.hazmat.primitives.serialization import Encoding
 from cryptography.hazmat.primitives.serialization import PublicFormat
+from cryptography.hazmat.primitives.serialization import load_der_public_key
 from cryptography.hazmat.primitives.asymmetric.ec import SECP256K1
+from cryptography.hazmat.primitives.asymmetric.ec import ECDSA
 from cryptography.hazmat.primitives.asymmetric.ec import derive_private_key
 from cryptography.hazmat.primitives.asymmetric.ec import EllipticCurvePrivateKey
 from litcoin.hashing import single_sha
-from litcoin.binhex import b, x
+from litcoin.binhex import b
 
 PRIVKEY_SIZE_BYTES = 32
 UNCOMPRESSED_PUBKEY_SIZE_BYTES = 65
 COMPRESSED_PUBKEY_SIZE_BYTES = 33
+UNCOMPRESSED_PUBKEY_DER_PREFIX = b('3056301006072a8648ce3d020106052b8104000a034200')
+COMPRESSED_PUBKEY_DER_PREFIX = b('3036301006072a8648ce3d020106052b8104000a032200')
+SIGNATURE_ALGORITHM = ECDSA(Prehashed(SHA256()))
+
+def _internal_key_from_bytes(privkey):
+    """
+    Gets an internal-form private key object for performing EC
+    operations such as signing and verification
+    """
+    privkey_int = int.from_bytes(privkey, signed=False, byteorder='big')
+    return derive_private_key(privkey_int, SECP256K1(), default_backend())
 
 def validate_privkey(privkey):
     assert type(privkey) == bytes, '`privkey` should be of type `bytes`'
@@ -44,10 +59,8 @@ def make_privkey(passphrase=None):
 
 def derive_pubkey(privkey, compress=True):
     validate_privkey(privkey)
-    assert type(compress) == bool, 'Compress should be of type bool'
-
-    privkey_int = int.from_bytes(privkey, signed=False, byteorder='big')
-    key = derive_private_key(privkey_int, SECP256K1(), default_backend())
+    assert type(compress) == bool, '`compress` should be of type bool'
+    key = _internal_key_from_bytes(privkey)
     public_key = key.public_key()
     point = public_key.public_numbers()
 
@@ -64,10 +77,22 @@ def derive_pubkey(privkey, compress=True):
 
 
 def sign_message(message, privkey):
-    #TODO
-    pass
+    assert type(message) is bytes, "`message` should be of type `bytes`"
+    validate_privkey(privkey)
+    key = _internal_key_from_bytes(privkey)
+    signature = key.sign(message, SIGNATURE_ALGORITHM)
+    return signature
 
 
 def verify_signature(signature, message, pubkey):
-    #TODO
-    pass
+    assert type(signature) is bytes, "`signature` should be of type `bytes`"
+    assert type(message) is bytes, "`message` should be of type `bytes`"
+    validate_pubkey(pubkey)
+
+    if len(pubkey) == UNCOMPRESSED_PUBKEY_SIZE_BYTES:
+        der_pubkey = UNCOMPRESSED_PUBKEY_DER_PREFIX + pubkey
+    else:
+        der_pubkey = COMPRESSED_PUBKEY_DER_PREFIX + pubkey
+
+    key = load_der_public_key(der_pubkey, default_backend())
+    return key.verify(signature, message, SIGNATURE_ALGORITHM)
