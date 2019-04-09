@@ -11,6 +11,7 @@ from cryptography.hazmat.primitives.asymmetric.ec import SECP256K1
 from cryptography.hazmat.primitives.asymmetric.ec import ECDSA
 from cryptography.hazmat.primitives.asymmetric.ec import derive_private_key
 from cryptography.hazmat.primitives.asymmetric.ec import EllipticCurvePrivateKey
+from cryptography.exceptions import InvalidSignature
 from litcoin.hashing import single_sha
 from litcoin.binhex import b
 
@@ -98,4 +99,8 @@ def verify_signature(signature, message, pubkey):
         der_pubkey = COMPRESSED_PUBKEY_DER_PREFIX + pubkey
 
     key = load_der_public_key(der_pubkey, default_backend())
-    return key.verify(signature, message, SIGNATURE_ALGORITHM)
+
+    try:
+        return key.verify(signature, message, SIGNATURE_ALGORITHM)
+    except InvalidSignature:
+        return False
