@@ -3,7 +3,7 @@
 from litcoin.ec import PRIVKEY_SIZE_BYTES, UNCOMPRESSED_PUBKEY_SIZE_BYTES, \
     COMPRESSED_PUBKEY_SIZE_BYTES, validate_privkey, validate_pubkey, \
     make_privkey, derive_pubkey, sign_message, verify_signature
-from litcoin.binhex import b, x
+from litcoin.binhex import b
 import unittest
 
 VALID_PRIVKEY = b('7fb4f6e09d5344c46b4551fe08af8033d5d5864d9bbe551f282a574c928e945b')
