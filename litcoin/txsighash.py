@@ -25,7 +25,12 @@ SIGVERSION_BASE = 0
 SIGVERSION_WITNESS_V0 = 1
 
 HASH_ONE = b("0100000000000000000000000000000000000000000000000000000000000000")
-SERIALIZED_NULL_TXOUTPUT = serialize_txoutput(make_txoutput(-1, b("")))
+
+# Pre-compute serializations which are used often
+EMPTY_SCRIPT = compile_script([])
+SERIALIZED_EMPTY_SCRIPT = serialize_script(EMPTY_SCRIPT)
+SERIALIZED_NULL_TXOUTPUT = serialize_txoutput(make_txoutput(-1, EMPTY_SCRIPT))
+
 
 def sigversion_base_serialize(tx, script, input_index, sighash_type, anyone_can_pay, 
     hash_single, hash_none):
@@ -44,7 +49,7 @@ def sigversion_base_serialize(tx, script, input_index, sighash_type, anyone_can_
         sig += serialize_outpoint(tx["inputs"][n_input]["outpoint"])
 
         if n_input != input_index:
-            sig += serialize_script(b(''))
+            sig += SERIALIZED_EMPTY_SCRIPT
         else:
             sig += serialize_script(script)
 
