@@ -27,8 +27,10 @@ class TestUInt256(unittest.TestCase):
     def test_serialize_uint256(self):
         assert serialize_uint256(0) == b('0000000000000000000000000000000000000000000000000000000000000000')
         assert serialize_uint256(1) == b('0100000000000000000000000000000000000000000000000000000000000000')
-        assert serialize_uint256(0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff) == b('ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff')
-        assert serialize_uint256(0xfffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe) == b('feffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff')
+        assert serialize_uint256(0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff) == \
+            b('ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff')
+        assert serialize_uint256(0xfffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe) == \
+            b('feffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff')
     
         with self.assertRaises(AssertionError, msg='should be raised because `n` argument is negative'):
             serialize_uint256(-1)
@@ -40,30 +42,50 @@ class TestUInt256(unittest.TestCase):
             serialize_uint256()
             
     def test_deserialize_uint256(self):
-        assert deserialize_uint256(b('0000000000000000000000000000000000000000000000000000000000000000')) == 0
-        assert deserialize_uint256(b('0100000000000000000000000000000000000000000000000000000000000000')) == 1
-        assert deserialize_uint256(b('ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff')) == 0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
-        assert deserialize_uint256(b('feffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff')) == 0xfffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe
+        assert deserialize_uint256(b('0000000000000000000000000000000000000000000000000000000000000000')) == \
+            (0, 32)
+        assert deserialize_uint256(b('0100000000000000000000000000000000000000000000000000000000000000')) == \
+            (1, 32)
+        assert deserialize_uint256(b('ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff')) == \
+            (0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff, 32)
+        assert deserialize_uint256(b('feffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff')) == \
+            (0xfffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe, 32)
         
-        assert deserialize_uint256(b('0000000000000000000000000000000000000000000000000000000000000000'), 0) == 0
-        assert deserialize_uint256(b('0100000000000000000000000000000000000000000000000000000000000000'), 0) == 1
-        assert deserialize_uint256(b('ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff'), 0) == 0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
-        assert deserialize_uint256(b('feffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff'), 0) == 0xfffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe
+        assert deserialize_uint256(b('0000000000000000000000000000000000000000000000000000000000000000'), 0) == \
+            (0, 32)
+        assert deserialize_uint256(b('0100000000000000000000000000000000000000000000000000000000000000'), 0) == \
+            (1, 32)
+        assert deserialize_uint256(b('ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff'), 0) == \
+            (0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff, 32)
+        assert deserialize_uint256(b('feffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff'), 0) == \
+            (0xfffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe, 32)
         
-        assert deserialize_uint256(b('0000000000000000000000000000000000000000000000000000000000000000cc'), 0) == 0
-        assert deserialize_uint256(b('0100000000000000000000000000000000000000000000000000000000000000cc'), 0) == 1
-        assert deserialize_uint256(b('ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffcc'), 0) == 0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
-        assert deserialize_uint256(b('feffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffcc'), 0) == 0xfffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe
+        assert deserialize_uint256(b('0000000000000000000000000000000000000000000000000000000000000000cc'), 0) == \
+            (0, 32)
+        assert deserialize_uint256(b('0100000000000000000000000000000000000000000000000000000000000000cc'), 0) == \
+            (1, 32)
+        assert deserialize_uint256(b('ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffcc'), 0) == \
+            (0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff, 32)
+        assert deserialize_uint256(b('feffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffcc'), 0) == \
+            (0xfffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe, 32)
           
-        assert deserialize_uint256(b('cc0000000000000000000000000000000000000000000000000000000000000000'), 1) == 0
-        assert deserialize_uint256(b('cc0100000000000000000000000000000000000000000000000000000000000000'), 1) == 1
-        assert deserialize_uint256(b('ccffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff'), 1) == 0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
-        assert deserialize_uint256(b('ccfeffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff'), 1) == 0xfffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe
+        assert deserialize_uint256(b('cc0000000000000000000000000000000000000000000000000000000000000000'), 1) == \
+            (0, 33)
+        assert deserialize_uint256(b('cc0100000000000000000000000000000000000000000000000000000000000000'), 1) == \
+            (1, 33)
+        assert deserialize_uint256(b('ccffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff'), 1) == \
+            (0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff, 33)
+        assert deserialize_uint256(b('ccfeffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff'), 1) == \
+            (0xfffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe, 33)
         
-        assert deserialize_uint256(b('cc0000000000000000000000000000000000000000000000000000000000000000cc'), 1) == 0
-        assert deserialize_uint256(b('cc0100000000000000000000000000000000000000000000000000000000000000cc'), 1) == 1
-        assert deserialize_uint256(b('ccffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffcc'), 1) == 0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
-        assert deserialize_uint256(b('ccfeffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffcc'), 1) == 0xfffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe
+        assert deserialize_uint256(b('cc0000000000000000000000000000000000000000000000000000000000000000cc'), 1) == \
+            (0, 33)
+        assert deserialize_uint256(b('cc0100000000000000000000000000000000000000000000000000000000000000cc'), 1) == \
+            (1, 33)
+        assert deserialize_uint256(b('ccffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffcc'), 1) == \
+            (0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff, 33)
+        assert deserialize_uint256(b('ccfeffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffcc'), 1) == \
+            (0xfffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe, 33)
 
         with self.assertRaises(AssertionError, msg='should be raised because `i` argument is negative'):
             deserialize_uint256(b('0000000000000000000000000000000000000000000000000000000000000000'), -1)

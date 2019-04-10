@@ -41,30 +41,30 @@ class TestInt32(unittest.TestCase):
             serialize_int32()
 
     def test_deserialize_int32(self):
-        assert deserialize_int32(b('00000000')) == 0
-        assert deserialize_int32(b('01000000')) == 1
-        assert deserialize_int32(b('ffffffff')) == -1
-        assert deserialize_int32(b('feffffff')) == -2
+        assert deserialize_int32(b('00000000')) == (0, 4)
+        assert deserialize_int32(b('01000000')) == (1, 4)
+        assert deserialize_int32(b('ffffffff')) == (-1, 4)
+        assert deserialize_int32(b('feffffff')) == (-2, 4)
 
-        assert deserialize_int32(b('00000000'), 0) == 0
-        assert deserialize_int32(b('01000000'), 0) == 1
-        assert deserialize_int32(b('ffffffff'), 0) == -1
-        assert deserialize_int32(b('feffffff'), 0) == -2
+        assert deserialize_int32(b('00000000'), 0) == (0, 4)
+        assert deserialize_int32(b('01000000'), 0) == (1, 4)
+        assert deserialize_int32(b('ffffffff'), 0) == (-1, 4)
+        assert deserialize_int32(b('feffffff'), 0) == (-2, 4)
 
-        assert deserialize_int32(b('00000000cc'), 0) == 0
-        assert deserialize_int32(b('01000000cc'), 0) == 1
-        assert deserialize_int32(b('ffffffffcc'), 0) == -1
-        assert deserialize_int32(b('feffffffcc'), 0) == -2
+        assert deserialize_int32(b('00000000cc'), 0) == (0, 4)
+        assert deserialize_int32(b('01000000cc'), 0) == (1, 4)
+        assert deserialize_int32(b('ffffffffcc'), 0) == (-1, 4)
+        assert deserialize_int32(b('feffffffcc'), 0) == (-2, 4)
 
-        assert deserialize_int32(b('cc00000000'), 1) == 0
-        assert deserialize_int32(b('cc01000000'), 1) == 1
-        assert deserialize_int32(b('ccffffffff'), 1) == -1
-        assert deserialize_int32(b('ccfeffffff'), 1) == -2
+        assert deserialize_int32(b('cc00000000'), 1) == (0, 5)
+        assert deserialize_int32(b('cc01000000'), 1) == (1, 5)
+        assert deserialize_int32(b('ccffffffff'), 1) == (-1, 5)
+        assert deserialize_int32(b('ccfeffffff'), 1) == (-2, 5)
         
-        assert deserialize_int32(b('cc00000000cc'), 1) == 0
-        assert deserialize_int32(b('cc01000000cc'), 1) == 1
-        assert deserialize_int32(b('ccffffffffcc'), 1) == -1
-        assert deserialize_int32(b('ccfeffffffcc'), 1) == -2
+        assert deserialize_int32(b('cc00000000cc'), 1) == (0, 5)
+        assert deserialize_int32(b('cc01000000cc'), 1) == (1, 5)
+        assert deserialize_int32(b('ccffffffffcc'), 1) == (-1, 5)
+        assert deserialize_int32(b('ccfeffffffcc'), 1) == (-2, 5)
 
         with self.assertRaises(AssertionError, msg='should be raised because `data` argument is 3 bytes long'):
             deserialize_int32(b('000000'))

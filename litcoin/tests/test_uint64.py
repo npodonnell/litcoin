@@ -40,30 +40,30 @@ class TestUInt64(unittest.TestCase):
             serialize_uint64()
 
     def test_deserialize_uint64(self):
-        assert deserialize_uint64(b('0000000000000000')) == 0
-        assert deserialize_uint64(b('0100000000000000')) == 1
-        assert deserialize_uint64(b('ffffffffffffffff')) == 0xffffffffffffffff
-        assert deserialize_uint64(b('feffffffffffffff')) == 0xfffffffffffffffe
+        assert deserialize_uint64(b('0000000000000000')) == (0, 8)
+        assert deserialize_uint64(b('0100000000000000')) == (1, 8)
+        assert deserialize_uint64(b('ffffffffffffffff')) == (0xffffffffffffffff, 8)
+        assert deserialize_uint64(b('feffffffffffffff')) == (0xfffffffffffffffe, 8)
 
-        assert deserialize_uint64(b('0000000000000000'), 0) == 0
-        assert deserialize_uint64(b('0100000000000000'), 0) == 1
-        assert deserialize_uint64(b('ffffffffffffffff'), 0) == 0xffffffffffffffff
-        assert deserialize_uint64(b('feffffffffffffff'), 0) == 0xfffffffffffffffe
+        assert deserialize_uint64(b('0000000000000000'), 0) == (0, 8)
+        assert deserialize_uint64(b('0100000000000000'), 0) == (1, 8)
+        assert deserialize_uint64(b('ffffffffffffffff'), 0) == (0xffffffffffffffff, 8)
+        assert deserialize_uint64(b('feffffffffffffff'), 0) == (0xfffffffffffffffe, 8)
 
-        assert deserialize_uint64(b('0000000000000000cc'), 0) == 0
-        assert deserialize_uint64(b('0100000000000000cc'), 0) == 1
-        assert deserialize_uint64(b('ffffffffffffffffcc'), 0) == 0xffffffffffffffff
-        assert deserialize_uint64(b('feffffffffffffffcc'), 0) == 0xfffffffffffffffe
+        assert deserialize_uint64(b('0000000000000000cc'), 0) == (0, 8)
+        assert deserialize_uint64(b('0100000000000000cc'), 0) == (1, 8)
+        assert deserialize_uint64(b('ffffffffffffffffcc'), 0) == (0xffffffffffffffff, 8)
+        assert deserialize_uint64(b('feffffffffffffffcc'), 0) == (0xfffffffffffffffe, 8)
 
-        assert deserialize_uint64(b('cc0000000000000000'), 1) == 0
-        assert deserialize_uint64(b('cc0100000000000000'), 1) == 1
-        assert deserialize_uint64(b('ccffffffffffffffff'), 1) == 0xffffffffffffffff
-        assert deserialize_uint64(b('ccfeffffffffffffff'), 1) == 0xfffffffffffffffe
+        assert deserialize_uint64(b('cc0000000000000000'), 1) == (0, 9)
+        assert deserialize_uint64(b('cc0100000000000000'), 1) == (1, 9)
+        assert deserialize_uint64(b('ccffffffffffffffff'), 1) == (0xffffffffffffffff, 9)
+        assert deserialize_uint64(b('ccfeffffffffffffff'), 1) == (0xfffffffffffffffe, 9)
         
-        assert deserialize_uint64(b('cc0000000000000000cc'), 1) == 0
-        assert deserialize_uint64(b('cc0100000000000000cc'), 1) == 1
-        assert deserialize_uint64(b('ccffffffffffffffffcc'), 1) == 0xffffffffffffffff
-        assert deserialize_uint64(b('ccfeffffffffffffffcc'), 1) == 0xfffffffffffffffe
+        assert deserialize_uint64(b('cc0000000000000000cc'), 1) == (0, 9)
+        assert deserialize_uint64(b('cc0100000000000000cc'), 1) == (1, 9)
+        assert deserialize_uint64(b('ccffffffffffffffffcc'), 1) == (0xffffffffffffffff, 9)
+        assert deserialize_uint64(b('ccfeffffffffffffffcc'), 1) == (0xfffffffffffffffe, 9)
 
         with self.assertRaises(AssertionError, msg='should be raised because `i` argument is negative'):
             deserialize_uint64(b('0000000000000000'), -1)

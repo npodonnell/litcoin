@@ -40,30 +40,30 @@ class TestUInt8(unittest.TestCase):
             serialize_uint8()
 
     def test_deserialize_uint8(self):
-        assert deserialize_uint8(b('00')) == 0
-        assert deserialize_uint8(b('01')) == 1
-        assert deserialize_uint8(b('ff')) == 0xff
-        assert deserialize_uint8(b('fe')) == 0xfe
-
-        assert deserialize_uint8(b('00'), 0) == 0
-        assert deserialize_uint8(b('01'), 0) == 1
-        assert deserialize_uint8(b('ff'), 0) == 0xff
-        assert deserialize_uint8(b('fe'), 0) == 0xfe
-
-        assert deserialize_uint8(b('00cc'), 0) == 0
-        assert deserialize_uint8(b('01cc'), 0) == 1
-        assert deserialize_uint8(b('ffcc'), 0) == 0xff
-        assert deserialize_uint8(b('fecc'), 0) == 0xfe
-
-        assert deserialize_uint8(b('cc00'), 1) == 0
-        assert deserialize_uint8(b('cc01'), 1) == 1
-        assert deserialize_uint8(b('ccff'), 1) == 0xff
-        assert deserialize_uint8(b('ccfe'), 1) == 0xfe
+        assert deserialize_uint8(b('00')) == (0, 1)
+        assert deserialize_uint8(b('01')) == (1, 1)
+        assert deserialize_uint8(b('ff')) == (0xff, 1)
+        assert deserialize_uint8(b('fe')) == (0xfe, 1)
         
-        assert deserialize_uint8(b('cc00cc'), 1) == 0
-        assert deserialize_uint8(b('cc01cc'), 1) == 1
-        assert deserialize_uint8(b('ccffcc'), 1) == 0xff
-        assert deserialize_uint8(b('ccfecc'), 1) == 0xfe
+        assert deserialize_uint8(b('00'), 0) == (0, 1)
+        assert deserialize_uint8(b('01'), 0) == (1, 1)
+        assert deserialize_uint8(b('ff'), 0) == (0xff, 1)
+        assert deserialize_uint8(b('fe'), 0) == (0xfe, 1)
+
+        assert deserialize_uint8(b('00cc'), 0) == (0, 1)
+        assert deserialize_uint8(b('01cc'), 0) == (1, 1)
+        assert deserialize_uint8(b('ffcc'), 0) == (0xff, 1)
+        assert deserialize_uint8(b('fecc'), 0) == (0xfe, 1)
+
+        assert deserialize_uint8(b('cc00'), 1) == (0, 2)
+        assert deserialize_uint8(b('cc01'), 1) == (1, 2)
+        assert deserialize_uint8(b('ccff'), 1) == (0xff, 2)
+        assert deserialize_uint8(b('ccfe'), 1) == (0xfe, 2)
+
+        assert deserialize_uint8(b('cc00cc'), 1) == (0, 2)
+        assert deserialize_uint8(b('cc01cc'), 1) == (1, 2)
+        assert deserialize_uint8(b('ccffcc'), 1) == (255, 2)
+        assert deserialize_uint8(b('ccfecc'), 1) == (254, 2)
 
         with self.assertRaises(AssertionError, msg='should be raised because `i` argument is negative'):
             deserialize_uint8(b('00'), -1)

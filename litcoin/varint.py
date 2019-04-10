@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from litcoin.serialization import validate_data
+from litcoin.serialization import ensure_enough_data
 from litcoin.uint16 import UINT16_SIZE_IN_BYTES, serialize_uint16, deserialize_uint16
 from litcoin.uint32 import UINT32_SIZE_IN_BYTES, serialize_uint32, deserialize_uint32
 from litcoin.uint64 import UINT64_SIZE_IN_BYTES, serialize_uint64, deserialize_uint64
@@ -26,19 +26,16 @@ def serialize_varint(n):
     return b'\xff' + int.to_bytes(n, 8, byteorder='little', signed=False)
 
 
-def deserialize_varint(data, i=0):
-    validate_data(data, i, VARINT_SIZE_RANGE_IN_BYTES[0])
+def deserialize_varint(data, pos=0):
+    ensure_enough_data(data, pos, VARINT_SIZE_RANGE_IN_BYTES[0])
+    next_pos = pos + 1
+    first_byte = int.from_bytes(data[pos : next_pos], byteorder='little', signed=False)
 
-    f = int.from_bytes(data[i : i + 1], byteorder='little', signed=False)
-
-    if f <= 0xfc:
-        return (f, 1)
-    if f == 0xfd:
-        assert i + UINT16_SIZE_IN_BYTES < len(data)
-        return (deserialize_uint16(data, i + 1), UINT16_SIZE_IN_BYTES)
-    if f == 0xfe:
-        assert i + UINT32_SIZE_IN_BYTES < len(data)
-        return (deserialize_uint32(data, i + 1), UINT32_SIZE_IN_BYTES)
-    if f == 0xff:
-        assert i + UINT64_SIZE_IN_BYTES < len(data)
-        return (deserialize_uint64(data, i + 1), UINT64_SIZE_IN_BYTES)
+    if first_byte <= 0xfc:
+        return (first_byte, next_pos)
+    if first_byte == 0xfd:
+        return deserialize_uint16(data, next_pos)
+    if first_byte == 0xfe:
+        return deserialize_uint32(data, next_pos)
+    if first_byte == 0xff:
+        return deserialize_uint64(data, next_pos)

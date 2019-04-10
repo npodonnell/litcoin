@@ -40,30 +40,30 @@ class TestUInt32(unittest.TestCase):
             serialize_uint32()
 
     def test_deserialize_uint32(self):
-        assert deserialize_uint32(b('00000000')) == 0
-        assert deserialize_uint32(b('01000000')) == 1
-        assert deserialize_uint32(b('ffffffff')) == 0xffffffff
-        assert deserialize_uint32(b('feffffff')) == 0xfffffffe
+        assert deserialize_uint32(b('00000000')) == (0, 4)
+        assert deserialize_uint32(b('01000000')) == (1, 4)
+        assert deserialize_uint32(b('ffffffff')) == (0xffffffff, 4)
+        assert deserialize_uint32(b('feffffff')) == (0xfffffffe, 4)
 
-        assert deserialize_uint32(b('00000000'), 0) == 0
-        assert deserialize_uint32(b('01000000'), 0) == 1
-        assert deserialize_uint32(b('ffffffff'), 0) == 0xffffffff
-        assert deserialize_uint32(b('feffffff'), 0) == 0xfffffffe
+        assert deserialize_uint32(b('00000000'), 0) == (0, 4)
+        assert deserialize_uint32(b('01000000'), 0) == (1, 4)
+        assert deserialize_uint32(b('ffffffff'), 0) == (0xffffffff, 4)
+        assert deserialize_uint32(b('feffffff'), 0) == (0xfffffffe, 4)
 
-        assert deserialize_uint32(b('00000000cc'), 0) == 0
-        assert deserialize_uint32(b('01000000cc'), 0) == 1
-        assert deserialize_uint32(b('ffffffffcc'), 0) == 0xffffffff
-        assert deserialize_uint32(b('feffffffcc'), 0) == 0xfffffffe
+        assert deserialize_uint32(b('00000000cc'), 0) == (0, 4)
+        assert deserialize_uint32(b('01000000cc'), 0) == (1, 4)
+        assert deserialize_uint32(b('ffffffffcc'), 0) == (0xffffffff, 4)
+        assert deserialize_uint32(b('feffffffcc'), 0) == (0xfffffffe, 4)
 
-        assert deserialize_uint32(b('cc00000000'), 1) == 0
-        assert deserialize_uint32(b('cc01000000'), 1) == 1
-        assert deserialize_uint32(b('ccffffffff'), 1) == 0xffffffff
-        assert deserialize_uint32(b('ccfeffffff'), 1) == 0xfffffffe
+        assert deserialize_uint32(b('cc00000000'), 1) == (0, 5)
+        assert deserialize_uint32(b('cc01000000'), 1) == (1, 5)
+        assert deserialize_uint32(b('ccffffffff'), 1) == (0xffffffff, 5)
+        assert deserialize_uint32(b('ccfeffffff'), 1) == (0xfffffffe, 5)
         
-        assert deserialize_uint32(b('cc00000000cc'), 1) == 0
-        assert deserialize_uint32(b('cc01000000cc'), 1) == 1
-        assert deserialize_uint32(b('ccffffffffcc'), 1) == 0xffffffff
-        assert deserialize_uint32(b('ccfeffffffcc'), 1) == 0xfffffffe
+        assert deserialize_uint32(b('cc00000000cc'), 1) == (0, 5)
+        assert deserialize_uint32(b('cc01000000cc'), 1) == (1, 5)
+        assert deserialize_uint32(b('ccffffffffcc'), 1) == (0xffffffff, 5)
+        assert deserialize_uint32(b('ccfeffffffcc'), 1) == (0xfffffffe, 5)
 
         with self.assertRaises(AssertionError, msg='should be raised because `i` argument is negative'):
             deserialize_uint32(b('00000000'), -1)

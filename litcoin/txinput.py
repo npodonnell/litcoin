@@ -8,7 +8,7 @@ from litcoin.script.validator import validate_script
 from litcoin.script.serialization import serialize_script, deserialize_script
 from litcoin.script.humanreadable import script_to_human_readable
 from litcoin.script.copy import script_copy
-from litcoin.serialization import validate_data
+from litcoin.serialization import ensure_enough_data
 
 TXINPUT_SIZE_RANGE_IN_BYTES = ( \
     OUTPOINT_SIZE_IN_BYTES + VARINT_SIZE_RANGE_IN_BYTES[0] + UINT32_SIZE_IN_BYTES, \
@@ -44,21 +44,12 @@ def serialize_txinput(txinput):
         serialize_uint32(txinput['sequence_no'])
 
 
-def deserialize_txinput(data, i=0):
-    validate_data(data, i, TXINPUT_SIZE_RANGE_IN_BYTES[0])
-
-    # deserialize outpoint
-    outpoint = deserialize_outpoint(data, i)
-    i += OUTPOINT_SIZE_IN_BYTES
-
-    # deserialize unlocking script
-    (unlocking_script, unlocking_script_length) = deserialize_script(data, i)
-    i += unlocking_script_length
-
-    # deserialize sequence number
-    sequence_no = deserialize_uint32(data, i)
-
-    return make_txinput(outpoint, unlocking_script, sequence_no)
+def deserialize_txinput(data, pos=0):
+    ensure_enough_data(data, pos, TXINPUT_SIZE_RANGE_IN_BYTES[0])
+    (outpoint, pos) = deserialize_outpoint(data, pos)
+    (unlocking_script, pos) = deserialize_script(data, pos)
+    (sequence_no, pos) = deserialize_uint32(data, pos)
+    return (make_txinput(outpoint, unlocking_script, sequence_no), pos)
 
 
 def txinput_to_human_readable(txinput):

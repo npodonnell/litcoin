@@ -40,30 +40,30 @@ class TestUInt16(unittest.TestCase):
             serialize_uint16()
 
     def test_deserialize_uint16(self):
-        assert deserialize_uint16(b('0000')) == 0
-        assert deserialize_uint16(b('0100')) == 1
-        assert deserialize_uint16(b('ffff')) == 0xffff
-        assert deserialize_uint16(b('feff')) == 0xfffe
+        assert deserialize_uint16(b('0000')) == (0, 2)
+        assert deserialize_uint16(b('0100')) == (1, 2)
+        assert deserialize_uint16(b('ffff')) == (0xffff, 2)
+        assert deserialize_uint16(b('feff')) == (0xfffe, 2)
 
-        assert deserialize_uint16(b('0000'), 0) == 0
-        assert deserialize_uint16(b('0100'), 0) == 1
-        assert deserialize_uint16(b('ffff'), 0) == 0xffff
-        assert deserialize_uint16(b('feff'), 0) == 0xfffe
+        assert deserialize_uint16(b('0000'), 0) == (0, 2)
+        assert deserialize_uint16(b('0100'), 0) == (1, 2)
+        assert deserialize_uint16(b('ffff'), 0) == (0xffff, 2)
+        assert deserialize_uint16(b('feff'), 0) == (0xfffe, 2)
 
-        assert deserialize_uint16(b('0000cc'), 0) == 0
-        assert deserialize_uint16(b('0100cc'), 0) == 1
-        assert deserialize_uint16(b('ffffcc'), 0) == 0xffff
-        assert deserialize_uint16(b('feffcc'), 0) == 0xfffe
+        assert deserialize_uint16(b('0000cc'), 0) == (0, 2)
+        assert deserialize_uint16(b('0100cc'), 0) == (1, 2)
+        assert deserialize_uint16(b('ffffcc'), 0) == (0xffff, 2)
+        assert deserialize_uint16(b('feffcc'), 0) == (0xfffe, 2)
 
-        assert deserialize_uint16(b('cc0000'), 1) == 0
-        assert deserialize_uint16(b('cc0100'), 1) == 1
-        assert deserialize_uint16(b('ccffff'), 1) == 0xffff
-        assert deserialize_uint16(b('ccfeff'), 1) == 0xfffe
+        assert deserialize_uint16(b('cc0000'), 1) == (0, 3)
+        assert deserialize_uint16(b('cc0100'), 1) == (1, 3)
+        assert deserialize_uint16(b('ccffff'), 1) == (0xffff, 3)
+        assert deserialize_uint16(b('ccfeff'), 1) == (0xfffe, 3)
         
-        assert deserialize_uint16(b('cc0000cc'), 1) == 0
-        assert deserialize_uint16(b('cc0100cc'), 1) == 1
-        assert deserialize_uint16(b('ccffffcc'), 1) == 0xffff
-        assert deserialize_uint16(b('ccfeffcc'), 1) == 0xfffe
+        assert deserialize_uint16(b('cc0000cc'), 1) == (0, 3)
+        assert deserialize_uint16(b('cc0100cc'), 1) == (1, 3)
+        assert deserialize_uint16(b('ccffffcc'), 1) == (0xffff, 3)
+        assert deserialize_uint16(b('ccfeffcc'), 1) == (0xfffe, 3)
 
         with self.assertRaises(AssertionError, msg='should be raised because `i` argument is negative'):
             deserialize_uint16(b('0000'), -1)

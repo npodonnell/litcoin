@@ -6,7 +6,7 @@ from litcoin.script.validator import validate_script
 from litcoin.script.humanreadable import script_to_human_readable
 from litcoin.script.serialization import serialize_script, deserialize_script
 from litcoin.script.copy import script_copy
-from litcoin.serialization import validate_data
+from litcoin.serialization import ensure_enough_data
 
 TXOUTPUT_SIZE_RANGE_IN_BYTES = ( \
     INT64_SIZE_IN_BYTES + VARINT_SIZE_RANGE_IN_BYTES[0], \
@@ -38,7 +38,7 @@ def serialize_txoutput(txoutput):
 
 
 def deserialize_txoutput(data, i=0):
-    validate_data(data, i, TXOUTPUT_SIZE_RANGE_IN_BYTES[0])
+    ensure_enough_data(data, i, TXOUTPUT_SIZE_RANGE_IN_BYTES[0])
 
     # deserialize value
     value = deserialize_int64(data, i)

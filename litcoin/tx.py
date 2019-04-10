@@ -3,11 +3,12 @@
 
 from .txinput import validate_txinput
 from .txoutput import validate_txoutput
-from .int32 import validate_int32
-from .uint32 import validate_uint32, serialize_uint32
-from .varint import serialize_varint
-from .txinput import serialize_txinput, txinput_to_human_readable, txinput_copy
-from .txoutput import serialize_txoutput, txoutput_to_human_readable, txoutput_copy
+from .int32 import INT32_SIZE_IN_BYTES, validate_int32, deserialize_int32
+from .uint32 import UINT32_SIZE_IN_BYTES, validate_uint32, serialize_uint32
+from .varint import VARINT_SIZE_RANGE_IN_BYTES, serialize_varint, deserialize_varint
+from .txinput import serialize_txinput, deserialize_txinput, txinput_to_human_readable, txinput_copy
+from .txoutput import serialize_txoutput, deserialize_txoutput, txoutput_to_human_readable, txoutput_copy
+from .serialization import ensure_enough_data
 
 """
 These are used whenever *coin is undergoing an upgrade. Newer nodes will 
@@ -23,6 +24,9 @@ Code Pointer: src/primitives/transaction.h
 MIN_TX_VERSION = 1
 CURRENT_TX_VERSION = 2
 MAX_TX_VERSION = 2
+
+
+TX_MIN_SIZE_IN_BYTES = INT32_SIZE_IN_BYTES + VARINT_SIZE_RANGE_IN_BYTES[0] + VARINT_SIZE_RANGE_IN_BYTES[0] + UINT32_SIZE_IN_BYTES
 
 
 def make_tx():
@@ -74,7 +78,23 @@ def serialize_tx(tx):
 
 
 def deserialize_tx(data, i=0):
-    pass
+    ensure_enough_data(data, i, TX_MIN_SIZE_IN_BYTES)
+    tx = make_tx()
+
+    # Deserialize version
+    version = deserialize_int32(data, i)
+    set_tx_version(tx, version)
+    i += INT32_SIZE_IN_BYTES
+
+    # Deserialize input count
+    (n_inputs, n_inputs_size) = deserialize_varint(data, i)
+
+    for _ in range(n_inputs):
+        txinput = deserialize_txinput(data, i)
+        
+
+    return tx
+    
 
 
 def tx_to_human_readable(tx):

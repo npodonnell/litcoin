@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from litcoin.serialization import validate_data
+from litcoin.serialization import ensure_enough_data
 
 INT64_SIZE_IN_BYTES = 8
 
@@ -15,6 +15,8 @@ def serialize_int64(n):
     return int.to_bytes(n, INT64_SIZE_IN_BYTES, byteorder='little', signed=True)
 
 
-def deserialize_int64(data, i=0):
-    validate_data(data, i, INT64_SIZE_IN_BYTES)
-    return int.from_bytes(data[i : i + INT64_SIZE_IN_BYTES], byteorder='little', signed=True)
+def deserialize_int64(data, pos=0):
+    ensure_enough_data(data, pos, INT64_SIZE_IN_BYTES)
+    next_pos = pos + INT64_SIZE_IN_BYTES
+    res = int.from_bytes(data[pos : next_pos], byteorder='little', signed=True)
+    return (res, next_pos)
