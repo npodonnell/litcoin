@@ -3,7 +3,8 @@
 
 from .txinput import validate_txinput
 from .txoutput import validate_txoutput
-from .uint32 import serialize_uint32
+from .int32 import validate_int32
+from .uint32 import validate_uint32, serialize_uint32
 from .varint import serialize_varint
 from .txinput import serialize_txinput, txinput_to_human_readable, txinput_copy
 from .txoutput import serialize_txoutput, txoutput_to_human_readable, txoutput_copy
@@ -37,16 +38,14 @@ def make_tx():
 
 
 def set_tx_version(tx, version):
-    assert type(version) is int, "`version` must be of type `int`"
+    validate_int32(version)
     assert MIN_TX_VERSION <= version and version <= MAX_TX_VERSION, \
         "`version` should be in the range [{0}, {1}]".format(MIN_TX_VERSION, MAX_TX_VERSION)
     tx["version"] = version
 
 
 def set_tx_lock_time(tx, lock_time):
-    assert type(lock_time) == int
-    assert 0 <= lock_time
-    assert lock_time <= 0xffffffff
+    validate_uint32(lock_time)
     tx['lock_time'] = lock_time
 
 
