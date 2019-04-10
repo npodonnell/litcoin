@@ -4,7 +4,7 @@
 from .txinput import validate_txinput
 from .txoutput import validate_txoutput
 from .int32 import INT32_SIZE_IN_BYTES, validate_int32, deserialize_int32
-from .uint32 import UINT32_SIZE_IN_BYTES, validate_uint32, serialize_uint32
+from .uint32 import UINT32_SIZE_IN_BYTES, validate_uint32, serialize_uint32, deserialize_uint32
 from .varint import VARINT_SIZE_RANGE_IN_BYTES, serialize_varint, deserialize_varint
 from .txinput import serialize_txinput, deserialize_txinput, txinput_to_human_readable, txinput_copy
 from .txoutput import serialize_txoutput, deserialize_txoutput, txoutput_to_human_readable, txoutput_copy
@@ -77,23 +77,35 @@ def serialize_tx(tx):
     return serialized
 
 
-def deserialize_tx(data, i=0):
-    ensure_enough_data(data, i, TX_MIN_SIZE_IN_BYTES)
+def deserialize_tx(data, pos=0):
+    ensure_enough_data(data, pos, TX_MIN_SIZE_IN_BYTES)
     tx = make_tx()
 
     # Deserialize version
-    version = deserialize_int32(data, i)
+    (version, pos) = deserialize_int32(data, pos)
     set_tx_version(tx, version)
-    i += INT32_SIZE_IN_BYTES
 
     # Deserialize input count
-    (n_inputs, n_inputs_size) = deserialize_varint(data, i)
+    (n_inputs, pos) = deserialize_varint(data, pos)
 
+    # Deserialize inputs
     for _ in range(n_inputs):
-        txinput = deserialize_txinput(data, i)
+        (txinput, pos) = deserialize_txinput(data, pos)
+        add_input(tx, txinput)
         
+    # Deserialize output count
+    (n_outputs, pos) = deserialize_varint(data, pos)
 
-    return tx
+    # Deserialize outputs
+    for _ in range(n_outputs):
+        (txoutput, pos) = deserialize_txoutput(data, pos)
+        add_output(tx, txoutput)
+
+    # Deserialize lock time
+    (lock_time, pos) = deserialize_uint32(data, pos)
+    set_tx_lock_time(tx, lock_time)
+
+    return (tx, pos)
     
 
 

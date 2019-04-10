@@ -27,7 +27,6 @@ def validate_txoutput(txoutput):
     assert type(txoutput) == dict, 'type of txoutput should be dict'
     assert set(txoutput.keys()) == {'value', 'locking_script'}, \
         'txoutput should have only `value` and `locking_script` keys'
-    
     validate_int64(txoutput['value'])
     validate_script(txoutput['locking_script'])
 
@@ -37,17 +36,11 @@ def serialize_txoutput(txoutput):
     return serialize_int64(txoutput['value']) + serialize_script(txoutput['locking_script'])
 
 
-def deserialize_txoutput(data, i=0):
-    ensure_enough_data(data, i, TXOUTPUT_SIZE_RANGE_IN_BYTES[0])
-
-    # deserialize value
-    value = deserialize_int64(data, i)
-    i += INT64_SIZE_IN_BYTES
-
-    # deserialize locking script
-    (locking_script, _) = deserialize_script(data, i)
-
-    return make_txoutput(value, locking_script)
+def deserialize_txoutput(data, pos=0):
+    ensure_enough_data(data, pos, TXOUTPUT_SIZE_RANGE_IN_BYTES[0])
+    (value, pos) = deserialize_int64(data, pos)
+    (locking_script, pos) = deserialize_script(data, pos)
+    return (make_txoutput(value, locking_script), pos)
 
 
 def txoutput_to_human_readable(txoutput):

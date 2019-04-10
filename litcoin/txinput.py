@@ -31,7 +31,6 @@ def validate_txinput(txinput):
     assert type(txinput) == dict, 'type of txinput should be dict'
     assert set(txinput.keys()) == {'outpoint', 'sequence_no', 'unlocking_script'}, \
         'txinput should have only `outpoint`, `sequence_no` and `unlocking_script` keys'
-    
     validate_outpoint(txinput['outpoint'])
     validate_script(txinput['unlocking_script'])
     validate_uint32(txinput['sequence_no'])
