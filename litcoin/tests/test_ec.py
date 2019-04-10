@@ -112,4 +112,4 @@ class TestEc(unittest.TestCase):
         signature = b("30460221008b409a819a0e99e2ba8d310b3184de6b62a1c6aa49d36512702591c7d4c2b27b022100fc73f7785b8163beb589543cb1ae6ca0a03fc5d4b4572423b1b7b28a623ad1ec")
         actual = verify_signature(signature, hashed_message, pubkey)
         expected = False
-        assert actual == expected, "Failed to get expected positive result for signature verification"
+        assert actual == expected, "Failed to get expected negative result for signature verification"
