@@ -19,6 +19,7 @@ TODO: This is bitcoin-specific, move these to networks.py
 Code Pointer: src/primitives/transaction.h
 
 """
+MIN_TX_VERSION = 1
 CURRENT_TX_VERSION = 2
 MAX_TX_VERSION = 2
 
@@ -33,6 +34,13 @@ def make_tx():
         'inputs': [],
         'outputs': []
     }
+
+
+def set_tx_version(tx, version):
+    assert type(version) is int, "`version` must be of type `int`"
+    assert MIN_TX_VERSION <= version and version <= MAX_TX_VERSION, \
+        "`version` should be in the range [{0}, {1}]".format(MIN_TX_VERSION, MAX_TX_VERSION)
+    tx["version"] = version
 
 
 def set_tx_lock_time(tx, lock_time):
@@ -66,7 +74,7 @@ def serialize_tx(tx):
     return serialized
 
 
-def deserialize_tx(tx_bytes):
+def deserialize_tx(data, i=0):
     pass
 
 
