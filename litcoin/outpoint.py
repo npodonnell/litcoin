@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
-from .uint256 import UINT256_SIZE_IN_BYTES, validate_uint256, serialize_uint256, deserialize_uint256
+from .uint256 import UINT256_SIZE_IN_BYTES, validate_uint256, serialize_uint256, \
+    uint256_to_hex, deserialize_uint256
 from .uint32 import UINT32_SIZE_IN_BYTES, validate_uint32, serialize_uint32, deserialize_uint32
 from .serialization import ensure_enough_data
 
@@ -38,7 +39,7 @@ def deserialize_outpoint(data, pos=0):
 
 def outpoint_to_human_readable(outpoint):
     return {
-        'txid': outpoint['txid'],
+        'txid': uint256_to_hex(outpoint['txid']),
         'output_index': outpoint['output_index']
     }
 
