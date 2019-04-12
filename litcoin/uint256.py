@@ -14,7 +14,7 @@ def validate_uint256(n):
 
 def uint256_to_hex(n):
     validate_uint256(n)
-    return x(serialize_uint256(n))
+    return x(int.to_bytes(n, UINT256_SIZE_IN_BYTES, byteorder='big', signed=False))
 
 
 def serialize_uint256(n):
