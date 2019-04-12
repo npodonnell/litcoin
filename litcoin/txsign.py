@@ -1,18 +1,20 @@
 #!/usr/bin/env python3
 
-from .txsighash import SIGVERSION_BASE, make_tx_sighash
+from .txsighash import SIGVERSION_BASE, SIGVERSION_WITNESS_V0, make_tx_sighash
 from .script.compiler import compile_script
 from .ec import sign_message
-from .binhex import x
+from .uint8 import serialize_uint8
+from .binhex import x, b
 
 
-def sign_input(tx, input_index, sighash_type, privkey):
+def sign_p2sh_input(tx, input_index, sighash_type, privkey):
     input = tx["inputs"][input_index]
     amount = sum([o["value"] for o in tx["outputs"]])
-    print("Amount={0}".format(amount))
     sighash = make_tx_sighash(input["unlocking_script"], tx, input_index, sighash_type, amount, SIGVERSION_BASE)
-    print("Sighash={0}".format(x(sighash)))
-    signature = sign_message(sighash, privkey)
-    print("Signature={0}".format(x(signature)))
-    input["unlocking_script"] = compile_script([signature]) + input["unlocking_script"]
-    print("Unlocking Script={0}".format(x(input["unlocking_script"])))
+
+    while True:
+        # Keep signing until we have a low "r" value
+        signature = sign_message(sighash, privkey)
+        if len(signature) < 71:
+            break
+    input["unlocking_script"] = compile_script([signature + serialize_uint8(sighash_type), input["unlocking_script"]])
