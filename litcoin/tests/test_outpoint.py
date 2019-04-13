@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 from litcoin.binhex import b, x
-from litcoin.uint256 import UINT256_SIZE_IN_BYTES, serialize_uint256
+from litcoin.uint256 import UINT256_SIZE_IN_BYTES, serialize_uint256, uint256_to_hex
 from litcoin.uint32 import UINT32_SIZE_IN_BYTES, serialize_uint32
 from litcoin.outpoint import OUTPOINT_SIZE_IN_BYTES, validate_outpoint, make_outpoint, serialize_outpoint, \
     deserialize_outpoint, outpoint_to_human_readable, outpoint_copy
@@ -68,7 +68,7 @@ class TestOutpoint(unittest.TestCase):
 
     def test_outpoint_to_human_readable(self):
         actual = outpoint_to_human_readable(make_outpoint(TXID, OUTPUT_INDEX))
-        expected = {'txid': TXID, 'output_index': OUTPUT_INDEX}
+        expected = {'txid': uint256_to_hex(TXID), 'output_index': OUTPUT_INDEX}
         assert actual == expected
 
 
