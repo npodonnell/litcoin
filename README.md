@@ -33,6 +33,7 @@ MIT
 Install these first:
 ```
 sudo pip3 install setuptools
+sudo pip3 install mock
 sudo pip3 install pytest
 sudo pip3 install pytest-runner
 sudo pip3 install cryptography
