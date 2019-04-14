@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 
 from litcoin.binhex import b, x
-from litcoin.uint256 import UINT256_SIZE_IN_BYTES, validate_uint256, serialize_uint256, deserialize_uint256
+from litcoin.uint256 import UINT256_SIZE_IN_BYTES, validate_uint256, serialize_uint256, deserialize_uint256, \
+    uint256_to_hex, uint256_from_hex
 import unittest
 
 
@@ -99,3 +100,30 @@ class TestUInt256(unittest.TestCase):
             deserialize_uint256('wrong type')
         with self.assertRaises(TypeError, msg='should be raised because all arguments are missing'):
             deserialize_uint256()
+
+    def test_uint256_to_hex(self):
+        actual = uint256_to_hex(0x055dd55091cf826f80f4a3fccef535378cc4d94b6609f60e4dbda9abeaa1801c)
+        expected = "055dd55091cf826f80f4a3fccef535378cc4d94b6609f60e4dbda9abeaa1801c"
+        assert actual == expected
+
+        with self.assertRaises(AssertionError, msg="should be raised because `n` argument is too big for 256 bits"):
+            uint256_from_hex(0x10000000000000000000000000000000000000000000000000000000000000000)
+        with self.assertRaises(AssertionError, msg="should be raised because `s` argument is the wrong type"):
+            uint256_to_hex("wrong type")
+        with self.assertRaises(TypeError, msg="should be raised because all arguments are missing"):
+            uint256_to_hex()
+
+
+    def test_uint256_from_hex(self):
+        actual = uint256_from_hex("055dd55091cf826f80f4a3fccef535378cc4d94b6609f60e4dbda9abeaa1801c")
+        expected = 0x055dd55091cf826f80f4a3fccef535378cc4d94b6609f60e4dbda9abeaa1801c
+        assert actual == expected
+
+        with self.assertRaises(AssertionError, msg="should be raised because `s` argument has less than 64 characters"):
+            uint256_from_hex("000000000000000000000000000000000000000000000000000000000000000")
+        with self.assertRaises(AssertionError, msg="should be raised because `s` argument is too big for 256 bits"):
+            uint256_from_hex("10000000000000000000000000000000000000000000000000000000000000000")
+        with self.assertRaises(AssertionError, msg="should be raised because `s` argument is the wrong type"):
+            uint256_from_hex("wrong type")
+        with self.assertRaises(TypeError, msg="should be raised because all arguments are missing"):
+            uint256_from_hex()
