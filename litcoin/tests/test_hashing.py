@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 
-from litcoin.hashing import single_sha, double_sha, hash160
+from litcoin.hashing import SHA_LENGTH_IN_BYTES, HASH160_LENGTH_IN_BYTES, \
+    validate_sha, validate_hash160, single_sha, double_sha, hash160
+from litcoin.binhex import b
 import unittest
 
 
@@ -39,12 +41,41 @@ TEST_CASES = [
 
 
 class TestHashing(unittest.TestCase):
+    def test_SHA_LENGTH_IN_BYTES(self):
+        assert SHA_LENGTH_IN_BYTES == 32
+
+    def test_HASH160_LENGTH_IN_BYTES(self):
+        assert HASH160_LENGTH_IN_BYTES == 20
+
+    def test_validate_sha(self):
+        validate_sha(b("e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"))
+
+        with self.assertRaises(AssertionError, msg="should be raised because `h` argument is 31 bytes"):
+            validate_sha(b("b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"))
+        with self.assertRaises(AssertionError, msg="should be raised because `h` argument is 33 bytes"):
+            validate_sha(b("b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855f987"))
+        with self.assertRaises(AssertionError, msg="should be raised because `h` argument is the wrong type"):
+            validate_sha("b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855f987")
+        with self.assertRaises(TypeError, msg="should be raised because `h` argument is missing"):
+            validate_sha()
+
+    def test_validate_hash160(self):
+        validate_hash160(b("a7ead10f72ddee539382f2cfff6e523a8eab3608"))
+
+        with self.assertRaises(AssertionError, msg="should be raised because `h` argument is 19 bytes"):
+            validate_hash160(b("a7ead10f72ddee539382f2cfff6e523a8ea608"))
+        with self.assertRaises(AssertionError, msg="should be raised because `h` argument is 21 bytes"):
+            validate_hash160(b("a7ead10f72ddee539382f2cfff6e523a8eab433608"))
+        with self.assertRaises(AssertionError, msg="should be raised because `h` argument is the wrong type"):
+            validate_hash160("a7ead10f72ddee539382f2cfff6e523a8ea608")
+        with self.assertRaises(TypeError, msg="should be raised because `h` argument is missing"):
+            validate_hash160()
+
     def test_single_sha(self):
         for test_case in TEST_CASES:
             actual = bytes.fromhex(test_case['single_sha'])
             expected = single_sha(bytes.fromhex(test_case['hex']))
             assert actual == expected
-
 
     def test_double_sha(self):
         for test_case in TEST_CASES:
@@ -52,7 +83,6 @@ class TestHashing(unittest.TestCase):
             expected = double_sha(bytes.fromhex(test_case['hex']))
             assert actual == expected
         
-
     def test_hash160(self):
         for test_case in TEST_CASES:
             actual = bytes.fromhex(test_case['hash160'])
