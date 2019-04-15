@@ -3,10 +3,14 @@
 from litcoin.int64 import INT64_SIZE_IN_BYTES, serialize_int64
 from litcoin.varint import VARINT_SIZE_RANGE_IN_BYTES, serialize_varint
 from litcoin.script.serialization import serialize_script
-from litcoin.txoutput import TXOUTPUT_SIZE_RANGE_IN_BYTES, make_txoutput, validate_txoutput, \
-    serialize_txoutput, deserialize_txoutput, txoutput_to_human_readable, txoutput_copy
+from litcoin.txoutput import TXOUTPUT_SIZE_RANGE_IN_BYTES, make_txoutput, make_txoutput_to_address, \
+    validate_txoutput, serialize_txoutput, deserialize_txoutput, txoutput_to_human_readable, txoutput_copy
 from litcoin.binhex import b
+from litcoin.script.compiler import compile_script
 from litcoin.script.humanreadable import script_to_human_readable
+from litcoin.script.standard import make_p2pkh_locking_script, make_p2sh_locking_script
+from litcoin.address import address_decode
+from litcoin.symbols import ADDRESS_TYPE_P2PKH, ADDRESS_TYPE_P2SH
 import unittest
 
 VALUE = 42
@@ -30,6 +34,24 @@ class TestTxoutput(unittest.TestCase):
             make_txoutput(VALUE)
         with self.assertRaises(TypeError, msg='should be raised because all arguments are missing'):
             make_txoutput()
+
+    def test_make_txoutput_to_address(self):
+        amount = 10000
+        for (p2pkh_address, p2sh_address) in [
+            ("18VkRiDhFu2Z17AvtpU3vL2LbTXDzCvDVo", "34mPLwgbsDFaUqKyuLwJdZz3uJJUKJ1DYE"), 
+            ("LZDjqaThptiYJ3E6G4rwdbaKxBcT1oZJKt", "MAyXeq6ZpL71HLbt1DveTDETDztvLUdZvT")
+        ]:
+            (_, address_type, address_hash) = address_decode(p2pkh_address)
+            assert address_type == ADDRESS_TYPE_P2PKH
+            actual = make_txoutput_to_address(amount, p2pkh_address)
+            expected = make_txoutput(amount, compile_script(make_p2pkh_locking_script(address_hash)))
+            assert actual == expected
+
+            (_, address_type, address_hash) = address_decode(p2sh_address)
+            assert address_type == ADDRESS_TYPE_P2SH
+            actual = make_txoutput_to_address(amount, p2sh_address)
+            expected = make_txoutput(amount, compile_script(make_p2sh_locking_script(address_hash)))
+            assert actual == expected
 
     def test_validate_txoutput(self):
         validate_txoutput({'value': VALUE, 'locking_script': LOCKING_SCRIPT})
