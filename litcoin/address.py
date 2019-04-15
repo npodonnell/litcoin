@@ -8,7 +8,6 @@ from .symbols import ADDRESS_TYPE_P2PKH, ADDRESS_TYPE_P2SH
 ADDRESS_DECODED_EXPECTED_LENGTH_IN_BYTES = 21
 
 
-
 def make_p2pkh_address(pubkey, network_name):
     pubkey_hash = hash160(pubkey)
     prefixed_pubkey_hash = NETWORKS[network_name]['p2pkh_prefix'] + pubkey_hash
@@ -28,10 +27,10 @@ def address_decode(address):
     Decode an address, extract the prefix and return a tuple of the
     network name, address type, and the hash
     """
+    assert type(address) is str, "`address` should be of type `str`"
     decoded = base58check_decode(address)
     assert len(decoded) == ADDRESS_DECODED_EXPECTED_LENGTH_IN_BYTES, \
         "Decoded address should be of length {0}".format(ADDRESS_DECODED_EXPECTED_LENGTH_IN_BYTES)
-    
     address_prefix = int.from_bytes(decoded[:1], byteorder='big', signed=False)
     address_hash = decoded[1:]
     decoded = False
