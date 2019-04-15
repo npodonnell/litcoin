@@ -1,11 +1,16 @@
 #!/usr/bin/env python3
 
-from litcoin.binhex import b
+from .binhex import b
+from .symbols import ADDRESS_TYPE_P2PKH, ADDRESS_TYPE_P2SH
 
 NETWORKS = {
     'bitcoin': {
         'name': 'bitcoin',
         'inventor': 'Satoshi Nakamoto',
+        'address_prefixes': {
+            0x00: ADDRESS_TYPE_P2PKH,
+            0x05: ADDRESS_TYPE_P2SH
+        },
         'p2pkh_prefix': b('00'),
         'p2sh_prefix': b('05'),
         'wif_prefix': b('80'),
@@ -20,6 +25,10 @@ NETWORKS = {
     'litecoin': {
         'name': 'litecoin',
         'inventor': 'Charles Lee',
+        'address_prefixes': {
+            0x30: ADDRESS_TYPE_P2PKH,
+            0x32: ADDRESS_TYPE_P2SH
+        },
         'p2pkh_prefix': b('30'),
         'p2sh_prefix': b('32'),
         'wif_prefix': b('b0'),
@@ -34,13 +43,3 @@ NETWORKS = {
 }
 
 NETWORK_NAMES = set(NETWORKS.keys())
-
-# reverse lookups
-
-NETWORK_BY_P2PKH_PREFIX = {
-    NETWORKS[k]['p2pkh_prefix']: NETWORKS[k] for k in NETWORKS
-}
-
-NETWORK_BY_P2SH_PREFIX = {
-    NETWORKS[k]['p2sh_prefix']: NETWORKS[k] for k in NETWORKS
-}
