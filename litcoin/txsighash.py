@@ -11,18 +11,9 @@ from .script.serialization import serialize_script
 from .uint32 import serialize_uint32
 from .int64 import serialize_int64
 from .varint import serialize_varint
+from .symbols import SIGHASH_ALL, SIGHASH_NONE, SIGHASH_SINGLE, SIGHASH_ANYONECANPAY, \
+    SIGVERSION_BASE, SIGVERSION_WITNESS_V0
 
-# Sighash types
-# See script/interpreter.h
-SIGHASH_ALL = 1
-SIGHASH_NONE = 2
-SIGHASH_SINGLE = 3
-SIGHASH_ANYONECANPAY = 0x80
-
-# Sigversions
-# See script/interpreter.h
-SIGVERSION_BASE = 0
-SIGVERSION_WITNESS_V0 = 1
 
 HASH_ONE = b("0100000000000000000000000000000000000000000000000000000000000000")
 
