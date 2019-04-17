@@ -134,7 +134,7 @@ def sign_message(message, privkey):
     return signature
 
 
-def verify_signature(signature, message, pubkey):
+def valid_signature(signature, message, pubkey):
     assert type(signature) is bytes, "`signature` should be of type `bytes`"
     assert type(message) is bytes, "`message` should be of type `bytes`"
     validate_pubkey(pubkey)
@@ -147,6 +147,7 @@ def verify_signature(signature, message, pubkey):
     key = load_der_public_key(der_pubkey, default_backend())
 
     try:
-        return key.verify(signature, message, SIGNATURE_ALGORITHM)
+        key.verify(signature, message, SIGNATURE_ALGORITHM)
+        return True
     except InvalidSignature:
         return False

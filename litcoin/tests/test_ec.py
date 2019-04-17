@@ -2,7 +2,7 @@
 
 from litcoin.ec import PRIVKEY_SIZE_BYTES, UNCOMPRESSED_PUBKEY_SIZE_BYTES, \
     COMPRESSED_PUBKEY_SIZE_BYTES, validate_privkey, validate_pubkey, \
-    make_privkey, derive_pubkey, sign_message, verify_signature
+    make_privkey, derive_pubkey, sign_message, valid_signature
 from litcoin.binhex import b
 import unittest
 
@@ -100,16 +100,16 @@ class TestEc(unittest.TestCase):
         signature = sign_message(hashed_message, privkey)
         assert type(signature) is bytes, "`signature` should be of type `bytes`"
 
-    def test_verify_signature(self):
+    def test_valid_signature(self):
         pubkey = b("02c7a6af8f2e3663cfd9fe112303042fdaa6e693e753d4f2c57d45534b88aae838")
         hashed_message = b("70bc18bef5ae66b72d1995f8db90a583a60d77b4066e4653f1cead613025861c")
         
         signature = b("30460221008b409a819a0e99e2ba8d310b4184de6b62a1c6aa49d36512702591c7d4c2b27b022100fc73f7785b8163beb589543cb1ae6ca0a03fc5d4b4572423b1b7b28a623ad1ec")
-        actual = verify_signature(signature, hashed_message, pubkey)
+        actual = valid_signature(signature, hashed_message, pubkey)
         expected = True
         assert actual == expected, "Failed to get expected positive result for signature verification"
 
         signature = b("30460221008b409a819a0e99e2ba8d310b3184de6b62a1c6aa49d36512702591c7d4c2b27b022100fc73f7785b8163beb589543cb1ae6ca0a03fc5d4b4572423b1b7b28a623ad1ec")
-        actual = verify_signature(signature, hashed_message, pubkey)
+        actual = valid_signature(signature, hashed_message, pubkey)
         expected = False
         assert actual == expected, "Failed to get expected negative result for signature verification"
