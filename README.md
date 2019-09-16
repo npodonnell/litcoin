@@ -30,13 +30,9 @@ MIT
 
 ## Installation
 
-Install these first:
+Make sure you have Python 3 and Pip 3 installed, then install Litcoin's dependencies:
 ```
-sudo pip3 install setuptools
-sudo pip3 install mock
-sudo pip3 install pytest
-sudo pip3 install pytest-runner
-sudo pip3 install cryptography
+pip3 install setuptools mock pytest pytest-runner cryptography
 ```
 
 Build:
