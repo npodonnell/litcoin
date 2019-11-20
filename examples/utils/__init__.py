@@ -24,6 +24,17 @@ def input_ans(question):
             return True
 
 
+def input_passphrase():
+    """
+    Prompt user for passphrase
+    """
+    passphrase = input('Passphrase (leave blank for none) ?')
+    if len(passphrase) == 0:
+        return None
+    else:
+        return passphrase
+
+
 def input_network_name():
     """
     Prompt user to choose a network
