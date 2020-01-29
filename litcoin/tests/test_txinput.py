@@ -11,7 +11,7 @@ from litcoin.script.humanreadable import script_to_human_readable
 from litcoin.binhex import b, x
 import unittest
 
-OUTPOINT = make_outpoint(0x8000000000000000000000000000000000000000000000000000000000000001, 42)
+OUTPOINT = make_outpoint(b("8000000000000000000000000000000000000000000000000000000000000001"), 42)
 UNLOCKING_SCRIPT = b('')
 SEQUENCE_NO = 42
 
