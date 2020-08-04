@@ -8,7 +8,7 @@ setup(
     description='A library for interacting with Bitcoin and Litecoin',
     license='MIT',
     packages=['litcoin', 'litcoin.script'],
-    author='Noel ODonnell',
+    author='N. P. O\'Donnell',
     keywords=['bitcoin', 'litecoin', 'litcoin'],
-    url='https://github.com/odonnellnoel/litcoin'
+    url='https://github.com/npodonnell/litcoin'
 )

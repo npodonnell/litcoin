@@ -1,6 +1,6 @@
 MIT Licence
 
-Copyright (c) 2018 Noel O'Donnell
+Copyright (c) 2018 - 2020 N. P. O'Donnell
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
