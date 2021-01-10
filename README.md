@@ -28,11 +28,19 @@ WARNING: THIS LIBRARY IS UNDER CONSTRUCTION. DO NOT USE IT FOR COMMERCIAL PURPOS
 ## License
 MIT
 
-## Installation
+## Build / Install
 
-Make sure you have Python 3 and Pip 3 installed, then install Litcoin's dependencies:
+To develop or experiment with litcoin, we recommend using virtual environments. 
+
+Create and initalize a virtual environment:
 ```
-pip3 install setuptools mock pytest pytest-runner cryptography
+virtualenv -p python3 venv
+. venv/bin/activate
+```
+
+Install pytest:
+```
+pip3 install pytest
 ```
 
 Build:
@@ -42,21 +50,18 @@ Build:
 
 Run Tests:
 ```
-./setup.py test
+pytest
 ```
 
 Install:
 ```
-sudo ./setup.py install
+pip install .
 ```
 
 ## Usage
 
 Creating keys and addresses
 ```
-Python 3.6.5 (default, Apr  4 2018, 15:09:05) 
-[GCC 7.3.1 20180130 (Red Hat 7.3.1-2)] on linux
-Type "help", "copyright", "credits" or "license" for more information.
 >>> from litcoin.address import make_p2pkh_address
 >>> from litcoin.ec import make_privkey, derive_pubkey
 >>> privkey = make_privkey()
