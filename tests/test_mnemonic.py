@@ -38,6 +38,36 @@ WORDLIST_256 = [
     "amazing", "museum", "category", "cabin", "tip", "deposit", "across", "exact"
 ]
 
+WORDLIST_128_WRONG_CHECKSUM = [
+    "funny", "hill", "borrow", "nut",
+    "wear", "dawn", "muscle", "toward",
+    "pencil", "category", "security", "wife"
+]
+
+WORDLIST_160_WRONG_CHECKSUM = [
+    "term", "scare", "glass", "float", "law",
+    "spoon", "goddess", "winner", "coach", "swift",
+    "distance", "rare", "blade", "relief", "patrol"
+]
+
+WORDLIST_192_WRONG_CHECKSUM = [
+    "observe", "replace", "remind", "shallow", "ridge", "almost",
+    "check", "struggle", "glad", "enroll", "very", "regular",
+    "virtual", "else", "thunder", "perfect", "item", "sniff"
+]
+
+WORDLIST_224_WRONG_CHECKSUM = [
+    "tuna", "double", "sheriff", "ride", "surprise", "donor", "fun",
+    "stumble", "joke", "elite", "orphan", "basic", "hybrid", "afraid",
+    "gift", "stuff", "sustain", "detail", "jeans", "tackle", "assume"
+]
+
+WORDLIST_256_WRONG_CHECKSUM = [
+    "abandon", "abandon", "abandon", "angry", "hole", "tape", "remind", "fancy",
+    "mail", "slush", "dove", "aunt", "primary", "theory", "gift", "axis",
+    "amazing", "museum", "category", "cabin", "tip", "deposit", "trial", "exact"
+]
+
 
 class TestMnemonic(unittest.TestCase):
     def test_entropy_to_wordlist(self):
@@ -53,3 +83,14 @@ class TestMnemonic(unittest.TestCase):
         self.assertEqual(wordlist_to_entropy(WORDLIST_192), ENTROPY_192)
         self.assertEqual(wordlist_to_entropy(WORDLIST_224), ENTROPY_224)
         self.assertEqual(wordlist_to_entropy(WORDLIST_256), ENTROPY_256)
+
+        with self.assertRaises(AssertionError):
+            self.assertEqual(wordlist_to_entropy(WORDLIST_128_WRONG_CHECKSUM), ENTROPY_128)
+        with self.assertRaises(AssertionError):
+            self.assertEqual(wordlist_to_entropy(WORDLIST_160_WRONG_CHECKSUM), ENTROPY_160)
+        with self.assertRaises(AssertionError):
+            self.assertEqual(wordlist_to_entropy(WORDLIST_192_WRONG_CHECKSUM), ENTROPY_192)
+        with self.assertRaises(AssertionError):
+            self.assertEqual(wordlist_to_entropy(WORDLIST_224_WRONG_CHECKSUM), ENTROPY_224)
+        with self.assertRaises(AssertionError):
+            self.assertEqual(wordlist_to_entropy(WORDLIST_256_WRONG_CHECKSUM), ENTROPY_256)
