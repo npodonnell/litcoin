@@ -1,6 +1,14 @@
 #!/usr/bin/env python3
 
-TREZOR_WORDLIST = [
+from litcoin.binhex import b, x
+from litcoin.hashing import single_sha
+from typing import List
+
+"""
+BIP-39
+"""
+
+ENGLISH_WORDLIST = [
     "abandon",
     "ability",
     "able",
@@ -2050,3 +2058,45 @@ TREZOR_WORDLIST = [
     "zone",
     "zoo"
 ]
+
+
+def entropy_to_wordlist(entropy: bytes) -> List[str]:
+    assert len(entropy) in [16, 20, 24, 28, 32]
+
+    entropy_bits = len(entropy) * 8
+    cs_bits = entropy_bits // 32
+    n_words = (entropy_bits + cs_bits) // 11
+    checksum = single_sha(entropy)
+    entropy_i = int.from_bytes(entropy + checksum[:1], byteorder="big", signed=False) >> (8 - cs_bits)
+
+    return [
+        ENGLISH_WORDLIST[entropy_i >> (i * 11) & 0b11111111111]
+        for i in reversed(range(n_words))
+    ]
+
+
+def wordlist_to_entropy(wordlist: List[str]) -> bytes:
+    assert len(wordlist) in [12, 15, 18, 21, 24]
+
+    entropy_bits = (352 * len(wordlist)) // 33
+    cs_bits = entropy_bits // 32
+    entropy = 0
+    indices = [ENGLISH_WORDLIST.index(w) for w in wordlist]
+
+    for i in range(len(indices) - 1):
+        entropy += indices[i]
+        entropy <<= 11
+
+    entropy += indices[-1]
+    checksum = entropy & ((1 << cs_bits) - 1)
+    entropy >>= cs_bits
+
+    entropy_b = entropy.to_bytes(length=entropy_bits // 8, byteorder="big", signed=False)
+    # check checksum
+    checksum2 = int.from_bytes(single_sha(entropy_b)[:1], byteorder="big", signed=False) >> (8 - cs_bits)
+    assert checksum == checksum2
+    return entropy_b
+
+
+def wordlist_to_seed(wordlist: List[str], passphrase: str = "") -> bytes:
+    pass
