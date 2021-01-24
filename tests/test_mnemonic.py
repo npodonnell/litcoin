@@ -1,4 +1,4 @@
-from litcoin.mnemonic import entropy_to_wordlist, wordlist_to_entropy
+from litcoin.mnemonic import entropy_to_wordlist, wordlist_to_entropy, wordlist_to_seed
 from litcoin.binhex import b
 import unittest
 
@@ -68,6 +68,21 @@ WORDLIST_256_WRONG_CHECKSUM = [
     "amazing", "museum", "category", "cabin", "tip", "deposit", "trial", "exact"
 ]
 
+SEED_128 = b("b0cfd663b005a57e720beecb83345901c80ec9c30851e8e7f08cea3b1cffceb7"
+             "5415683f4f7ba469df7eb3fa1b22c9def35ea7c8336760ba5ab0f3dcba98b27f")
+
+SEED_160 = b("4e98441c82065432bb4e2fa571fb9cc0bf080df1bc90302ef56bd55810243f4b"
+             "9fa388d837c4da97778e426ad9760470aab8c08acb290247b149ae7c8bdfed3c")
+
+SEED_192 = b("383c29df199a88c94ec2024c1d937a7762962659cc00a09920af5b5e7884cb4a"
+             "be4fba3af033d1378b5e67b1f420a3bfe442e1590d4348bd377561903f1d753e")
+
+SEED_224 = b("e1d80aec5438832f0b159d5af0d6c9e9177a3fd88f5b71a7388d075656e3c6b6"
+             "2286bddbd4920909f125179bdb26c29c8a7dc3ba60e3e7a15708799fe63c8641")
+
+SEED_256 = b("3d833acb9145d5e7a8321e5edc7ef30f02b28c1709258f7ab0518f3bb5d6da31"
+             "693d8e520c56747949675b2563045adcd5366880e1d27fd90aed0700943b9b0c")
+
 
 class TestMnemonic(unittest.TestCase):
     def test_entropy_to_wordlist(self):
@@ -94,3 +109,10 @@ class TestMnemonic(unittest.TestCase):
             self.assertEqual(wordlist_to_entropy(WORDLIST_224_WRONG_CHECKSUM), ENTROPY_224)
         with self.assertRaises(AssertionError):
             self.assertEqual(wordlist_to_entropy(WORDLIST_256_WRONG_CHECKSUM), ENTROPY_256)
+
+    def test_wordlist_to_seed(self):
+        self.assertEqual(wordlist_to_seed(WORDLIST_128), SEED_128)
+        self.assertEqual(wordlist_to_seed(WORDLIST_160), SEED_160)
+        self.assertEqual(wordlist_to_seed(WORDLIST_192), SEED_192)
+        self.assertEqual(wordlist_to_seed(WORDLIST_224), SEED_224)
+        self.assertEqual(wordlist_to_seed(WORDLIST_256), SEED_256)
