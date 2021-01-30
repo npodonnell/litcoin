@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-
 from .txinput import validate_txinput
 from .txoutput import validate_txoutput
 from .int32 import INT32_SIZE_IN_BYTES, validate_int32, deserialize_int32
@@ -11,7 +10,7 @@ from .txoutput import serialize_txoutput, deserialize_txoutput, txoutput_to_huma
 from .serialization import ensure_enough_data
 
 """
-These are used whenever *coin is undergoing an upgrade. Newer nodes will 
+These are used whenever bitcoin is undergoing an upgrade. Newer nodes will 
 bump up MAX_TX_VERSION first and accept transactions with both the current
 version and the new version. Eventually when all (or most) nodes have
 upgraded, CURRENT_TX_VERSION will be bumped up to match MAX_TX_VERSION and
@@ -19,13 +18,10 @@ older transactions will no longer be accepted.
 TODO: This is bitcoin-specific, move these to networks.py
 
 Code Pointer: src/primitives/transaction.h
-
 """
 MIN_TX_VERSION = 1
 CURRENT_TX_VERSION = 2
 MAX_TX_VERSION = 2
-
-
 TX_MIN_SIZE_IN_BYTES = INT32_SIZE_IN_BYTES + VARINT_SIZE_RANGE_IN_BYTES[0] + VARINT_SIZE_RANGE_IN_BYTES[0] + UINT32_SIZE_IN_BYTES
 
 
@@ -43,7 +39,7 @@ def make_tx():
 
 def set_tx_version(tx, version):
     validate_int32(version)
-    assert MIN_TX_VERSION <= version and version <= MAX_TX_VERSION, \
+    assert MIN_TX_VERSION <= version <= MAX_TX_VERSION, \
         "`version` should be in the range [{0}, {1}]".format(MIN_TX_VERSION, MAX_TX_VERSION)
     tx["version"] = version
 
@@ -105,9 +101,8 @@ def deserialize_tx(data, pos=0):
     (lock_time, pos) = deserialize_uint32(data, pos)
     set_tx_lock_time(tx, lock_time)
 
-    return (tx, pos)
+    return tx, pos
     
-
 
 def tx_to_human_readable(tx):
     return {
