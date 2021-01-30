@@ -6,7 +6,7 @@ from litcoin.hashing import single_sha
 from typing import List
 
 """
-BIP-39
+BIP-39 Mnemonic
 """
 
 MNEMONIC_CONSTANT = b"mnemonic"
