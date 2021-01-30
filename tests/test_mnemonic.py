@@ -2,6 +2,7 @@ from litcoin.mnemonic import entropy_to_wordlist, wordlist_to_entropy, wordlist_
 from litcoin.binhex import b
 import unittest
 
+
 ENTROPY_128 = b("5e2d74684bdf866fe46730a2a4870b59")
 ENTROPY_160 = b("df78098bac97dfa51908642cbb78fed901716aa8")
 ENTROPY_192 = b("9876dad7628b980d89c6ba628967cbda67289078651876d9")
