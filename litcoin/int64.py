@@ -7,7 +7,7 @@ INT64_SIZE_IN_BYTES = 8
 
 def validate_int64(n):
     assert type(n) == int, 'type of `n` should be int'
-    assert -0x7fffffffffffffff <= n and n <= 0x7fffffffffffffff, '`n` must fit within 64 bits'
+    assert -0x8000000000000000 <= n <= 0x7fffffffffffffff, '`n` must fit within 64 bits'
 
 
 def serialize_int64(n):

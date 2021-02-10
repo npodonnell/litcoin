@@ -7,7 +7,7 @@ INT32_SIZE_IN_BYTES = 4
 
 def validate_int32(n):
     assert type(n) == int, 'type of `n` should be int'
-    assert -0x7fffffff <= n and n <= 0x7fffffff, '`n` must fit within 32 bits'
+    assert -0x80000000 <= n <= 0x7fffffff, '`n` must fit within 32 bits'
 
 
 def serialize_int32(n):
