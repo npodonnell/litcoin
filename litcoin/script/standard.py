@@ -16,14 +16,15 @@ TX_WITNESS_UNKNOWN:
 TX_NONSTANDARD
 """
 
-from .operations import OP_DUP, OP_HASH160, OP_EQUALVERIFY, OP_EQUAL, OP_CHECKSIG
-from ..hashing import validate_hash160
+from litcoin.script.compiler import compile_script
+from litcoin.script.operations import OP_DUP, OP_HASH160, OP_EQUALVERIFY, OP_EQUAL, OP_CHECKSIG, OP_0
+from litcoin.hashing import validate_hash160
+from litcoin.binhex import b
 
 
 def make_p2pkh_locking_script(pubkey_hash):
     """
-    Makes a P2PKH (Pay-to-public-key-hash) script which pays `amount` satoshis 
-    to the public key which hashes to `pubkey_hash`
+    Makes a P2PKH (Pay-to-public-key-hash) script which pays to pubkey_hash.
     """
     validate_hash160(pubkey_hash)
     return [OP_DUP, OP_HASH160, pubkey_hash, OP_EQUALVERIFY, OP_CHECKSIG]
@@ -31,8 +32,22 @@ def make_p2pkh_locking_script(pubkey_hash):
 
 def make_p2sh_locking_script(script_hash):
     """
-    Makes a P2SH (Pay-to-script-hash) script which pays `amount` satoshis 
-    to the redeem script which hashes to `script_hash`
+    Makes a P2SH (Pay-to-script-hash) script which pays to script_hash.
     """
     validate_hash160(script_hash)
     return [OP_HASH160, script_hash, OP_EQUAL]
+
+
+def make_p2sh_unlocking_script(redeem_script, scriptsig_script=[]):
+    """
+    Makes a P2SH (Pay-to-script-hash) unlocking script.
+    """
+    assert type(redeem_script) in (list, str, bytes)
+    assert type(scriptsig_script) is list
+
+    if type(redeem_script) is list:
+        redeem_script = compile_script(redeem_script)
+    elif type(redeem_script) is str:
+        redeem_script = b(redeem_script)
+
+    return scriptsig_script + [redeem_script]
