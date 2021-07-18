@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
 
-from .hashing import hash160, double_sha
-from .base58check import base58check_encode, base58check_decode
-from .networks import NETWORKS
-from .symbols import ADDRESS_TYPE_P2PKH, ADDRESS_TYPE_P2SH
+from litcoin.hashing import hash160
+from litcoin.base58check import base58check_encode, base58check_decode
+from litcoin.networks import NETWORKS
 
 ADDRESS_DECODED_EXPECTED_LENGTH_IN_BYTES = 21
 
