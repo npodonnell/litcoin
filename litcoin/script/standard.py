@@ -16,8 +16,10 @@ TX_WITNESS_UNKNOWN:
 TX_NONSTANDARD
 """
 
+from litcoin.address import address_decode
 from litcoin.script.compiler import compile_script
-from litcoin.script.operations import OP_DUP, OP_HASH160, OP_EQUALVERIFY, OP_EQUAL, OP_CHECKSIG, OP_0
+from litcoin.script.operations import OP_DUP, OP_HASH160, OP_EQUALVERIFY, OP_EQUAL, OP_CHECKSIG
+from litcoin.symbols import ADDRESS_TYPE_P2PKH, ADDRESS_TYPE_P2SH
 from litcoin.hashing import validate_hash160
 from litcoin.binhex import b
 
@@ -36,6 +38,19 @@ def make_p2sh_locking_script(script_hash):
     """
     validate_hash160(script_hash)
     return [OP_HASH160, script_hash, OP_EQUAL]
+
+
+def make_std_locking_script(address):
+    """
+    Makes either a P2PKH (Pay-to-public-key-hash) or P2SK (Pay-to-script-hash)
+    script depending on the address type.
+    """
+    _, address_type, address_hash = address_decode(address)
+
+    if address_type == ADDRESS_TYPE_P2PKH:
+        return make_p2pkh_locking_script(address_hash)
+    elif address_type == ADDRESS_TYPE_P2SH:
+        return make_p2sh_locking_script(address_hash)
 
 
 def make_p2sh_unlocking_script(redeem_script, scriptsig_script=[]):
