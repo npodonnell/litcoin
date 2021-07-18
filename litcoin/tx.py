@@ -8,6 +8,7 @@ from .varint import VARINT_SIZE_RANGE_IN_BYTES, serialize_varint, deserialize_va
 from .txinput import serialize_txinput, deserialize_txinput, txinput_to_human_readable, txinput_copy
 from .txoutput import serialize_txoutput, deserialize_txoutput, txoutput_to_human_readable, txoutput_copy
 from .serialization import ensure_enough_data
+from .hashing import double_sha
 
 """
 These are used whenever bitcoin is undergoing an upgrade. Newer nodes will 
@@ -123,3 +124,7 @@ def tx_copy(tx):
         'inputs': [txinput_copy(i) for i in tx["inputs"]],
         'outputs': [txoutput_copy(i) for i in tx["outputs"]]
     }
+
+
+def tx_hash(tx):
+    return double_sha(serialize_tx(tx))
