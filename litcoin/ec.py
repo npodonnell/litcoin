@@ -15,6 +15,7 @@ from cryptography.exceptions import InvalidSignature
 from litcoin.hashing import single_sha
 from litcoin.binhex import b, x
 
+
 PRIVKEY_SIZE_BYTES = 32
 UNCOMPRESSED_PUBKEY_SIZE_BYTES = 65
 COMPRESSED_PUBKEY_SIZE_BYTES = 33
@@ -24,10 +25,11 @@ SIGNATURE_ALGORITHM = ECDSA(Prehashed(SHA256()))
 SECP256K1_CURVE_ORDER = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364141
 SECP256K1_CURVE_ORDER_HALVED = SECP256K1_CURVE_ORDER >> 1
 
+
 def _uint_size_in_bytes(x):
     """
     Compute the number of bytes needed to hold an unsigned integer of
-    arbitrary length. Needed for DER re-encoding 
+    arbitrary length. 
     """
     assert type(x) is int, "`x` should be of type `int`"
     assert 0 <= x, "`x` should be >= 0"
@@ -36,7 +38,8 @@ def _uint_size_in_bytes(x):
         x >>= 8
         size += 1
         if x == 0:
-            return size
+            return size  
+
 
 def _internal_key_from_bytes(privkey):
     """
@@ -110,7 +113,7 @@ def sign_message(message, privkey):
         signature = key.sign(message, SIGNATURE_ALGORITHM)
         if signature[r_pos] != 0x00:
             break
-    
+
     r_len_pos = 3
     r_len = int.from_bytes(signature[r_len_pos : r_len_pos + 1], byteorder='big', signed=False)
     s_len_pos = 5 + r_len
