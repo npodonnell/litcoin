@@ -83,6 +83,7 @@ def get_outputs_hash(tx):
         data += serialize_txoutput(txoutput)
     return double_sha(data)
 
+
 def make_tx_sighash(script, tx, input_index, sighash_type, amount, sigversion):
     assert type(script) is bytes, "`script` should be of type bytes"
     assert input_index < len(tx["inputs"]), "`input_index` should be less than the number of inputs"
