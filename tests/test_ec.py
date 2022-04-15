@@ -32,6 +32,7 @@ class TestEc(unittest.TestCase):
         privkey: bytes = b("8000000000000000000000000000000000000000000000000000000000000000")
         pubkey_c: bytes = derive_pubkey(privkey)
         pubkey_u: bytes = derive_pubkey(privkey, compress=False)
+        self.assertEqual(pubkey_c, b("02b23790a42be63e1b251ad6c94fdef07271ec0aada31db6c3e8bd32043f8be384"))
         self.assertEqual(pubkey_u, b("04"
                                      "b23790a42be63e1b251ad6c94fdef07271ec0aada31db6c3e8bd32043f8be384"
                                      "fc6b694919d55edbe8d50f88aa81f94517f004f4149ecb58d10a473deb19880e"))
