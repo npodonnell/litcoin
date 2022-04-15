@@ -24,6 +24,17 @@ def deserialize_uint256(data, pos=0):
     return (res, next_pos)
 
 
+def uint256_to_bytes(n: int) -> bytes:
+    validate_uint256(n)
+    return int.to_bytes(n, UINT256_SIZE_IN_BYTES, byteorder='big', signed=False)
+    
+
+def uint256_from_bytes(b: bytes) -> int:
+    assert type(b) is bytes, "`b` should be of type `bytes`"
+    assert len(b) == 32, "`b` should be of length 32"
+    return int.from_bytes(b, byteorder='big', signed=False)
+
+
 def uint256_to_hex(n):
     validate_uint256(n)
     return x(int.to_bytes(n, UINT256_SIZE_IN_BYTES, byteorder='big', signed=False))
