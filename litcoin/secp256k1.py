@@ -15,20 +15,38 @@ SECP256K1_ORDER: Final[int] = 11579208923731619542357098500868790785283756427907
 SECP256K1_COFACTOR: Final[int] = 1
 
 
-def mmi(a: int, n: int):
+def _egcd(a: int, b: int) -> tuple[int, int, int]:
     """
-    Modular Mulplicative Inverse (MMI) of a mod n. The MMI exists iff
-    a and n are coprime.
+    Extended Euclidean Algorithm.
+    """
+    if a == 0:
+        return b, 0, 1
+    else:
+        g, y, x = _egcd(b % a, a)
+        return g, x - (b // a) * y, y
+
+
+def _mai(a: int, n: int) -> int:
+    """
+    Modular Additive Inverse (MAI) of a mod n.
+    """
+    return (n - a) % n
+
+
+def _mmi(a: int, n: int) -> int:
+    """
+    Modular Mulplicative Inverse (MMI) of a mod n. 
+    The MMI exists iff a and n are coprime.
     """
     assert(n >= 1)
     if a == 1 and n == 1:
         return 0
     else:
-        g, x, _ = egcd(a, n)
+        g, x, _ = _egcd(a, n)
         if g == 1:
             return x % n
         elif g == -1:
-            return mai(x, n)
+            return _mai(x, n)
         else:
             raise ValueError(f"MMI does not exist for {a} modulo {n}")
 
@@ -45,7 +63,7 @@ def secp256k1_add(point_p: tuple[int, int], point_q: tuple[int, int]):
     elif px == qx:
         if py == qy:
             # Point doubling.
-            s = (((3 * px**2) + SECP256K1_A) * mmi(2 * py, SECP256K1_P)) % SECP256K1_P
+            s = (((3 * px**2) + SECP256K1_A) * _mmi(2 * py, SECP256K1_P)) % SECP256K1_P
             rx = (s**2 - (2 * px)) % SECP256K1_P
             ry = ((s * (px - rx)) - py) % SECP256K1_P
         else:
@@ -53,9 +71,10 @@ def secp256k1_add(point_p: tuple[int, int], point_q: tuple[int, int]):
             rx, ry = POINT_AT_INFINITY
     else:
         # Point addition.
-        s = ((qy - py) * mmi(qx - px, SECP256K1_P)) % SECP256K1_P
+        s = ((qy - py) * _mmi(qx - px, SECP256K1_P)) % SECP256K1_P
         rx = (s**2 - px - qx) % SECP256K1_P
         ry = ((s * (px - rx)) - py) % SECP256K1_P
+    return rx, ry
 
 
 def secp256k1_multiply(scalar: int, point: tuple[int, int] = SECP256K1_GENERATOR) -> tuple[int, int]:
