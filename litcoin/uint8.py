@@ -21,3 +21,8 @@ def deserialize_uint8(data, pos=0):
     next_pos = pos + UINT8_SIZE_IN_BYTES
     res = int.from_bytes(data[pos : next_pos], byteorder='little', signed=False)
     return (res, next_pos)
+
+
+def uint8_to_bytes(n: int) -> bytes:
+    validate_uint8(n)
+    return int.to_bytes(n, UINT8_SIZE_IN_BYTES, byteorder='big', signed=False)
