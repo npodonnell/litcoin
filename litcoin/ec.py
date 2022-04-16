@@ -60,12 +60,8 @@ def make_privkey(passphrase: Optional[str] = None) -> bytes:
 
 def derive_pubkey(privkey: bytes, compress: bool = True) -> bytes:
     validate_privkey(privkey)
-    assert type(compress) == bool, '`compress` should be of type bool'
-    x, y = secp256k1_multiply(uint256_from_bytes(privkey))
-    if compress:
-        return (b"\x02" if (y % 2) == 0 else b"\x03") + uint256_to_bytes(x)
-    else:
-        return b"\x04" + uint256_to_bytes(x) + uint256_to_bytes(y)
+    assert type(compress) is bool, '`compress` should be of type bool'
+    return serialize_pubkey(secp256k1_multiply(uint256_from_bytes(privkey)), compress)
 
 
 def parse_pubkey(pubkey: bytes) -> tuple[int, int]:
@@ -76,6 +72,16 @@ def parse_pubkey(pubkey: bytes) -> tuple[int, int]:
     else:
         y: int = secp256k1_compute_ys(x)[pubkey[0] & 1]
     return x, y
+
+
+def serialize_pubkey(pubkey: tuple[int, int], compress: bool = True) -> bytes:
+    assert type(pubkey) is tuple
+    assert type(compress) is bool, '`compress` should be of type bool'
+    x, y = pubkey
+    if compress:
+        return (b"\x02" if (y % 2) == 0 else b"\x03") + uint256_to_bytes(x)
+    else:
+        return b"\x04" + uint256_to_bytes(x) + uint256_to_bytes(y)
 
 
 def sign_message(message: bytes, privkey: bytes):

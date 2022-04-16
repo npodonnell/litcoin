@@ -1,4 +1,4 @@
-from litcoin.ec import make_privkey, derive_pubkey, parse_pubkey
+from litcoin.ec import make_privkey, derive_pubkey, parse_pubkey, serialize_pubkey
 from litcoin.binhex import b, x
 import unittest
 
@@ -50,3 +50,16 @@ class TestEc(unittest.TestCase):
         )
         self.assertEqual(parse_pubkey(pubkey_c), pubkey_exp)
         self.assertEqual(parse_pubkey(pubkey_u), pubkey_exp)
+    
+    def test_serialize_pubkey(self):
+        pubkey: tuple[int, int] = (
+            93490448322171366308997730228944117434252538148664993621081956959551078425565,
+            57715698625569537031334996032706854239943749628299835406117911428008835728636
+        )
+        pubkey_c_exp: bytes = b("02"
+                                "ceb1b7f378a23b765728e7629bbd3283f7289123634994d742b8f4617c3663dd")
+        pubkey_u_exp: bytes = b("04"
+                                "ceb1b7f378a23b765728e7629bbd3283f7289123634994d742b8f4617c3663dd"
+                                "7f99ed8354f384b39724bd8d81159028e85f5af0e7471023bc94d96a9e72c4fc")
+        self.assertEqual(serialize_pubkey(pubkey), pubkey_c_exp)
+        self.assertEqual(serialize_pubkey(pubkey, compress=False), pubkey_u_exp)
