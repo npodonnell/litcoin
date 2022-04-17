@@ -2,6 +2,7 @@
 
 from .serialization import ensure_enough_data
 from .binhex import b, x
+import os
 
 UINT256_SIZE_IN_BYTES = 32
 
@@ -44,3 +45,7 @@ def uint256_from_hex(s):
     assert type(s) is str, "`s` should be of type `str`"
     assert len(s) == 64, "`s` should be of length 64"
     return int.from_bytes(b(s), byteorder='big', signed=False)
+
+
+def uint256_random() -> int:
+    return uint256_from_bytes(os.urandom(UINT256_SIZE_IN_BYTES))
