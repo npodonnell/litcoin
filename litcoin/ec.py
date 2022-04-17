@@ -29,12 +29,12 @@ def _uint_size_in_bytes(x):
             return size  
 
 
-def validate_privkey(privkey):
+def validate_privkey(privkey: bytes):
     assert type(privkey) is bytes, "privkey should be of type bytes"
     assert len(privkey) == PRIVKEY_SIZE_BYTES, f"privkey should be of length {PRIVKEY_SIZE_BYTES}"
 
 
-def validate_pubkey(pubkey):
+def validate_pubkey(pubkey: bytes):
     assert type(pubkey) == bytes, '`pubkey` should be of type bytes'
     assert len(pubkey) == UNCOMPRESSED_PUBKEY_SIZE_BYTES or len(pubkey) == COMPRESSED_PUBKEY_SIZE_BYTES, \
         '`pubkey` should be of length {0} or {1} bytes' \
