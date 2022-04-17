@@ -1,5 +1,5 @@
 from typing import Optional
-from .secp256k1 import SECP256K1_ORDER, secp256k1_multiply, secp256k1_compute_ys
+from .secp256k1 import SECP256K1_ORDER, secp256k1_random_scalar, secp256k1_multiply, secp256k1_compute_ys
 from .uint256 import uint256_from_bytes, uint256_to_bytes
 from .hashing import single_sha
 from .binhex import b, x
@@ -55,7 +55,7 @@ def make_privkey(passphrase: Optional[str] = None) -> bytes:
         if type(passphrase) is not str:
             raise TypeError("passphrase should be a string")
         return single_sha(passphrase.encode("utf-8"))
-    return os.urandom(PRIVKEY_SIZE_BYTES)
+    return uint256_to_bytes(secp256k1_random_scalar())
 
 
 def derive_pubkey(privkey: bytes, compress: bool = True) -> bytes:
@@ -87,8 +87,9 @@ def serialize_pubkey(pubkey: tuple[int, int], compress: bool = True) -> bytes:
 def sign_message(message: bytes, privkey: bytes):
     assert type(message) is bytes, "`message` should be of type `bytes`"
     validate_privkey(privkey)
-    key = _internal_key_from_bytes(privkey)
-    r_pos = 4
+    key: int = uint256_from_bytes(privkey)
+    
+    # r_pos = 4
 
     # In DER serialization, all values are interpreted as big-endian, signed integers. The highest bit in the integer indicates
     # its signed-ness; 0 is positive, 1 is negative. When the value is interpreted as a negative integer, it must be converted

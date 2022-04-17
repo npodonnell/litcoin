@@ -1,3 +1,4 @@
+from .uint256 import uint256_random
 from typing import Final
 from math import inf
 
@@ -142,7 +143,11 @@ def _tonelli_shanks(a: int, p: int) -> tuple[int, int]:
     return even_first(r, p - r)
 
 
-def secp256k1_add(point_p: tuple[int, int], point_q: tuple[int, int]):
+def secp256k1_random_scalar() -> int:
+    return 1 + (uint256_random() % (SECP256K1_ORDER - 2))
+
+
+def secp256k1_add(point_p: tuple[int, int], point_q: tuple[int, int]) -> tuple[int, int]:
     """Add two points P and Q resulting in point R."""
     px, py = point_p
     qx, qy = point_q
