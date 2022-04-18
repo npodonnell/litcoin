@@ -1,0 +1,46 @@
+from typing import Final
+from litcoin.secp256k1_ecdsa import secp256k1_ecdsa_sign, secp256k1_ecdsa_verify
+from litcoin.binhex import b
+import unittest
+
+"""
+Test cases were generated with the "official" secp256k1 library.
+https://github.com/bitcoin-core/secp256k1.git
+Commit hash: 485f608fa9e28f132f127df97136617645effe81
+"""
+
+MSG_HASH: Final[bytes] = b("315f5bdb76d078c43b8ac0064e4a0164612b1fce77c869345bfc94c75894edd3")
+BAD_MSG_HASH: Final[bytes] = b("315f5bdb76d078c43b8ac0064e4a0164612b1fce77c869345bfc94c75894edd4")
+
+# Naturally low s.
+PRIVKEY_1: Final[int] = 64232834872967360002211345063887994146790522123274456644695293051595838629937
+PUBKEY_1: Final[tuple[int, int]] = (
+    55173270408443316925721914421228381042291441320293228708403178145124811593079,
+    33775624570639333905127850349900297568059235815506565202881330955837833255349
+)
+EXP_SIG_1: Final[tuple[int, int]] = (
+    16586642487822701996776114739632993920426540354541552635482189416136627750540,
+    30037983404342793357087882969720482313583432727169829015988924382022168147707
+)
+
+# Requires modification of s.
+PRIVKEY_2: Final[int] = 0xc3b71caf86e45289ff74b4b1f32a4de1a618db19b714e6cf8575be5bf7b3a6e4
+PUBKEY_2: Final[bytes] = (
+    98999396901065845765862186234145935192457761223260558525826818529791416521817,
+    83233619044973447002324205570662115720035269279642592351417625969271490267154
+)
+EXP_SIG_2: Final[tuple[int, int]] = (
+    33782461897810258991982521868756122554904563147218340649406403404447756104374,
+    46590072132071111691142562242890070093476563752106099251076845399601207286719
+)
+
+class TestSecp256k1Ecdsa(unittest.TestCase):
+    def test_secp256k1_ecdsa_sign(self):
+        self.assertEqual(secp256k1_ecdsa_sign(PRIVKEY_1, MSG_HASH), EXP_SIG_1)
+        self.assertEqual(secp256k1_ecdsa_sign(PRIVKEY_2, MSG_HASH), EXP_SIG_2)
+
+    def test_secp256k1_ecdsa_verify(self):
+        self.assertEqual(secp256k1_ecdsa_verify(EXP_SIG_1, PUBKEY_1, MSG_HASH), True)
+        self.assertEqual(secp256k1_ecdsa_verify(EXP_SIG_2, PUBKEY_2, MSG_HASH), True)
+        self.assertEqual(secp256k1_ecdsa_verify(EXP_SIG_2, PUBKEY_1, MSG_HASH), False)
+        self.assertEqual(secp256k1_ecdsa_verify(EXP_SIG_2, PUBKEY_2, BAD_MSG_HASH), False)
