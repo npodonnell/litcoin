@@ -190,3 +190,8 @@ def secp256k1_multiply(scalar: int, point: tuple[int, int] = SECP256K1_GENERATOR
 def secp256k1_compute_ys(x: int) -> tuple[int, int]:
     """Compute the two y co-ordinates given an x coordinate. Even first."""
     return _tonelli_shanks((_mod_exp(x, 3, SECP256K1_P) + SECP256K1_A * x + SECP256K1_B) % SECP256K1_P, SECP256K1_P)
+
+
+def secp256k1_order_inverse(s: int) -> int:
+    """Compute the multiplicative inverse of a scaclar s modulo the curve order."""
+    return _mmi(s, SECP256K1_ORDER)
