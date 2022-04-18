@@ -97,7 +97,7 @@ def parse_der_ecdsa_signature(signature: bytes) -> tuple[int, int]:
 
 
 def sign_message(msg_hash: bytes, privkey: bytes) -> bytes:
-    assert type(message) is bytes, "`message` should be of type `bytes`"
+    assert type(msg_hash) is bytes, "`message` should be of type `bytes`"
     validate_privkey(privkey)
     privkey_i: int = uint256_from_bytes(privkey)
     
