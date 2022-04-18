@@ -4,10 +4,10 @@ from .rfc6979 import generate_k
 from .uint256 import uint256_from_bytes
 
 
-def secp256k1_ecdsa_sign(privkey: int, msg_hash: bytes, count: int = 0) -> tuple[int, int]:
+def secp256k1_ecdsa_sign(privkey: int, msg_hash: bytes, counter: int = 0) -> tuple[int, int]:
     """Sign with deterministic generation of k."""
-    if count > 0:
-        ee = count.to_bytes(4, signed=False, byteorder="little")
+    if counter > 0:
+        ee = counter.to_bytes(32, byteorder="little", signed=False)
     else:
         ee = b""
     k: int = generate_k(SECP256K1_ORDER, privkey, sha256, msg_hash, 0, ee)
