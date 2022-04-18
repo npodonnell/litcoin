@@ -103,7 +103,7 @@ def sign_message(msg_hash: bytes, privkey: bytes):
     #     if signature[r_pos] != 0x00:
     #         break
     for counter in count(0):
-        r, s = secp256k1_ecdsa_sign(privkey_i, msg_hash, count)
+        r, s = secp256k1_ecdsa_sign(privkey_i, msg_hash, counter)
         r_len: int = _uint_size_in_bytes(r)
         r_bytes: bytes = int.to_bytes(r_len, byteorder="big", signed=False)
 
