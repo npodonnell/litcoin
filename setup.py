@@ -12,9 +12,6 @@ setup(
     keywords=["bitcoin", "litecoin", "litcoin"],
     url="https://github.com/npodonnell/litcoin",
     test_suite="tests",
-    setup_requires=[
-        "cryptography"
-    ],
     tests_require=[
         "mock",
         "pytest",
