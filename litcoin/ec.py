@@ -1,6 +1,6 @@
 from typing import Optional
 from .secp256k1 import SECP256K1_ORDER, secp256k1_random_scalar, secp256k1_multiply, secp256k1_compute_ys
-from .secp256k1_ecdsa import secp256k1_ecdsa_sign
+from .secp256k1_ecdsa import secp256k1_ecdsa_sign, secp256k1_ecdsa_verify
 from .uint256 import uint256_from_bytes, uint256_to_bytes
 from .hashing import single_sha
 from .binhex import b, x
@@ -11,10 +11,6 @@ from itertools import count
 PRIVKEY_SIZE_BYTES = 32
 UNCOMPRESSED_PUBKEY_SIZE_BYTES = 65
 COMPRESSED_PUBKEY_SIZE_BYTES = 33
-UNCOMPRESSED_PUBKEY_DER_PREFIX = b('3056301006072a8648ce3d020106052b8104000a034200')
-COMPRESSED_PUBKEY_DER_PREFIX = b('3036301006072a8648ce3d020106052b8104000a032200')
-SECP256K1_ORDER_HALVED = SECP256K1_ORDER >> 1
-
 
 def _uint_size_in_bytes(x):
     """
@@ -86,64 +82,50 @@ def serialize_pubkey(pubkey: tuple[int, int], compress: bool = True) -> bytes:
         return b"\x04" + uint256_to_bytes(x) + uint256_to_bytes(y)
 
 
-def sign_message(msg_hash: bytes, privkey: bytes):
+def parse_der_ecdsa_signature(signature: bytes) -> tuple[int, int]:
+    assert type(signature) is bytes
+    assert len(signature) >= 8, "signature should be at least 8 bytes long"
+    assert signature[0] == 0x30, f"first octet expected to be 0x30, but is 0x{signature[0]:02x}"
+    assert signature[1] == len(signature) - 2, "incorrect total size"
+    assert signature[2] == 0x02, f"third octet expected to be 0x02, but is 0x{signature[2]:02x}"
+    r_len: int = signature[3]
+    r: int = int.from_bytes(signature[4 : 4 + r_len], byteorder="big", signed=False)
+    assert signature[4 + r_len] == 0x02, f"octet {4 + r_len} expected to be 0x02, but is 0x{signature[4 + r_len]:02x}"
+    s_len: int = signature[4 + r_len + 1]
+    s: int = int.from_bytes(signature[4 + r_len + 1 : 4 + r_len + 1 + s_len], byteorder="big", signed=False)
+    return r, s
+
+
+def sign_message(msg_hash: bytes, privkey: bytes) -> bytes:
     assert type(message) is bytes, "`message` should be of type `bytes`"
     validate_privkey(privkey)
     privkey_i: int = uint256_from_bytes(privkey)
     
-    # r_pos = 4
-
     # In DER serialization, all values are interpreted as big-endian, signed integers. The highest bit in the integer indicates
     # its signed-ness; 0 is positive, 1 is negative. When the value is interpreted as a negative integer, it must be converted
     # to a positive value by prepending a 0x00 byte so that the highest bit is 0. We can avoid this prepending by ensuring that
     # our highest bit is always 0, and thus we must check that the first byte is less than 0x80.
     # See src/key.cpp - SigHasLowR function
-    # while True:
-    #     signature = key.sign(message, SIGNATURE_ALGORITHM)
-    #     if signature[r_pos] != 0x00:
-    #         break
     for counter in count(0):
         r, s = secp256k1_ecdsa_sign(privkey_i, msg_hash, counter)
         r_len: int = _uint_size_in_bytes(r)
-        r_bytes: bytes = int.to_bytes(r_len, byteorder="big", signed=False)
+        r_bytes: bytes = r.to_bytes(r_len, byteorder="big", signed=False)
+        if r_bytes[0] < 0x80:
+            break
+    s_len: int = _uint_size_in_bytes(s)
+    s_bytes: bytes = s.to_bytes(s_len, byteorder="big", signed=False)
+    total_size: int = 4 + r_len + s_len
+    total_size_bytes = total_size.to_bytes(1, byteorder="big", signed=False)
+    r_len_bytes: int = r_len.to_bytes(1, byteorder="big", signed=False)
+    s_len_bytes: int = s_len.to_bytes(1, byteorder="big", signed=False)
 
-    # r_len_pos = 3
-    # r_len = int.from_bytes(signature[r_len_pos : r_len_pos + 1], byteorder='big', signed=False)
-    # s_len_pos = 5 + r_len
-    # s_pos = s_len_pos + 1
-    # s_len = int.from_bytes(signature[s_len_pos : s_len_pos + 1], byteorder='big', signed=False)
-    # s = int.from_bytes(signature[s_pos : s_pos + s_len], byteorder='big', signed=False)
-
-    # # To help with non-malleability of transactions, We want a low S value.
-    # # See https://github.com/bitcoin/bips/blob/master/bip-0062.mediawiki#Low_S_values_in_signatures
-    # if SECP256K1_CURVE_ORDER_HALVED < s:
-    #     s = SECP256K1_CURVE_ORDER - s
-    #     s_len = _uint_size_in_bytes(s)
-    #     total_size = 4 + r_len + s_len
-    #     # Rebuild signature
-    #     total_size_bytes = int.to_bytes(total_size, 1, byteorder='big', signed=False)
-    #     r_len_bytes = signature[r_len_pos : r_len_pos + 1]
-    #     r_bytes = signature[r_pos : r_pos + r_len]
-    #     s_len_bytes = int.to_bytes(s_len, 1, byteorder='big', signed=False)
-    #     s_bytes = int.to_bytes(s, s_len, byteorder='big', signed=False)
-    #     signature = b'\x30' + total_size_bytes + b'\x02' + r_len_bytes + r_bytes + b'\x02' + s_len_bytes + s_bytes
-    # return signature
+    # DER serialize.
+    return b"\x30" + total_size_bytes + b"\x02" + r_len_bytes + r_bytes + b"\x02" + s_len_bytes + s_bytes
 
 
-# def valid_signature(signature, message, pubkey):
-#     assert type(signature) is bytes, "`signature` should be of type `bytes`"
-#     assert type(message) is bytes, "`message` should be of type `bytes`"
-#     validate_pubkey(pubkey)
-
-#     if len(pubkey) == UNCOMPRESSED_PUBKEY_SIZE_BYTES:
-#         der_pubkey = UNCOMPRESSED_PUBKEY_DER_PREFIX + pubkey
-#     else:
-#         der_pubkey = COMPRESSED_PUBKEY_DER_PREFIX + pubkey
-
-#     key = load_der_public_key(der_pubkey, default_backend())
-
-#     try:
-#         key.verify(signature, message, SIGNATURE_ALGORITHM)
-#         return True
-#     except InvalidSignature:
-#         return False
+def valid_signature(signature: bytes, message: bytes, pubkey: bytes) -> bool:
+    assert type(signature) is bytes, "`signature` should be of type `bytes`"
+    assert type(message) is bytes, "`message` should be of type `bytes`"
+    assert len(message) == 32, "`message` should be 32 bytes long"
+    validate_pubkey(pubkey)
+    return secp256k1_ecdsa_verify(parse_der_ecdsa_signature(signature), parse_pubkey(pubkey), message)
