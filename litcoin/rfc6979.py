@@ -11,7 +11,6 @@ Many thanks to Coda Hale for his implementation in Go language:
 """
 
 import hmac
-from hashlib import sha256
 from binascii import hexlify, unhexlify
 from litcoin.binhex import b
 from litcoin.uint256 import uint256_to_hex
