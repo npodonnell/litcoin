@@ -1,9 +1,11 @@
 from typing import Optional
 from .secp256k1 import SECP256K1_ORDER, secp256k1_random_scalar, secp256k1_multiply, secp256k1_compute_ys
+from .secp256k1_ecdsa import secp256k1_ecdsa_sign
 from .uint256 import uint256_from_bytes, uint256_to_bytes
 from .hashing import single_sha
 from .binhex import b, x
 import os
+from itertools import count
 
 
 PRIVKEY_SIZE_BYTES = 32
@@ -84,10 +86,10 @@ def serialize_pubkey(pubkey: tuple[int, int], compress: bool = True) -> bytes:
         return b"\x04" + uint256_to_bytes(x) + uint256_to_bytes(y)
 
 
-def sign_message(message: bytes, privkey: bytes):
+def sign_message(msg_hash: bytes, privkey: bytes):
     assert type(message) is bytes, "`message` should be of type `bytes`"
     validate_privkey(privkey)
-    key: int = uint256_from_bytes(privkey)
+    privkey_i: int = uint256_from_bytes(privkey)
     
     # r_pos = 4
 
@@ -100,6 +102,10 @@ def sign_message(message: bytes, privkey: bytes):
     #     signature = key.sign(message, SIGNATURE_ALGORITHM)
     #     if signature[r_pos] != 0x00:
     #         break
+    for counter in count(0):
+        r, s = secp256k1_ecdsa_sign(privkey_i, msg_hash, count)
+        r_len: int = _uint_size_in_bytes(r)
+        r_bytes: bytes = int.to_bytes(r_len, byteorder="big", signed=False)
 
     # r_len_pos = 3
     # r_len = int.from_bytes(signature[r_len_pos : r_len_pos + 1], byteorder='big', signed=False)
