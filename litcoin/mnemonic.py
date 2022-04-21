@@ -1,7 +1,5 @@
-#!/usr/bin/env python3
-
-from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
-from cryptography.hazmat.primitives import hashes
+from typing import Final
+from hashlib import pbkdf2_hmac
 from litcoin.hashing import single_sha
 from typing import List
 
@@ -9,7 +7,7 @@ from typing import List
 BIP-39 Mnemonic
 """
 
-MNEMONIC_CONSTANT = b"mnemonic"
+MNEMONIC_CONSTANT: Final[bytes] = b"mnemonic"
 
 ENGLISH_WORDLIST = [
     "abandon", "ability", "able", "about", "above", "absent", "absorb", "abstract",
@@ -1760,7 +1758,5 @@ def wordlist_to_entropy(wordlist: List[str]) -> bytes:
 
 def wordlist_to_seed(wordlist: List[str], passphrase: str = "") -> bytes:
     assert type(wordlist_to_entropy(wordlist)) is bytes
-
-    salt = MNEMONIC_CONSTANT + passphrase.encode("utf8")
-    kdf = PBKDF2HMAC(algorithm=hashes.SHA512(), length=64, salt=salt, iterations=2048)
-    return kdf.derive(" ".join(wordlist).encode("utf8"))
+    salt: bytes = MNEMONIC_CONSTANT + passphrase.encode("utf8")
+    return pbkdf2_hmac("sha512", password=" ".join(wordlist).encode("utf8"), salt=salt, iterations=2048)
